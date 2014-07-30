@@ -27,8 +27,7 @@ body {
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span>
+					<span class="sr-only">lezomao</span> <span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#">乐助猫</a>
 			</div>
@@ -43,7 +42,7 @@ body {
 					<div class="form-group">
 						<input placeholder="Search" class="form-control" type="text"
 							size="40"> <span class="form-group-btn">
-							<button class="btn btn-success" type="submit">Go!</button>
+							<button class="btn btn-success" type="submit">Go</button>
 						</span>
 					</div>
 				</form>
@@ -55,6 +54,36 @@ body {
 				</ul>
 			</div>
 			<!--/.navbar-collapse -->
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6 col-md-4">
+			<div class="thumbnail">
+				<img data-src="holder.js/300x300" alt="...">
+				<div class="caption">
+					<h3>Thumbnail label</h3>
+					<p>...</p>
+					<p>
+						<a href="#" class="btn btn-primary" role="button">Button</a> <a
+							href="#" class="btn btn-default" role="button">Button</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<div class="container">
+			<ul class="pagination">
+				<li class="disabled"><span>&laquo;</span></li>
+				<li class="active"><span>1 <span class="sr-only">(current)</span></span></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li><a href="#">&raquo;</a></li>
+			</ul>
 		</div>
 	</div>
 </body>
