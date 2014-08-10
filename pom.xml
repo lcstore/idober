@@ -34,9 +34,9 @@
 			<version>1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.mina</groupId>
-			<artifactId>mina-core</artifactId>
-			<version>${mina.version}</version>
+			<groupId>com.lezo.iscript</groupId>
+			<artifactId>iscript-service-crawler</artifactId>
+			<version>${iscript.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -111,6 +111,6 @@
 		<maven-war-plugin.version>2.2.1</maven-war-plugin.version>
 		<slf4j.version>1.7.7</slf4j.version>
 		<mina.version>2.0.7</mina.version>
-
+		<iscript.version>1.0-SNAPSHOT</iscript.version>
 	</properties>
 </project>
