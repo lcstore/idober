@@ -9,7 +9,7 @@
 	<!-- 启用spring mvc 注解 -->
 	<context:annotation-config />
 	<mvc:annotation-driven />
-	<context:component-scan base-package="com.lezo.iscript.yeam.tasker.web.action"
+	<context:component-scan base-package="com.lezo.idober.home.action"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
