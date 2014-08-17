@@ -62,6 +62,9 @@ public class ProductVo {
 	}
 
 	public void setImgUrl(String imgUrl) {
+		if (imgUrl != null) {
+			imgUrl = imgUrl.replace("_60x60.jpg", "_200x200.jpg");
+		}
 		this.imgUrl = imgUrl;
 	}
 }
