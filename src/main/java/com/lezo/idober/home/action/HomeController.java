@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lezo.iscript.service.crawler.dto.ProductDto;
 import com.lezo.iscript.service.crawler.dto.ProductStatDto;
+import com.lezo.iscript.service.crawler.dto.PromotionMapDto;
 import com.lezo.iscript.service.crawler.service.ProductService;
 import com.lezo.iscript.service.crawler.service.ProductStatService;
+import com.lezo.iscript.service.crawler.service.PromotionMapService;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
 
 @Controller
@@ -50,6 +52,11 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index(@ModelAttribute("model") ModelMap model) {
+		PromotionMapService promotionMapService = SpringBeanUtils.getBean(PromotionMapService.class);
+		Integer siteId = 1001;
+		Set<String> pCodeSet = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, null, PromotionMapDto.PROMOTE_STATUS_START, PromotionMapDto.DELETE_FALSE);
+		// int len = pCodeSet.size() <= 16?pCodeSet;
+		List<String> codeList = new ArrayList<String>();
 		ProductStatService productStatService = SpringBeanUtils.getBean(ProductStatService.class);
 		ProductService productService = SpringBeanUtils.getBean(ProductService.class);
 		Long fromId = 0L;
@@ -60,8 +67,7 @@ public class HomeController {
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		Date updateTime = calendar.getTime();
-		List<ProductStatDto> statList = productStatService.getProductStatDtosLowestPrice(fromId, shopId, updateTime,
-				limit);
+		List<ProductStatDto> statList = productStatService.getProductStatDtosLowestPrice(fromId, shopId, updateTime, limit);
 		List<ProductVo> voList = new ArrayList<ProductVo>();
 		Map<String, ProductStatDto> statMap = new HashMap<String, ProductStatDto>();
 		Map<Integer, Set<String>> siteCodeMap = new HashMap<Integer, Set<String>>();
@@ -77,8 +83,7 @@ public class HomeController {
 			codeSet.add(statDto.getProductCode());
 		}
 		for (Entry<Integer, Set<String>> entry : siteCodeMap.entrySet()) {
-			List<ProductDto> productList = productService.getProductDtos(new ArrayList<String>(entry.getValue()),
-					entry.getKey());
+			List<ProductDto> productList = productService.getProductDtos(new ArrayList<String>(entry.getValue()), entry.getKey());
 			for (ProductDto pDto : productList) {
 				String key = pDto.getShopId() + pDto.getProductCode();
 				ProductVo pVo = new ProductVo();

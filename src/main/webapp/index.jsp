@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html lang="zh-cn">
 <head>
-<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>乐助猫，助你快乐生活</title>
@@ -235,8 +237,7 @@ body {
 				<div class="container">
 					<hr>
 					<div class="text-center row-fluid">
-						Copyright &copy; 2014 LEZOMAO.COM 版权所有 &nbsp; <a
-							href="http://www.miitbeian.gov.cn/">鄂ICP备14009865号</a>
+						Copyright &copy; 2014 LEZOMAO.COM 版权所有 &nbsp;鄂ICP备14009865号</a>
 					</div>
 				</div>
 			</footer>
