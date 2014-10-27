@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD configuration 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<mappers>
+		<mapper resource="mybatis/mybatis-mapper-taskpriority.xml" />
+		<mapper resource="mybatis/mybatis-mapper-typeconfig.xml" />
+		<mapper resource="mybatis/mybatis-mapper-taskconfig.xml" />
+		<mapper resource="mybatis/mybatis-mapper-taskpriority.xml" />
+		<mapper resource="mybatis/mybatis-mapper-typeconfig.xml" />
+		<mapper resource="mybatis/mybatis-mapper-taskconfig.xml" />
+		<mapper resource="mybatis/mybatis-mapper-proxyAddr.xml" />
+		<mapper resource="mybatis/mybatis-mapper-barCodeItem.xml" />
+		<mapper resource="mybatis/mybatis-mapper-shop.xml" />
+		<mapper resource="mybatis/mybatis-mapper-product.xml" />
+		<mapper resource="mybatis/mybatis-mapper-productStat.xml" />
+		<mapper resource="mybatis/mybatis-mapper-productStatHis.xml" />
+		<mapper resource="mybatis/mybatis-mapper-similar.xml" />
+		<mapper resource="mybatis/mybatis-mapper-proxyDetect.xml" />
+		<mapper resource="mybatis/mybatis-mapper-sessionHis.xml" />
+		<mapper resource="mybatis/mybatis-mapper-listRank.xml" />
+		<mapper resource="mybatis/mybatis-mapper-message.xml" />
+		<mapper resource="mybatis/mybatis-mapper-promotionMap.xml" />
+	</mappers>
+</configuration>

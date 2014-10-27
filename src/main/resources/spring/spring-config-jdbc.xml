@@ -79,7 +79,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="typeAliasesPackage" value="com.lezo.iscript.service.crawler.dto" />
-		<property name="configLocation" value="classpath:mybatis-config-idober.xml" />
+		<property name="configLocation" value="classpath:mybatis-config-mapper.xml" />
 	</bean>
 
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"

@@ -54,20 +54,16 @@ public class HomeController {
 	public String index(@ModelAttribute("model") ModelMap model) {
 		PromotionMapService promotionMapService = SpringBeanUtils.getBean(PromotionMapService.class);
 		Integer siteId = 1001;
-		Set<String> pCodeSet = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, null, PromotionMapDto.PROMOTE_STATUS_START, PromotionMapDto.DELETE_FALSE);
-		// int len = pCodeSet.size() <= 16?pCodeSet;
-		List<String> codeList = new ArrayList<String>();
+		Integer promoteType = null; 
+		Integer promoteStatus = PromotionMapDto.PROMOTE_STATUS_START;
+		Integer isDelete = PromotionMapDto.DELETE_FALSE;
+		List<String> pCodeList = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, promoteType, promoteStatus, isDelete);
+		int len = pCodeList.size() <= 16 ? pCodeList.size() : 16;
+		List<String> codeList = pCodeList;//.subList(0, len);
 		ProductStatService productStatService = SpringBeanUtils.getBean(ProductStatService.class);
 		ProductService productService = SpringBeanUtils.getBean(ProductService.class);
-		Long fromId = 0L;
-		Integer shopId = 1002;
-		int limit = 4;
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DAY_OF_MONTH, -1);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		Date updateTime = calendar.getTime();
-		List<ProductStatDto> statList = productStatService.getProductStatDtosLowestPrice(fromId, shopId, updateTime, limit);
+		
+		List<ProductStatDto> statList = productStatService.getProductStatDtos(codeList, siteId);
 		List<ProductVo> voList = new ArrayList<ProductVo>();
 		Map<String, ProductStatDto> statMap = new HashMap<String, ProductStatDto>();
 		Map<Integer, Set<String>> siteCodeMap = new HashMap<Integer, Set<String>>();
@@ -103,5 +99,4 @@ public class HomeController {
 		model.addAttribute("statList", voList);
 		return "index";
 	}
-
 }
