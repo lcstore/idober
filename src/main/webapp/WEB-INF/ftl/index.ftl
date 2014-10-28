@@ -120,7 +120,7 @@ del {
 					<div class="row">
 						<div class="index-hot panel panel-default">
 							<div class="panel-body">
-							    <#list model["statList"] as pVo>
+							    <#list model["indexHotList"] as pVo>
 									<div class="col-md-3">
 										<section>
 										<div class="p-img">
