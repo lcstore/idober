@@ -149,15 +149,15 @@ del {
 										<div class="panel-body">
 										 <#list model["pageList"] as pVo>
 											 <div class="col-md-4">
-												<div class="img">
+												<div class="p-img">
 													<a href="${pVo.productUrl}" target="_blank"><img width="180"
 														height="180" data-img="1" alt="${pVo.productName}"
 														src="${pVo.imgUrl}"></a>
 												</div>
-												<div class="pname">
+												<div class="p-name">
 													<a href="${pVo.productUrl}" target="_blank">${pVo.productName} </a>
 												</div>
-												<div class="pprice">
+												<div class="p-price">
 													<strong>￥${pVo.productPrice}</strong>
 												</div>
 											  </div>
