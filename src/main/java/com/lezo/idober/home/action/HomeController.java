@@ -1,10 +1,8 @@
 package com.lezo.idober.home.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -47,13 +45,11 @@ public class HomeController {
 		Integer promoteStatus = PromotionMapDto.PROMOTE_STATUS_START;
 		Integer isDelete = PromotionMapDto.DELETE_FALSE;
 		List<String> pCodeList = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, promoteType, promoteStatus, isDelete);
-		List<ProductStatDto> statList = productStatService.getProductStatDtos(pCodeList, siteId);
-		Map<String, ProductStatDto> statMap = getKeyMap(statList);
-		List<Entry<String, ProductStatDto>> statEntryList = new ArrayList<Entry<String, ProductStatDto>>(statMap.entrySet());
-		doCommentDesc(statEntryList);
+		List<ProductStatDto> statList = productStatService.getProductStatDtos(pCodeList, siteId, 1);
+		doCommentDesc(statList);
 		int hotCount = 4;
-		addHotList(statEntryList, hotCount, statMap, model);
-		addHomeList(statEntryList, hotCount, model);
+		addHotList(statList, hotCount, model);
+		addHomeList(statList, hotCount, model);
 		return "index";
 	}
 
@@ -63,36 +59,49 @@ public class HomeController {
 		}
 		Map<Integer, Set<String>> siteCodeMap = new HashMap<Integer, Set<String>>();
 		for (ProductStatDto statDto : statList) {
-			Set<String> codeSet = siteCodeMap.get(statDto.getShopId());
+			Set<String> codeSet = siteCodeMap.get(statDto.getSiteId());
 			if (codeSet == null) {
 				codeSet = new HashSet<String>();
-				siteCodeMap.put(statDto.getShopId(), codeSet);
+				siteCodeMap.put(statDto.getSiteId(), codeSet);
 			}
 			codeSet.add(statDto.getProductCode());
 		}
 		return siteCodeMap;
 	}
 
-	private void addHomeList(List<Entry<String, ProductStatDto>> statEntryList, int hotCount, ModelMap model) {
-		if (CollectionUtils.isEmpty(statEntryList)) {
+	private void addHomeList(List<ProductStatDto> statList, int hotCount, ModelMap model) {
+		if (CollectionUtils.isEmpty(statList) || statList.size() <= hotCount) {
 			return;
 		}
-
+		statList = statList.subList(hotCount, statList.size());
+		doPriceAsc(statList);
+		int pageSize = 36;
+		int toIndex = statList.size();
+		toIndex = toIndex < pageSize ? toIndex : pageSize;
+		List<ProductStatDto> pageList = statList.subList(0, toIndex);
+		List<ProductVo> voList = convert2ProductVos(pageList);
+		model.addAttribute("pageList", voList);
 	}
 
-	private void addHotList(List<Entry<String, ProductStatDto>> statEntryList, int hotCount, Map<String, ProductStatDto> statMap, ModelMap model) {
-		if (CollectionUtils.isEmpty(statEntryList)) {
+	private void addHotList(List<ProductStatDto> statList, int hotCount, ModelMap model) {
+		if (CollectionUtils.isEmpty(statList)) {
 			model.addAttribute("indexHotList", Collections.emptyList());
 			return;
 		}
-		int len = statEntryList.size();
-		len = len < hotCount ? len : hotCount;
-		List<ProductStatDto> hotList = new ArrayList<ProductStatDto>(len);
-		for (int i = 0; i < len; i++) {
-			hotList.add(statEntryList.get(i).getValue());
+		int toIndex = statList.size();
+		toIndex = toIndex < hotCount ? toIndex : hotCount;
+		List<ProductStatDto> hotList = statList.subList(0, toIndex);
+		List<ProductVo> voList = convert2ProductVos(hotList);
+		model.addAttribute("indexHotList", voList);
+	}
+
+	public List<ProductVo> convert2ProductVos(List<ProductStatDto> statList) {
+		if (CollectionUtils.isEmpty(statList)) {
+			return Collections.emptyList();
 		}
-		Map<Integer, Set<String>> siteCodeMap = getSiteCodeMap(hotList);
-		List<ProductVo> voList = new ArrayList<ProductVo>();
+		Map<Integer, Set<String>> siteCodeMap = getSiteCodeMap(statList);
+		Map<String, ProductStatDto> statMap = getKeyMap(statList);
+		List<ProductVo> voList = new ArrayList<ProductVo>(statList.size());
 		for (Entry<Integer, Set<String>> entry : siteCodeMap.entrySet()) {
 			List<ProductDto> productList = productService.getProductDtos(new ArrayList<String>(entry.getValue()), entry.getKey());
 			for (ProductDto pDto : productList) {
@@ -111,7 +120,7 @@ public class HomeController {
 				voList.add(pVo);
 			}
 		}
-		model.addAttribute("indexHotList", voList);
+		return voList;
 	}
 
 	private Map<String, ProductStatDto> getKeyMap(List<ProductStatDto> hotList) {
@@ -130,23 +139,19 @@ public class HomeController {
 		return dto.getSiteId() + "-" + dto.getProductCode();
 	}
 
-	private void doPriceAsc(List<Entry<String, ProductStatDto>> statEntryList) {
-		Collections.sort(statEntryList, new Comparator<Entry<String, ProductStatDto>>() {
+	private void doPriceAsc(List<ProductStatDto> statList) {
+		Collections.sort(statList, new Comparator<ProductStatDto>() {
 			@Override
-			public int compare(Entry<String, ProductStatDto> o1, Entry<String, ProductStatDto> o2) {
-				ProductStatDto statLeft = o1.getValue();
-				ProductStatDto statRight = o2.getValue();
+			public int compare(ProductStatDto statLeft, ProductStatDto statRight) {
 				return statLeft.getProductPrice().compareTo(statRight.getProductPrice());
 			}
 		});
 	}
 
-	private void doCommentDesc(List<Entry<String, ProductStatDto>> statEntryList) {
-		Collections.sort(statEntryList, new Comparator<Entry<String, ProductStatDto>>() {
+	private void doCommentDesc(List<ProductStatDto> statList) {
+		Collections.sort(statList, new Comparator<ProductStatDto>() {
 			@Override
-			public int compare(Entry<String, ProductStatDto> o1, Entry<String, ProductStatDto> o2) {
-				ProductStatDto statLeft = o1.getValue();
-				ProductStatDto statRight = o2.getValue();
+			public int compare(ProductStatDto statLeft, ProductStatDto statRight) {
 				if (statLeft.getCommentNum() == null) {
 					return -1;
 				}

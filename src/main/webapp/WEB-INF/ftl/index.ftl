@@ -147,62 +147,21 @@ del {
 								<div class="col-md-9 row-left">
 									<div class="body-left panel panel-default">
 										<div class="panel-body">
-											<div class="col-md-4">
-												<article class="post tag-bs2">
-													<section class="post-featured-image">
-														<a
-															onclick="_hmt.push(['_trackEvent', 'imagelink', 'click', 'Karma'])"
-															target="_blank" href="/karma/" class="thumbnail"> <img
-															width="800" height="600" alt="Karma"
-															src="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															data-original="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															style="display: block;">
-														</a> <span class="bs2"></span>
-													</section>
-												</article>
-											</div>
-											<div class="col-md-4">
-												<article class="post tag-bs2">
-													<section class="post-featured-image">
-														<a
-															onclick="_hmt.push(['_trackEvent', 'imagelink', 'click', 'Karma'])"
-															target="_blank" href="/karma/" class="thumbnail"> <img
-															width="800" height="600" alt="Karma"
-															src="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															data-original="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															style="display: block;">
-														</a> <span class="bs2"></span>
-													</section>
-												</article>
-											</div>
-											<div class="col-md-4">
-												<article class="post tag-bs2">
-													<section class="post-featured-image">
-														<a
-															onclick="_hmt.push(['_trackEvent', 'imagelink', 'click', 'Karma'])"
-															target="_blank" href="/karma/" class="thumbnail"> <img
-															width="800" height="600" alt="Karma"
-															src="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															data-original="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															style="display: block;">
-														</a> <span class="bs2"></span>
-													</section>
-												</article>
-											</div>
-											<div class="col-md-4">
-												<article class="post tag-bs2">
-													<section class="post-featured-image">
-														<a
-															onclick="_hmt.push(['_trackEvent', 'imagelink', 'click', 'Karma'])"
-															target="_blank" href="/karma/" class="thumbnail"> <img
-															width="800" height="600" alt="Karma"
-															src="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															data-original="http://static.bootcss.com/expo/img/d/b0/76066886855f77948cea9821f8c6b.jpg"
-															style="display: block;">
-														</a> <span class="bs2"></span>
-													</section>
-												</article>
-											</div>
+										 <#list model["pageList"] as pVo>
+											 <div class="col-md-4">
+												<div class="img">
+													<a href="${pVo.productUrl}" target="_blank"><img width="180"
+														height="180" data-img="1" alt="${pVo.productName}"
+														src="${pVo.imgUrl}"></a>
+												</div>
+												<div class="pname">
+													<a href="${pVo.productUrl}" target="_blank">${pVo.productName} </a>
+												</div>
+												<div class="pprice">
+													<strong>￥${pVo.productPrice}</strong>
+												</div>
+											  </div>
+							              </#list>
 										</div>
 									</div>
 								</div>
