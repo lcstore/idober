@@ -24,22 +24,33 @@
 				<a title="Lezomao" href="/" class="navbar-brand" id="header_logo">Lezomao</a>
 			</div>
 			<div class="collapse navbar-collapse navbar-header-collapse">
-
-				<ul class="nav navbar-nav" id="header_menu">
-					<li class="active"><a href="/">首页</a></li>
-					<li><a href="/tour">聚实惠</a></li>
-					<li><a href="/plan">爆款</a></li>
-					<li><a href="/mobile">鉴定故事</a></li>
-				</ul>
-
-				<ul id="header_me" ng-controller="user_ctrl"
-					class="nav navbar-nav navbar-right ng-scope">
-					<li class="divider-vertical hidden-xs"></li>
-
-					<li><a href="/signin" class="mr_15">登录</a></li>
-					<li><a href="/signup?utm_source=nav_bar">注册</a></li>
-
-				</ul>
+				<div class="container">
+					<div class="col-md-4">
+						<ul class="nav navbar-nav" id="header_menu">
+							<li class="active"><a href="/">首页</a></li>
+							<li><a href="/tour">爱推荐</a></li>
+							<li><a href="/plan">淘实惠</a></li>
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<form class="navbar-form navbar-left" role="search">
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Search"
+									size="40"> <span class="input-group-btn">
+									<button class="btn btn-success" type="button">Go!</button>
+								</span>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-4">
+						<ul id="header_me" ng-controller="user_ctrl"
+							class="nav navbar-nav navbar-right ng-scope">
+							<li class="divider-vertical hidden-xs"></li>
+							<li><a href="/signin" class="mr_15">登录</a></li>
+							<li><a href="/signup?utm_source=nav_bar">注册</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</nav>
 	</header>
