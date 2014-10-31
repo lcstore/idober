@@ -27,11 +27,9 @@
 
 				<ul class="nav navbar-nav" id="header_menu">
 					<li class="active"><a href="/">首页</a></li>
-					<li><a href="/tour">功能</a></li>
-					<li><a href="/plan">付费</a></li>
-					<li><a href="/mobile">移动版</a></li>
-					<li><a href="/blog">博客</a></li>
-					<li><a href="/club">社区</a></li>
+					<li><a href="/tour">聚实惠</a></li>
+					<li><a href="/plan">爆款</a></li>
+					<li><a href="/mobile">鉴定故事</a></li>
 				</ul>
 
 				<ul id="header_me" ng-controller="user_ctrl"
