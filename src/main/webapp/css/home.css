@@ -1,0 +1,110 @@
+body {
+	font-family: 'Microsoft Yahei', 'Segoe UI', Verdana, Helvetica,
+		sans-serif;
+}
+
+.divider-vertical {
+	height: 50px;
+	border-left: 1px solid #111415;
+	border-right: 1px solid #646668;
+	opacity: 0.4;
+}
+
+.navbar-nav .active {
+	border-radius: 0.3;
+}
+
+.act-col-box {
+	background-color: #fefefe;
+	border: 1px solid #efefef;
+	border-radius: 10px;
+	text-align: center;
+	margin: 10px -10px;
+	padding: 10px;
+	height: 280px;
+}
+
+.list-col-box {
+	background-color: #fefefe;
+	text-align: center;
+	margin: 0px -16px;
+	padding: 10px;
+	height: 280px;
+}
+
+.list-col-box:hover {
+	border: 2px solid #efefef;
+	border-radius: 2px;
+	background: none repeat scroll 0 0 #fff;
+	margin: 0px -14px;
+}
+
+.actbox-padding {
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 48px;
+	padding-bottom: 0px;
+}
+
+.act-pic img {
+	width: 200px;
+	height: 200px;
+}
+
+.shop-pic {
+	border: 1px solid white;
+	float: right;
+	position: absolute;
+	right: 5%;
+	top: 5%;
+	z-index: 1;
+}
+
+.shop-pic img {
+	width: 36px;
+	height: 36px;
+}
+
+.act-list-pic {
+	float: left;
+	height: 180px;
+	margin: 6px 0 0;
+	overflow: hidden;
+	position: relative;
+	width: 180px;
+}
+
+.act-list-text {
+	color: #333;
+	float: right;
+	line-height: 23px;
+	padding: 0;
+	width: 450px;
+}
+
+.list_price {
+	color: #c40000;
+	font-size: 18px;
+	font-weight: bolder;
+	margin-right: 8px;
+}
+
+.zm-coin {
+	font-family: arial;
+}
+
+.msg-container {
+	font-family: arial;
+}
+
+.listbotron-padding {
+	padding-left: 30px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	margin-top: -30px;
+}
+
+.msg-col {
+}

@@ -9,24 +9,9 @@
 <title>乐助猫，助你快乐生活</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../css/home.css">
 <style>
-body {
-	font-family: 'Microsoft Yahei', 'Segoe UI', Verdana, Helvetica,
-		sans-serif;
-}
-
-.divider-vertical {
-	height: 50px;
-	border-left: 1px solid #111415;
-	border-right: 1px solid #646668;
-	opacity: 0.4;
-}
-
-.navbar-nav .active {
-	border-radius: 0.3;
-}
-
-.act-col-box {
+.msg-col-box {
 	background-color: #fefefe;
 	border: 1px solid #efefef;
 	border-radius: 10px;
@@ -36,86 +21,24 @@ body {
 	height: 280px;
 }
 
-.list-col-box {
-	background-color: #fefefe;
-	text-align: center;
-	margin: 0px -16px;
-	padding: 10px;
-	height: 280px;
+.msg-row {
+	
 }
 
-.list-col-box:hover {
-	border: 2px solid #efefef;
-	border-radius: 2px;
-	background: none repeat scroll 0 0 #fff;
-	margin: 0px -14px;
-}
-
-.actbox-padding {
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 48px;
-	padding-bottom: 0px;
-}
-
-.act-pic img {
-	width: 200px;
-	height: 200px;
-}
-
-.shop-pic {
-	border: 1px solid white;
-	float: right;
-	position: absolute;
-	right: 5%;
-	top: 5%;
-	z-index: 1;
-}
-
-.shop-pic img {
-	width: 36px;
-	height: 36px;
-}
-
-.act-list-pic {
-	float: left;
-	height: 180px;
-	margin: 6px 0 0;
-	overflow: hidden;
-	position: relative;
-	width: 180px;
-}
-
-.act-list-text {
-	color: #333;
-	float: right;
-	line-height: 23px;
-	padding: 0;
-	width: 450px;
-}
-
-.list_price {
-	color: #c40000;
-	font-size: 18px;
-	font-weight: bolder;
-	margin-right: 8px;
-}
-
-.zm-coin {
-	font-family: arial;
-}
-
-.msg-container {
-	font-family: arial;
-}
-
-.listbotron-padding {
-	padding-left: 30px;
+.mgsbotron-padding {
+	padding-left: 1px;
 	padding-right: 0px;
 	padding-top: 0px;
 	padding-bottom: 0px;
 	margin-bottom: 0px;
 	margin-top: -30px;
+}
+
+.msg-col-box {
+	background-color: #fefefe;
+	text-align: center;
+	padding-left: 10px;
+	margin-top: 0px;
 }
 </style>
 </head>
@@ -344,7 +267,30 @@ body {
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3">right</div>
+				<div class="col-md-3 jumbotron mgsbotron-padding">
+					<div class="row-fluid msg-row">
+						<div class="col-md-12">
+							<div class="msg-col-box">
+								<div class="act-pic">
+									<a href="http://item.yhd.com/item/8095858" target="_blank">
+										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+										src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="msg-col-box">
+								<div class="act-pic">
+									<a href="http://item.yhd.com/item/8095858" target="_blank">
+										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+										src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
