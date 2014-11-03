@@ -10,36 +10,10 @@
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="../css/home.css">
+<!-- 添加标签图标16x16 -->
+<!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->
 <style>
-.msg-col-box {
-	background-color: #fefefe;
-	border: 1px solid #efefef;
-	border-radius: 10px;
-	text-align: center;
-	margin: 10px -10px;
-	padding: 10px;
-	height: 280px;
-}
 
-.msg-row {
-	
-}
-
-.mgsbotron-padding {
-	padding-left: 1px;
-	padding-right: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	margin-bottom: 0px;
-	margin-top: -30px;
-}
-
-.msg-col-box {
-	background-color: #fefefe;
-	text-align: center;
-	padding-left: 10px;
-	margin-top: 0px;
-}
 </style>
 </head>
 <body>
@@ -85,14 +59,14 @@
 
 		</nav>
 	</header>
-	<div class="main">
+	<div class="main data-box">
 		<div class="act">
 			<div class="jumbotron actbox-padding">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-4 act-col">
 							<div class="act-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/36177809" target="_blank">
 										<img
 										alt="Coolpad 酷派 大神F1青春版（8297D） 3G手机（智尚白） TD-SCDMA/GSM 双卡双待 真八核"
@@ -112,14 +86,37 @@
 									<strong class="list_price"><span class="zm-coin">¥</span>999</strong>
 								</div>
 								<div class="act-shop shop-pic">
-									<img alt="1号店"
-										src="http://d7.yihaodianimg.com/N02/M02/40/EB/CgQCsFLVBOOAE0boAAAK5UNpfUI56300.png" />
+									<img alt="1号店" src="/img/1001.png" />
 								</div>
 							</div>
 						</div>
 						<div class="col-md-4 act-col">
 							<div class="act-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
+									<a href="http://item.yhd.com/item/8095858" target="_blank">
+										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
+									</a>
+								</div>
+								<div class="act-txt">
+									<a href="http://item.yhd.com/item/8095858" target="_blank">
+										<span>Olay 玉兰油 新生塑颜金纯活能水 150ml</span>
+									</a>
+								</div>
+								<div class="act-price">
+									<del>
+										<span class="zm-coin">¥</span>240
+									</del>
+									<strong class="list_price"><span class="zm-coin">¥</span>169</strong>
+								</div>
+								<div class="shop-pic">
+									<img alt="1号店" src="/img/1001.png" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 act-col">
+							<div class="act-col-box">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -137,33 +134,7 @@
 									<strong class="list_price"><span class="zm-coin">¥</span>169</strong>
 								</div>
 								<div class="act-shop shop-pic">
-									<img alt="1号店"
-										src="http://d7.yihaodianimg.com/N02/M02/40/EB/CgQCsFLVBOOAE0boAAAK5UNpfUI56300.png" />
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 act-col">
-							<div class="act-col-box">
-								<div class="act-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-								<div class="act-txt">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<span>Olay 玉兰油 新生塑颜金纯活能水 150ml</span>
-									</a>
-								</div>
-								<div class="act-price">
-									<del>
-										<span class="zm-coin">¥</span>240
-									</del>
-									<strong class="list_price"><span class="zm-coin">¥</span>169</strong>
-								</div>
-								<div class="act-shop shop-pic">
-									<img alt="1号店"
-										src="http://d7.yihaodianimg.com/N02/M02/40/EB/CgQCsFLVBOOAE0boAAAK5UNpfUI56300.png" />
+									<img alt="1号店" src="/img/1002-44x36.png" />
 								</div>
 							</div>
 						</div>
@@ -177,7 +148,33 @@
 					<div class="row-fluid">
 						<div class="col-md-4">
 							<div class="list-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
+									<a href="http://item.yhd.com/item/8095858" target="_blank">
+										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
+									</a>
+								</div>
+								<div class="act-shop shop-pic">
+									<img alt="1号店" src="/img/1002-44x36.png" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="list-col-box">
+								<div class="list-pic">
+									<a href="http://item.yhd.com/item/8095858" target="_blank">
+										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
+									</a>
+								</div>
+								<div class="act-shop shop-pic">
+									<img alt="1号店" src="/img/1002-44x36.png" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="list-col-box">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -187,7 +184,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="list-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -197,7 +194,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="list-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -207,7 +204,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="list-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -217,7 +214,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="list-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -227,7 +224,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="list-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -237,27 +234,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="list-col-box">
-								<div class="act-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="act-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="act-pic">
+								<div class="list-pic">
 									<a href="http://item.yhd.com/item/8095858" target="_blank">
 										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
 										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
@@ -267,25 +244,27 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3 jumbotron mgsbotron-padding">
-					<div class="row-fluid msg-row">
-						<div class="col-md-12">
-							<div class="msg-col-box">
-								<div class="act-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
-									</a>
+				<div class="col-md-3 mgsbotron-padding">
+					<div class="msg-container">
+						<div class="row-fluid ">
+							<div class="col-md-12">
+								<div class="msg-col-box">
+									<div class="list-pic">
+										<a href="http://item.yhd.com/item/8095858" target="_blank">
+											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+										</a>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="msg-col-box">
-								<div class="act-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
-									</a>
+							<div class="col-md-12">
+								<div class="msg-col-box">
+									<div class="list-pic">
+										<a href="http://item.yhd.com/item/8095858" target="_blank">
+											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>
