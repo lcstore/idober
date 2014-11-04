@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,6 +31,7 @@ import com.lezo.iscript.spring.context.SpringBeanUtils;
 
 @Controller
 public class HomeController {
+	private static Logger logger = org.slf4j.LoggerFactory.getLogger(HomeController.class);
 	private ProductStatService productStatService = SpringBeanUtils.getBean(ProductStatService.class);
 	private ProductService productService = SpringBeanUtils.getBean(ProductService.class);
 
@@ -41,10 +44,11 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(@ModelAttribute("model") ModelMap model) {
+		long start = System.currentTimeMillis();
 		PromotionMapService promotionMapService = SpringBeanUtils.getBean(PromotionMapService.class);
 		List<Integer> siteList = new ArrayList<Integer>();
 		siteList.add(1001);
-//		siteList.add(1002);
+		// siteList.add(1002);
 		Integer promoteType = null;
 		Integer promoteStatus = PromotionMapDto.PROMOTE_STATUS_START;
 		Integer isDelete = PromotionMapDto.DELETE_FALSE;
@@ -63,6 +67,8 @@ public class HomeController {
 		maxCount = maxCount > summaryStatList.size() ? summaryStatList.size() : maxCount;
 		summaryStatList = summaryStatList.subList(hotCount, maxCount);
 		addHomeList(summaryStatList, hotCount, model);
+		long cost = System.currentTimeMillis() - start;
+		logger.info("do home controller.cost:" + cost);
 		return "index";
 	}
 
@@ -87,7 +93,7 @@ public class HomeController {
 			return;
 		}
 		statList = statList.subList(hotCount, statList.size());
-//		doPriceAsc(statList);
+		// doPriceAsc(statList);
 		int pageSize = 36;
 		int toIndex = statList.size();
 		toIndex = toIndex < pageSize ? toIndex : pageSize;
