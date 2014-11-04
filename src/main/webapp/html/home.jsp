@@ -13,7 +13,6 @@
 <!-- 添加标签图标16x16 -->
 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->
 <style>
-
 </style>
 </head>
 <body>
@@ -149,13 +148,26 @@
 						<div class="col-md-4">
 							<div class="list-col-box">
 								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
+									<a href="http://item.yhd.com/item/36177809" target="_blank">
+										<img
+										alt="Coolpad 酷派 大神F1青春版（8297D） 3G手机（智尚白） TD-SCDMA/GSM 双卡双待 真八核"
+										src="http://d9.yihaodianimg.com/N07/M02/3C/61/CgQIz1QOcRiAc3wtAAF4PA8xBek31801_200x200.jpg" />
 									</a>
 								</div>
-								<div class="act-shop shop-pic">
-									<img alt="1号店" src="/img/1002-44x36.png" />
+								<div class="list-txt">
+									<a href="http://item.yhd.com/item/36177809" target="_blank">
+										<span>Coolpad 酷派 大神F1青春版（8297D） 3G手机（智尚白） TD-SCDMA/GSM
+											双卡双待 真八核 ... </span>
+									</a>
+								</div>
+								<div class="list-price">
+									<del>
+										<span class="zm-coin">¥</span>999
+									</del>
+									<strong class="list_price"><span class="zm-coin">¥</span>999</strong>
+								</div>
+								<div class="shop-pic">
+									<img alt="1号店" src="/img/1001.png" />
 								</div>
 							</div>
 						</div>
@@ -273,7 +285,13 @@
 			</div>
 		</div>
 	</div>
-	<footer></footer>
+	<footer class="hidden-xs" id="footer-outer">
+		<div class="columns"></div>
+		<div class="text-center">
+			Copyright &copy; 2014 LEZOMAO.COM 版权所有
+			<p>鄂ICP备14009865号</p>
+		</div>
+	</footer>
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lezo.iscript.service.crawler.dto.ProductDto;
 import com.lezo.iscript.service.crawler.dto.ProductStatDto;
 import com.lezo.iscript.service.crawler.dto.PromotionMapDto;
+import com.lezo.iscript.service.crawler.dto.ShopDto;
 import com.lezo.iscript.service.crawler.service.ProductService;
 import com.lezo.iscript.service.crawler.service.ProductStatService;
 import com.lezo.iscript.service.crawler.service.PromotionMapService;
+import com.lezo.iscript.service.crawler.utils.ShopCacher;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
 
 @Controller
@@ -37,19 +39,30 @@ public class HomeController {
 	 * @param model
 	 * @return The index view (FTL)
 	 */
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(@ModelAttribute("model") ModelMap model) {
 		PromotionMapService promotionMapService = SpringBeanUtils.getBean(PromotionMapService.class);
-		Integer siteId = 1001;
+		List<Integer> siteList = new ArrayList<Integer>();
+		siteList.add(1001);
+//		siteList.add(1002);
 		Integer promoteType = null;
 		Integer promoteStatus = PromotionMapDto.PROMOTE_STATUS_START;
 		Integer isDelete = PromotionMapDto.DELETE_FALSE;
-		List<String> pCodeList = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, promoteType, promoteStatus, isDelete);
-		List<ProductStatDto> statList = productStatService.getProductStatDtos(pCodeList, siteId, 1);
-		doCommentDesc(statList);
-		int hotCount = 4;
-		addHotList(statList, hotCount, model);
-		addHomeList(statList, hotCount, model);
+		List<ProductStatDto> summaryStatList = new ArrayList<ProductStatDto>();
+		for (Integer siteId : siteList) {
+			List<String> pCodeList = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, promoteType, promoteStatus, isDelete);
+			List<ProductStatDto> statList = productStatService.getProductStatDtos(pCodeList, siteId, 1);
+			if (!statList.isEmpty()) {
+				summaryStatList.addAll(statList);
+			}
+		}
+		doCommentDesc(summaryStatList);
+		int hotCount = 3;
+		addHotList(summaryStatList, hotCount, model);
+		int maxCount = hotCount + 100;
+		maxCount = maxCount > summaryStatList.size() ? summaryStatList.size() : maxCount;
+		summaryStatList = summaryStatList.subList(hotCount, maxCount);
+		addHomeList(summaryStatList, hotCount, model);
 		return "index";
 	}
 
@@ -74,7 +87,7 @@ public class HomeController {
 			return;
 		}
 		statList = statList.subList(hotCount, statList.size());
-		doPriceAsc(statList);
+//		doPriceAsc(statList);
 		int pageSize = 36;
 		int toIndex = statList.size();
 		toIndex = toIndex < pageSize ? toIndex : pageSize;
@@ -104,17 +117,20 @@ public class HomeController {
 		List<ProductVo> voList = new ArrayList<ProductVo>(statList.size());
 		for (Entry<Integer, Set<String>> entry : siteCodeMap.entrySet()) {
 			List<ProductDto> productList = productService.getProductDtos(new ArrayList<String>(entry.getValue()), entry.getKey());
+			ShopDto siteDto = ShopCacher.getInstance().getShopDto(entry.getKey());
+			String siteName = siteDto == null ? "" : siteDto.getShopName();
 			for (ProductDto pDto : productList) {
 				String key = pDto.getSiteId() + "-" + pDto.getProductCode();
 				ProductVo pVo = new ProductVo();
 				ProductStatDto statDto = statMap.get(key);
 				pVo.setImgUrl(pDto.getImgUrl());
+				pVo.setSiteName(siteName);
 				if (statDto != null) {
 					pVo.setMarketPrice(statDto.getMarketPrice());
 					pVo.setProductUrl(statDto.getProductUrl());
 					pVo.setProductCode(statDto.getProductCode());
 					pVo.setProductName(statDto.getProductName());
-					pVo.setShopId(statDto.getShopId());
+					pVo.setSiteId(statDto.getSiteId());
 					pVo.setProductPrice(statDto.getProductPrice());
 				}
 				voList.add(pVo);
@@ -152,13 +168,15 @@ public class HomeController {
 		Collections.sort(statList, new Comparator<ProductStatDto>() {
 			@Override
 			public int compare(ProductStatDto statLeft, ProductStatDto statRight) {
-				if (statLeft.getCommentNum() == null) {
+				Integer leftNum = statLeft.getSoldNum() == null ? statLeft.getCommentNum() : statLeft.getSoldNum();
+				Integer rightNum = statRight.getSoldNum() == null ? statRight.getCommentNum() : statRight.getSoldNum();
+				if (leftNum == null) {
 					return -1;
 				}
-				if (statRight.getCommentNum() == null) {
+				if (rightNum == null) {
 					return 1;
 				}
-				return statRight.getCommentNum().compareTo(statRight.getCommentNum());
+				return rightNum.compareTo(leftNum);
 			}
 		});
 	}

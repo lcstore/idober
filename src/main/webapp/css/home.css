@@ -149,3 +149,39 @@ a:hover {
 	height: 256px;
 	padding: 10px;
 }
+
+#footer-outer {
+	background: none repeat scroll 0 0 #f9f9f7;
+	box-shadow: 0 0 3px #e1e1e1 inset;
+	padding-top: 30px;
+}
+
+#footer-outer .columns {
+	margin: 0 auto;
+	width: 920px;
+}
+
+#footer-outer .columns:before, #footer-outer .columns:after {
+	content: " ";
+	display: table;
+}
+
+#footer-outer .columns:after {
+	clear: both;
+}
+
+#footer-outer .columns .column {
+	float: left;
+	line-height: 220%;
+	margin-left: 0;
+	width: 70px;
+}
+
+#footer-outer .columns .column li h2 {
+	font-size: 19px;
+}
+
+#footer-outer .text-center {
+	color: #ccc;
+	padding: 20px;
+}

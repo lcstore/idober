@@ -1,7 +1,7 @@
 package com.lezo.idober.home.action;
 
 public class ProductVo {
-	private Integer shopId;
+	private Integer siteId;
 	private String productCode;
 	private String productName;
 	private Float marketPrice;
@@ -9,13 +9,7 @@ public class ProductVo {
 	private String productUrl;
 	private String imgUrl;
 
-	public Integer getShopId() {
-		return shopId;
-	}
-
-	public void setShopId(Integer shopId) {
-		this.shopId = shopId;
-	}
+	private String siteName;
 
 	public String getProductCode() {
 		return productCode;
@@ -66,5 +60,21 @@ public class ProductVo {
 			imgUrl = imgUrl.replace("_60x60.jpg", "_200x200.jpg");
 		}
 		this.imgUrl = imgUrl;
+	}
+
+	public Integer getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(Integer siteId) {
+		this.siteId = siteId;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 }

@@ -1,72 +1,18 @@
 <!DOCTYPE html>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html lang="zh-cn">
 <head>
-<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>乐助猫，助你快乐生活</title>
-<!-- Bootstrap core CSS -->
-<link href="css/bootstrap.css" rel="stylesheet">
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-<style type="text/css">
-body {
-	padding-top: 70px;
-}
-
-.bs-example {
-	background-color: #fff;
-	border-color: #ddd;
-	border-radius: 4px 4px 0 0;
-	border-width: 10px;
-	box-shadow: none;
-	margin-left: 0;
-	margin-right: 0;
-}
-
-.row-left {
-	float: left
-}
-
-.row-right {
-	float: right;
-	margin-right: 15px;
-	width: 23%;
-}
-
-.floot {
-	background-color: black;
-}
-.p-price {
-    height: 20px;
-    overflow: hidden;
-}
-.p-price strong {
-    float: left;
-    color: #e4393c;
-    font-size: 14px;
-    margin-right: 4px;
-}
-.p-img, .p-name, .p-price, .p-market, .p-detail {
-    overflow: hidden;
-}
-.p-img {
-    padding: 5px 0;
-}
-
-a img {
-    border: 0 none;
-}
-img {
-    vertical-align: middle;
-}
-del {
-    text-decoration: line-through;
-}
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../css/home.css">
+<!-- 添加标签图标16x16 -->
+<!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->
+<style>
 </style>
 </head>
 <body>
@@ -80,121 +26,127 @@ del {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a title="Worktile" href="/" class="navbar-brand" id="header_logo">eMao</a>
+				<a title="Lezomao" href="/" class="navbar-brand" id="header_logo">Lezomao</a>
 			</div>
 			<div class="collapse navbar-collapse navbar-header-collapse">
-
-				<ul class="nav navbar-nav" id="header_menu">
-					<li class="active"><a href="/">首页</a></li>
-					<li><a href="#">今日推荐</a></li>
-					<li><a href="#">实惠特区</a></li>
-				</ul>
-				<form class="navbar-form navbar-left" role="search">
-					<div class="form-group">
-						<input placeholder="Search" class="form-control" type="text"
-							size="40"> <span class="form-group-btn">
-							<button class="btn btn-success" type="submit">Go</button>
-						</span>
+				<div class="row">
+					<div class="col-md-3">
+						<ul class="nav navbar-nav" id="header_menu">
+							<li class="active"><a href="/">首页</a></li>
+							<li><a href="#">爱抢眼</a></li>
+							<li><a href="#">购实惠</a></li>
+						</ul>
 					</div>
-				</form>
-				<ul id="header_me" class="nav navbar-nav navbar-right"
-					style="margin-right: 40px;">
-					<li class="divider-vertical hidden-xs"></li>
-					<li><a href="#">注册</a></li>
-					<li><a href="#">登录</a></li>
-				</ul>
+					<div class="col-md-4">
+						<form class="navbar-form navbar-left" role="search">
+							<div class="form-group">
+								<input type="text" size="40" class="form-control"
+									placeholder="Search">
+								<button type="submit" class="btn btn-success">Go</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-3">
+						<ul id="header_me" class="nav navbar-nav navbar-right ng-scope">
+							<li class="divider-vertical hidden-xs"></li>
+							<li><a href="#" class="mr_15">登录</a></li>
+							<li><a href="#">注册</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
+
 		</nav>
 	</header>
-	<div id="wrap-all">
-		<div class="inner" id="main">
-			<div id="index-wrap">
-				<div class="container">
+	<div class="main data-box">
+		<div class="act">
+			<div class="jumbotron actbox-padding">
+				<div class="container-fluid">
 					<div class="row">
-						<div class="index-banner">
-							<div class="index-banner-wrap">
-								<div class="index-banner-inner"></div>
+					  <#list model["indexHotList"] as pVo>
+						<div class="col-md-4 act-col">
+							<div class="act-col-box">
+								<div class="list-pic">
+									<a href="${pVo.productUrl}" target="_blank">
+										<img
+										alt="${pVo.productName}"
+										src="${pVo.imgUrl}" />
+									</a>
+								</div>
+								<div class="act-txt">
+									<a href="${pVo.productUrl}" target="_blank">
+										<span>${pVo.productName}</span>
+									</a>
+								</div>
+								<div class="act-price">
+									<del>
+										<span class="zm-coin">¥</span>${pVo.marketPrice}
+									</del>
+									<strong class="list_price"><span class="zm-coin">¥</span>${pVo.productPrice}</strong>
+								</div>
+								<div class="act-shop shop-pic">
+									<img alt="${pVo.siteName}" src="/img/${pVo.siteId}.png" />
+								</div>
 							</div>
 						</div>
+						 </#list>
 					</div>
-					<div class="row">
-						<div class="index-hot panel panel-default">
-							<div class="panel-body">
-							    <#list model["indexHotList"] as pVo>
-									<div class="col-md-3">
-										<section>
-										<div class="p-img">
-										<a href="${pVo.productUrl}" target="_blank">
-										<img width="220" height="220" class="err-product" data-img="1" alt="${pVo.productName}" src="${pVo.imgUrl}" title="${pVo.productName}">
-										</a>
-										</div>
-										<div class="p-name">
-										<a href="${pVo.productUrl}" target="_blank">
-										  ${pVo.productName}
-										</a>
-										</div>
-										<div class="p-price"><strong>￥${pVo.productPrice}</strong></div>
-										</section>
-									</div>
-							    </#list>
+				</div>
+			</div>
+		</div>
+		<div class="data-main ">
+			<div class="row">
+				<div class="col-md-9 jumbotron listbotron-padding">
+					<div class="row-fluid">
+					   <#list model["pageList"] as pVo>
+						<div class="col-md-4">
+							<div class="list-col-box">
+								<div class="list-pic">
+									<a href="${pVo.productUrl}" target="_blank">
+										<img
+										alt="${pVo.productName}"
+										src="${pVo.imgUrl}" />
+									</a>
+								</div>
+								<div class="list-txt">
+									<a href="${pVo.productUrl}" target="_blank">
+										<span>${pVo.productName}</span>
+									</a>
+								</div>
+								<div class="list-price">
+									<del>
+										<span class="zm-coin">¥</span>${pVo.marketPrice}
+									</del>
+									<strong class="list_price"><span class="zm-coin">¥</span>${pVo.productPrice}</strong>
+								</div>
+								<div class="shop-pic">
+									<img alt="${pVo.siteName}" src="/img/${pVo.siteId}.png" />
+								</div>
 							</div>
 						</div>
+					 </#list>
 					</div>
-					<div></div>
-					<div class="row">
-						<div class="index-body ">
-							<div class="row">
-								<div class="col-md-9 row-left">
-									<div class="body-left panel panel-default">
-										<div class="panel-body">
-										 <#list model["pageList"] as pVo>
-											 <div class="col-md-4">
-												<div class="p-img">
-													<a href="${pVo.productUrl}" target="_blank"><img width="180"
-														height="180" data-img="1" alt="${pVo.productName}"
-														src="${pVo.imgUrl}"></a>
-												</div>
-												<div class="p-name">
-													<a href="${pVo.productUrl}" target="_blank">${pVo.productName} </a>
-												</div>
-												<div class="p-price">
-													<strong>￥${pVo.productPrice}</strong>
-												</div>
-											  </div>
-							              </#list>
-										</div>
+				</div>
+				<div class="col-md-3 mgsbotron-padding">
+					<div class="msg-container">
+						<div class="row-fluid ">
+							<div class="col-md-12">
+								<div class="msg-col-box">
+									<div class="list-pic">
+										<a href="http://item.yhd.com/item/8095858" target="_blank">
+											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+										</a>
 									</div>
 								</div>
-								<div class="col-md-3 row-right">
-									<div class="body-right">
-										<div class="">
-											<div class="row panel panel-default">
-												<div class="panel-body">
-													<article class="post tag-bs2 ">
-														<section>
-															<img alt="提高效率"
-																src="https://dn-wtbox.qbox.me/img/index/i3.png?ver=3.2.26">
-															<br>
-															<h4>提高效率</h4>
-															灵活的任务和日程，让团队成员的<br> 效率迅速提升，工作就是这么简单
-														</section>
-													</article>
-												</div>
-											</div>
-											<div class="row panel panel-default">
-												<div class="panel-body">
-													<article class="post tag-bs2 ">
-														<section>
-															<img alt="提高效率"
-																src="https://dn-wtbox.qbox.me/img/index/i3.png?ver=3.2.26">
-															<br>
-															<h4>提高效率</h4>
-															灵活的任务和日程，让团队成员的<br> 效率迅速提升，工作就是这么简单
-														</section>
-													</article>
-												</div>
-											</div>
-										</div>
+							</div>
+							<div class="col-md-12">
+								<div class="msg-col-box">
+									<div class="list-pic">
+										<a href="http://item.yhd.com/item/8095858" target="_blank">
+											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+										</a>
 									</div>
 								</div>
 							</div>
@@ -202,16 +154,17 @@ del {
 					</div>
 				</div>
 			</div>
-			<footer class="hidden-xs " id="footer-outer" role="contentinfo">
-				<div class="container">
-					<hr>
-					<div class="text-center row-fluid">
-						Copyright &copy; 2014 LEZOMAO.COM 版权所有 &nbsp; <a
-							href="http://www.miitbeian.gov.cn/">鄂ICP备14009865号</a>
-					</div>
-				</div>
-			</footer>
 		</div>
 	</div>
+	<footer class="hidden-xs" id="footer-outer">
+		<div class="columns"></div>
+		<div class="text-center">
+			Copyright &copy; 2014 LEZOMAO.COM 版权所有
+			<p>鄂ICP备14009865号</p>
+		</div>
+	</footer>
+	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+	<script
+		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>
