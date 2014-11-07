@@ -130,6 +130,7 @@ public class HomeController {
 				ProductVo pVo = new ProductVo();
 				ProductStatDto statDto = statMap.get(key);
 				pVo.setImgUrl(pDto.getImgUrl());
+				pVo.setUnionUrl(pDto.getUnionUrl());
 				pVo.setSiteName(siteName);
 				if (statDto != null) {
 					pVo.setMarketPrice(statDto.getMarketPrice());

@@ -1,5 +1,7 @@
 package com.lezo.idober.home.action;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ProductVo {
 	private Integer siteId;
 	private String productCode;
@@ -8,6 +10,7 @@ public class ProductVo {
 	private Float productPrice;
 	private String productUrl;
 	private String imgUrl;
+	private String unionUrl;
 
 	private String siteName;
 
@@ -44,6 +47,9 @@ public class ProductVo {
 	}
 
 	public String getProductUrl() {
+		if (!StringUtils.isEmpty(getUnionUrl())) {
+			return getUnionUrl();
+		}
 		return productUrl;
 	}
 
@@ -76,5 +82,13 @@ public class ProductVo {
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
+	}
+
+	public String getUnionUrl() {
+		return unionUrl;
+	}
+
+	public void setUnionUrl(String unionUrl) {
+		this.unionUrl = unionUrl;
 	}
 }
