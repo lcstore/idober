@@ -28,7 +28,7 @@ public class SearchActionServiceImpl implements SearchActionService {
 		searchHisDto.setStatus(SearchHisDto.STATUS_NEW);
 		searchHisDto.setCreateTime(new Date());
 		searchHisDto.setUpdateTime(searchHisDto.getCreateTime());
-		return searchHisService.saveSearchHisDtoAndGetId(searchHisDto);
+		return searchHisService.saveSearchHisDtoAndGetId(searchHisDto).getId();
 	}
 
 	// q=copyText%3A%E7%89%9B%E5%A5%B6&start=1&rows=8&fl=siteId%2CproductCode%2CproductName%2CproductBrand&wt=xml&indent=true
@@ -42,7 +42,7 @@ public class SearchActionServiceImpl implements SearchActionService {
 		sb.append(pageSize);
 		sb.append("&fl=");
 		sb.append(getFields(keyWord));
-		sb.append("&wt=json&indent=true");
+		// sb.append("&wt=json&indent=true");
 		return sb.toString();
 	}
 
