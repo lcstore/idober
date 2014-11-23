@@ -1,4 +1,4 @@
-package com.lezo.idober.home.action;
+package com.lezo.idober.vo;
 
 public class User {
 	private String firstname;

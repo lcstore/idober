@@ -264,22 +264,14 @@
 							<div class="col-md-12">
 								<div class="msg-col-box">
 									<div class="list-pic">
-										<a href="http://item.yhd.com/item/8095858" target="_blank">
-											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+										<a href="http://s.click.taobao.com/t?e=m%3D2%26s%3DA7w91x%2F8C6kcQipKwQzePCperVdZeJviK7Vc7tFgwiFRAdhuF14FMU6aDTxgPUFeRitN3%2FurF3xQwTOyExEmO4ZdFhTQClgvSoG%2FlgsMYiTYf2eFg%2BkFfaUuZxIcp9pfUIgVEmFmgnbDX0%2BHH2IEVeOhxeU7PAMffjxl6AIniNq2NuRO0YvGxWDg6Uw6J4%2Fplpa1ptKO5BKn1GHnsRyADPKha8ag2qqg3Z8tT6jmgDDcUneJPpKI5lIl2CYBTvnV" target="_blank">
+											<img alt="双11大牌保暖全年最牛价最强集结！"
+											src="http://gtms04.alicdn.com/tps/i4/TB1v6HJGFXXXXX_XpXXQO4D5VXX-440-180.jpg" />
 										</a>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-12">
-								<div class="msg-col-box">
-									<div class="list-pic">
-										<a href="http://item.yhd.com/item/8095858" target="_blank">
-											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
-										</a>
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>

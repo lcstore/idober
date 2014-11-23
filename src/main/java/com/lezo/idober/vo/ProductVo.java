@@ -1,4 +1,4 @@
-package com.lezo.idober.home.action;
+package com.lezo.idober.vo;
 
 import org.apache.commons.lang3.StringUtils;
 
