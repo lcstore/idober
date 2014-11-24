@@ -1,8 +1,5 @@
 package com.lezo.idober.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -28,7 +25,8 @@ public class SearchController {
 	private SearchActionService searchActionService = SpringBeanUtils.getBean(SearchActionService.class);
 
 	@RequestMapping("build")
-	public String buildSearch(@ModelAttribute("model") ModelMap model, @RequestParam String keyWord, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "10") Integer pageSize) {
+	public String buildSearch(@ModelAttribute("model") ModelMap model, @RequestParam String keyWord,
+			@RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "10") Integer pageSize) {
 		long start = System.currentTimeMillis();
 		Long searchId = 0L;
 		try {
@@ -40,23 +38,13 @@ public class SearchController {
 		}
 		model.addAttribute("sid", searchId);
 		long cost = System.currentTimeMillis() - start;
-		JSONObject mObject = new JSONObject();
-		JSONUtils.put(mObject, "code", 0);
 		logger.info("search:{},page:{},searchId:{},cost:{}", keyWord, curPage, searchId, cost);
 		return "searchList";
 	}
 
-	@RequestMapping("check")
+	@RequestMapping("query")
 	@ResponseBody
-	public String checkSearch(@ModelAttribute("model") ModelMap model, @PathVariable Long searchId) {
-		long start = System.currentTimeMillis();
-		long cost = System.currentTimeMillis() - start;
-		return searchActionService.getSearchResult(searchId);
-	}
-
-	@RequestMapping("query/{searchId}")
-	@ResponseBody
-	public String getSearchResult(@ModelAttribute("model") ModelMap model, @PathVariable Long searchId) {
+	public String getSearchResult(@ModelAttribute("model") ModelMap model, @RequestParam(value = "sid") Long searchId) {
 		long start = System.currentTimeMillis();
 		long cost = System.currentTimeMillis() - start;
 		return searchActionService.getSearchResult(searchId);

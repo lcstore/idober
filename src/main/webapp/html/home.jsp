@@ -40,11 +40,11 @@
 						</ul>
 					</div>
 					<div class="col-md-4">
-						<form class="navbar-form navbar-left" role="search">
+						<form class="navbar-form navbar-left" role="search" action="/search/build">
 							<div class="form-group">
 								<input type="text" size="40" class="form-control"
-									placeholder="Search" id="queryWord">
-								<button type="button" class="btn btn-success" id="searchBtn">Go</button>
+									placeholder="Search" name="keyWord">
+								<button type="submit" class="btn btn-success">Go</button>
 							</div>
 						</form>
 					</div>
@@ -172,7 +172,6 @@
 									<img alt="1号店" src="/img/1001.png" />
 								</div>
 							</div>
-							<span id="testSpan"></span>
 						</div>
 					</div>
 				</div>
@@ -207,23 +206,5 @@
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			var myChecker;
-			var lastQuery;
-			$("#searchBtn").click(function() {
-				var queryWord = $("#queryWord").val();
-				console.log(queryWord);
-				if (lastQuery && lastQuery == queryWord) {
-					return;
-				}
-				$.post("/search/build", {
-					keyWord : queryWord
-				}, function(result) {
-					$("testSpan").html(result);
-				});
-			});
-		});
-	</script>
 </body>
 </html>
