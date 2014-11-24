@@ -43,8 +43,8 @@
 						<form class="navbar-form navbar-left" role="search">
 							<div class="form-group">
 								<input type="text" size="40" class="form-control"
-									placeholder="Search">
-								<button type="submit" class="btn btn-success">Go</button>
+									placeholder="Search" id="queryWord">
+								<button type="button" class="btn btn-success" id="searchBtn">Go</button>
 							</div>
 						</form>
 					</div>
@@ -146,7 +146,7 @@
 		<div class="data-main ">
 			<div class="row">
 				<div class="col-md-9 jumbotron listbotron-padding">
-					<div class="row-fluid">
+					<div class="row-fluid" id="searchlist">
 						<div class="col-md-4">
 							<div class="list-col-box">
 								<div class="list-pic">
@@ -172,89 +172,7 @@
 									<img alt="1号店" src="/img/1001.png" />
 								</div>
 							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-								<div class="act-shop shop-pic">
-									<img alt="1号店" src="/img/1002-44x36.png" />
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="list-col-box">
-								<div class="list-pic">
-									<a href="http://item.yhd.com/item/8095858" target="_blank">
-										<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-										src="http://d6.yihaodianimg.com/N03/M08/22/31/CgQCs1ER8ayAd6G1AAPUTW9n4fU51801_200x200.jpg" />
-									</a>
-								</div>
-							</div>
+							<span id="testSpan"></span>
 						</div>
 					</div>
 				</div>
@@ -264,15 +182,15 @@
 							<div class="col-md-12">
 								<div class="msg-col-box">
 									<div class="list-pic">
-										<a href="http://s.click.taobao.com/t?e=m%3D2%26s%3DA7w91x%2F8C6kcQipKwQzePCperVdZeJviK7Vc7tFgwiFRAdhuF14FMU6aDTxgPUFeRitN3%2FurF3xQwTOyExEmO4ZdFhTQClgvSoG%2FlgsMYiTYf2eFg%2BkFfaUuZxIcp9pfUIgVEmFmgnbDX0%2BHH2IEVeOhxeU7PAMffjxl6AIniNq2NuRO0YvGxWDg6Uw6J4%2Fplpa1ptKO5BKn1GHnsRyADPKha8ag2qqg3Z8tT6jmgDDcUneJPpKI5lIl2CYBTvnV" target="_blank">
-											<img alt="双11大牌保暖全年最牛价最强集结！"
+										<a
+											href="http://s.click.taobao.com/t?e=m%3D2%26s%3DA7w91x%2F8C6kcQipKwQzePCperVdZeJviK7Vc7tFgwiFRAdhuF14FMU6aDTxgPUFeRitN3%2FurF3xQwTOyExEmO4ZdFhTQClgvSoG%2FlgsMYiTYf2eFg%2BkFfaUuZxIcp9pfUIgVEmFmgnbDX0%2BHH2IEVeOhxeU7PAMffjxl6AIniNq2NuRO0YvGxWDg6Uw6J4%2Fplpa1ptKO5BKn1GHnsRyADPKha8ag2qqg3Z8tT6jmgDDcUneJPpKI5lIl2CYBTvnV"
+											target="_blank"> <img alt="双11大牌保暖全年最牛价最强集结！"
 											src="http://gtms04.alicdn.com/tps/i4/TB1v6HJGFXXXXX_XpXXQO4D5VXX-440-180.jpg" />
 										</a>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-12">
-							</div>
+							<div class="col-md-12"></div>
 						</div>
 					</div>
 				</div>
@@ -289,5 +207,23 @@
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var myChecker;
+			var lastQuery;
+			$("#searchBtn").click(function() {
+				var queryWord = $("#queryWord").val();
+				console.log(queryWord);
+				if (lastQuery && lastQuery == queryWord) {
+					return;
+				}
+				$.post("/search/build", {
+					keyWord : queryWord
+				}, function(result) {
+					$("testSpan").html(result);
+				});
+			});
+		});
+	</script>
 </body>
 </html>

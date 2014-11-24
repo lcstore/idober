@@ -3,6 +3,7 @@ package com.lezo.idober.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +17,7 @@ import com.lezo.idober.service.SearchActionService;
 import com.lezo.iscript.service.crawler.service.ProductService;
 import com.lezo.iscript.service.crawler.service.ProductStatService;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
+import com.lezo.iscript.utils.JSONUtils;
 
 @Controller
 @RequestMapping("search")
@@ -25,8 +27,8 @@ public class SearchController {
 	private ProductService productService = SpringBeanUtils.getBean(ProductService.class);
 	private SearchActionService searchActionService = SpringBeanUtils.getBean(SearchActionService.class);
 
-	@RequestMapping("build/{keyWord}")
-	public String buildSearch(@ModelAttribute("model") ModelMap model, @PathVariable String keyWord, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "10") Integer pageSize) {
+	@RequestMapping("build")
+	public String buildSearch(@ModelAttribute("model") ModelMap model, @RequestParam String keyWord, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "10") Integer pageSize) {
 		long start = System.currentTimeMillis();
 		Long searchId = 0L;
 		try {
@@ -38,8 +40,18 @@ public class SearchController {
 		}
 		model.addAttribute("sid", searchId);
 		long cost = System.currentTimeMillis() - start;
+		JSONObject mObject = new JSONObject();
+		JSONUtils.put(mObject, "code", 0);
 		logger.info("search:{},page:{},searchId:{},cost:{}", keyWord, curPage, searchId, cost);
 		return "searchList";
+	}
+
+	@RequestMapping("check")
+	@ResponseBody
+	public String checkSearch(@ModelAttribute("model") ModelMap model, @PathVariable Long searchId) {
+		long start = System.currentTimeMillis();
+		long cost = System.currentTimeMillis() - start;
+		return searchActionService.getSearchResult(searchId);
 	}
 
 	@RequestMapping("query/{searchId}")
