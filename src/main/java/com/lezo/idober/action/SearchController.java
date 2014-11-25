@@ -1,20 +1,18 @@
 package com.lezo.idober.action;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lezo.idober.service.SearchActionService;
+import com.lezo.idober.vo.ActionReturnVo;
 import com.lezo.iscript.service.crawler.service.ProductService;
 import com.lezo.iscript.service.crawler.service.ProductStatService;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
-import com.lezo.iscript.utils.JSONUtils;
 
 @Controller
 @RequestMapping("search")
@@ -44,9 +42,13 @@ public class SearchController {
 
 	@RequestMapping("query")
 	@ResponseBody
-	public String getSearchResult(@ModelAttribute("model") ModelMap model, @RequestParam(value = "sid") Long searchId) {
+	public ActionReturnVo getSearchResult(@ModelAttribute("model") ModelMap model, @RequestParam(value = "sid") Long searchId) {
 		long start = System.currentTimeMillis();
 		long cost = System.currentTimeMillis() - start;
-		return searchActionService.getSearchResult(searchId);
+		ActionReturnVo vo = searchActionService.getSearchResult(searchId);
+//		ObjectMapper mapper = new ObjectMapper();
+//		StringWriter writer = new StringWriter();
+//		mapper.writeValue(writer, vo);
+		return vo;
 	}
 }

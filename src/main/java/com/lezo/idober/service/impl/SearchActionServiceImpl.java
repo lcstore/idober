@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.lezo.idober.service.SearchActionService;
+import com.lezo.idober.vo.ActionReturnVo;
 import com.lezo.iscript.service.crawler.dto.SearchHisDto;
 import com.lezo.iscript.service.crawler.service.SearchHisService;
-import com.lezo.iscript.utils.JSONUtils;
 
 @Component
 public class SearchActionServiceImpl implements SearchActionService {
@@ -67,23 +66,23 @@ public class SearchActionServiceImpl implements SearchActionService {
 	}
 
 	@Override
-	public String getSearchResult(Long searchId) {
-		JSONObject rsObject = new JSONObject();
+	public ActionReturnVo getSearchResult(Long searchId) {
+		ActionReturnVo returnVo = new ActionReturnVo();
 		List<Long> idList = new ArrayList<Long>(1);
 		idList.add(searchId);
 		List<SearchHisDto> dataList = searchHisService.getSearchHisDtoByIds(idList);
 		if (dataList.isEmpty()) {
-			JSONUtils.put(rsObject, "code", SearchHisDto.STATUS_DONE);
-			JSONUtils.put(rsObject, "msg", "not found searchId:" + searchId);
+			returnVo.setCode(SearchHisDto.STATUS_DONE);
+			returnVo.setMsg("not found searchId:" + searchId);
 		} else {
 			SearchHisDto hasDto = dataList.get(0);
-			JSONUtils.put(rsObject, "code", hasDto.getStatus());
+			returnVo.setCode(hasDto.getStatus());
 			if (hasDto.getStatus() == SearchHisDto.STATUS_DONE) {
-				JSONUtils.put(rsObject, "msg", "success");
-				JSONUtils.put(rsObject, "data", hasDto.getQueryResult());
+				returnVo.setMsg("success");
+				returnVo.setData(hasDto.getQueryResult());
 			}
 		}
-		return rsObject.toString();
+		return returnVo;
 	}
 
 }

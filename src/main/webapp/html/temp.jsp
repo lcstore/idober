@@ -212,32 +212,48 @@
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function() {
-		var sid = $("input[name=sid][value]").val();
-		var iCount = 0;
-		var iMaxCount=5;
-		var myChecker= setInterval(function(){
-			$.ajax({  
+        function Queryer(){
+             this._maxCount = 5;
+             this._count = 0;
+        };
+        Queryer.prototype.start = function(){
+        	this._sid = $("input[name=sid][value]").val();
+            this.check();
+        };
+        Queryer.prototype.stop = function(){
+           if(this._myChecker){
+              clearInterval(this._myChecker);
+           }
+        };
+        Queryer.prototype.check = function(){
+           this.query();
+           this._count++;
+           if(this._data && this._data.code==2){
+              this.stop();
+              this.addResult(this._data);
+              return;
+           }else if(!this._myChecker){
+               this._myChecker= setInterval(this.check,3000) ; 
+           }
+           if(this._count<this._maxCount) {
+             this.stop();
+           }
+        };
+        Queryer.prototype.query = function(){
+            $.ajax({  
                 type: "GET",  
-                url: "/search/check?sid="+sid,  
+                url: "/search/query?sid="+ this._sid,  
                 dataType: 'json',  
                 success: function(data){ 
-                	if(data.code==2){
-                		clearInterval(myChecker);
-                		addResult(data);
-                	}else{
-	                    iCount++;
-	                    if(iCount >=iMaxCount){
-	                    	 clearInterval(myChecker);
-	                    }
-                	}
+                	this._data = data;
                 },  
                 error:function(data){  
-                    $("#testSpan").html(data);  
-                    clearInterval(myChecker);
+                    this.stop();
                 }  
-            })
-        },3000) ; 
-		function addResult(data){
+            });
+        };
+        Queryer.prototype.addResult=function(data){
+		    alert(data);
 			var oDocs = data.docs;
 			if(!oDocs){
 				return;
@@ -262,9 +278,12 @@
 				searchHtml+='<img alt="siteName" src="/img/'+oDoc.productUrl+'.png" />\n';
 				searchHtml+='</div></div>\n';
 			}
+			 $("#testSpan").html(searchHtml);
 			console.warn(searchHtml);
 			alert(searchHtml);
-		}
+		};
+		var oQueryer = new Queryer();
+		oQueryer.start();
 	});
 	</script>
 </body>

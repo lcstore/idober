@@ -24,51 +24,49 @@
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-$(document).ready(function() {
-        var oQueryer = function(){
+<script type="text/javascript">
+	$(document).ready(function() {
+        function Queryer(){
              this._maxCount = 5;
              this._count = 0;
         };
-        oQueryer.start = function(){
+        Queryer.prototype.start = function(){
         	this._sid = $("input[name=sid][value]").val();
-            this.check();
+            this.query();
         };
-        oQueryer.stop = function(){
+        Queryer.prototype.stop = function(){
            if(this._myChecker){
               clearInterval(this._myChecker);
            }
-        },
-        oQueryer.check = function(){
-           this.query();
+        };
+        Queryer.prototype.check = function(oData){
            this._count++;
-           if(this._data && this._data.code==2){
+           if(oData && oData.code==2){
               this.stop();
-              this.addResult(this._data);
+              this.addResult(oData);
               return;
-           }else if(!this._myChecker){
-               this._myChecker= setInterval(this.check,3000) ; 
            }
-           if(this._count<this._maxCount) {
+           if(this._count==this._maxCount) {
              this.stop();
            }
         };
-        oQueryer.query = function(){
+        Queryer.prototype.query = function(){
+            var _this_ =this;
             $.ajax({  
                 type: "GET",  
                 url: "/search/query?sid="+ this._sid,  
                 dataType: 'json',  
                 success: function(data){ 
-                	this._data = data;
+                	_this_.check(data);
                 },  
                 error:function(data){  
-                    this.stop();
+                    _this_.stop();
                 }  
             });
         };
-		oQueryer.addResult=function(data){
-		    alert(data);
-			var oDocs = data.docs;
+        Queryer.prototype.addResult=function(oCallBack){
+			var oData = eval('('+oCallBack.data+')');
+			var oDocs = oData.docs;
 			if(!oDocs){
 				return;
 			}
@@ -96,6 +94,7 @@ $(document).ready(function() {
 			console.warn(searchHtml);
 			alert(searchHtml);
 		};
+		var oQueryer = new Queryer();
 		oQueryer.start();
 	});
 	</script>
