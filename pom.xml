@@ -97,31 +97,21 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.15.v20140411</version>
 				<configuration>
+					<stopKey>stop</stopKey>
+					<stopPort>9999</stopPort>
+					<scanIntervalSeconds>1</scanIntervalSeconds>
+					<contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
 					<webApp>
 						<contextPath>/</contextPath>
 					</webApp>
-					<stopKey>webx</stopKey>
-					<stopPort>9999</stopPort>
 					<connectors>
 						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
 							<port>8081</port>
 							<maxIdleTime>60000</maxIdleTime>
 						</connector>
 					</connectors>
-					<requestLog implementation="org.eclipse.jetty.server.NCSARequestLog">
-						<filename>target/access.log</filename>
-						<retainDays>90</retainDays>
-						<append>false</append>
-						<extended>false</extended>
-						<logTimeZone>GMT+8:00</logTimeZone>
-					</requestLog>
-					<systemProperties>
-						<systemProperty>
-							<name>productionMode</name>
-							<value>${productionMode}</value>
-						</systemProperty>
-					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>

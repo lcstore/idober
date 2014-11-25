@@ -40,8 +40,13 @@
 					<div class="col-md-4">
 						<form class="navbar-form navbar-left" role="search">
 							<div class="form-group">
-								<input type="text" size="40" class="form-control"
-									placeholder="Search">
+						       <#if model["qWord"] = null> 
+								  <input type="text" size="40" class="form-control"
+									placeholder="Search" value="牛奶">
+								<#else> 
+								  <input type="text" size="40" class="form-control"
+									placeholder="Search" value="${model["qWord"]}">
+								</#if>
 								<button type="submit" class="btn btn-success">Go</button>
 							</div>
 						</form>
@@ -150,6 +155,7 @@
         function Queryer(){
              this._maxCount = 5;
              this._count = 0;
+             this._period = 1000;
         };
         Queryer.prototype.start = function(){
         	this._sid = $("input[name=sid][value]").val();
@@ -171,7 +177,7 @@
            if(!this._myChecker){
                this._myChecker= setInterval(function(){
                   _this.query();
-               },2000) ; 
+               },this._period) ; 
            }
            if(this._count==this._maxCount) {
              this.stop();
@@ -231,16 +237,16 @@
 				var oDoc = oDocs[i];
 				searchHtml+='<div class="col-md-4"><div class="list-col-box">\n';
 				searchHtml+='<div class="list-pic">\n';
-				searchHtml+='<a href="${pVo.productUrl}" target="_blank"><img alt="${pVo.productName}" src="${pVo.imgUrl}" /></a>\n';
+				searchHtml+='<a href="'+(oDoc.unionUrl?oDoc.unionUrl:oDoc.productUrl)+'" target="_blank"><img alt="'+oDoc.productName+'" src="'+oDoc.imgUrl+'" /></a>\n';
 				searchHtml+='</div>\n';
 				searchHtml+='<div class="list-txt">\n';
-				searchHtml+='<a href="${pVo.productUrl}" target="_blank"> <span>${pVo.productName}</span></a>\n';
+				searchHtml+='<a href="'+oDoc.productUrl+'" target="_blank"> <span>'+oDoc.productName+'</span></a>\n';
 				searchHtml+='</div>\n';
 				searchHtml+='<div class="list-price">\n';
-				searchHtml+='<del><span class="zm-coin">¥</span>${pVo.marketPrice}</del>\n';
-				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>${pVo.productPrice}</strong>\n';
+				searchHtml+='<del><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</del>\n';
+				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</strong>\n';
 				searchHtml+='</div>\n';
-				searchHtml+='<div class="shop-pic"><img alt="${pVo.siteName}" src="/img/${pVo.siteId}.png" /></div>\n';
+				searchHtml+='<div class="shop-pic"><img alt="'+oDoc.siteName+'" src="/img/'+oDoc.siteId+'.png" /></div>\n';
 				searchHtml+='</div></div>\n';
 			}
 			 $("#sContainer").html(searchHtml);

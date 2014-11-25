@@ -23,8 +23,7 @@ public class SearchController {
 	private SearchActionService searchActionService = SpringBeanUtils.getBean(SearchActionService.class);
 
 	@RequestMapping("build")
-	public String buildSearch(@ModelAttribute("model") ModelMap model, @RequestParam String keyWord,
-			@RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "10") Integer pageSize) {
+	public String buildSearch(@ModelAttribute("model") ModelMap model, @RequestParam(value = "q") String keyWord, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "12") Integer pageSize) {
 		long start = System.currentTimeMillis();
 		Long searchId = 0L;
 		try {
@@ -34,6 +33,7 @@ public class SearchController {
 			String msg = String.format("search:%s,page:%s,cause:", keyWord, curPage);
 			logger.warn(msg, e);
 		}
+		model.addAttribute("qWord", keyWord);
 		model.addAttribute("sid", searchId);
 		long cost = System.currentTimeMillis() - start;
 		logger.info("search:{},page:{},searchId:{},cost:{}", keyWord, curPage, searchId, cost);
@@ -46,9 +46,9 @@ public class SearchController {
 		long start = System.currentTimeMillis();
 		long cost = System.currentTimeMillis() - start;
 		ActionReturnVo vo = searchActionService.getSearchResult(searchId);
-//		ObjectMapper mapper = new ObjectMapper();
-//		StringWriter writer = new StringWriter();
-//		mapper.writeValue(writer, vo);
+		// ObjectMapper mapper = new ObjectMapper();
+		// StringWriter writer = new StringWriter();
+		// mapper.writeValue(writer, vo);
 		return vo;
 	}
 }

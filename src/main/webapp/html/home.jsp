@@ -40,10 +40,10 @@
 						</ul>
 					</div>
 					<div class="col-md-4">
-						<form class="navbar-form navbar-left" role="search" action="/search/build">
+						<form class="navbar-form navbar-left" role="search" action="/search/build" target="_blank">
 							<div class="form-group">
 								<input type="text" size="40" class="form-control"
-									placeholder="Search" name="keyWord">
+									placeholder="Search" name="q">
 								<button type="submit" class="btn btn-success">Go</button>
 							</div>
 						</form>

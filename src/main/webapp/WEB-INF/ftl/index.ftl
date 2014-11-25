@@ -32,16 +32,16 @@
 				<div class="row">
 					<div class="col-md-3">
 						<ul class="nav navbar-nav" id="header_menu">
-							<li class="active"><a href="/">首页</a></li>
+							<li class="active"><a href="http://www.lezomao.com/">首页</a></li>
 							<li><a href="#">爱抢眼</a></li>
 							<li><a href="#">购实惠</a></li>
 						</ul>
 					</div>
 					<div class="col-md-4">
-						<form class="navbar-form navbar-left" role="search">
+						<form class="navbar-form navbar-left" role="search" action="/search/build" target="_blank">
 							<div class="form-group">
 								<input type="text" size="40" class="form-control"
-									placeholder="Search">
+									placeholder="Search" name="q">
 								<button type="submit" class="btn btn-success">Go</button>
 							</div>
 						</form>
