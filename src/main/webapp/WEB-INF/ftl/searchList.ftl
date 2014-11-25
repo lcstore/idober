@@ -16,15 +16,136 @@
 </style>
 </head>
 <body>
-   <span>${.now}</span>
-   <span>sid:${model["sid"]}</span>
-   <span>result:${model["qResult"]}</span>
-  	<input type="hidden" name="sid" value='${model["sid"]}'/>
-	<span id="testSpan"></span>
+	<header id="header">
+		<nav role="navigation"
+			class="navbar navbar-inverse navbar-default navbar-fixed-top"
+			id="header_outer">
+			<div class="navbar-header">
+				<button data-target=".navbar-header-collapse" data-toggle="collapse"
+					class="navbar-toggle" type="button">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a title="Lezomao" href="/" class="navbar-brand" id="header_logo">Lezomao</a>
+			</div>
+			<div class="collapse navbar-collapse navbar-header-collapse">
+				<div class="row">
+					<div class="col-md-3">
+						<ul class="nav navbar-nav" id="header_menu">
+							<li class="active"><a href="/">首页</a></li>
+							<li><a href="#">爱抢眼</a></li>
+							<li><a href="#">购实惠</a></li>
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<form class="navbar-form navbar-left" role="search">
+							<div class="form-group">
+								<input type="text" size="40" class="form-control"
+									placeholder="Search">
+								<button type="submit" class="btn btn-success">Go</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-3">
+						<ul id="header_me" class="nav navbar-nav navbar-right ng-scope">
+							<li class="divider-vertical hidden-xs"></li>
+							<li><a href="#" class="mr_15">登录</a></li>
+							<li><a href="#">注册</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</nav>
+	</header>
+	<div class="main data-box">
+		<div class="act">
+			<div class="jumbotron actbox-padding">
+				<div class="container-fluid">
+					<div class="row">
+					  <#list model["indexHotList"] as pVo>
+						<div class="col-md-4 act-col">
+							<div class="act-col-box">
+								<div class="list-pic">
+									<a href="${pVo.productUrl}" target="_blank">
+										<img
+										alt="${pVo.productName}"
+										src="${pVo.imgUrl}" />
+									</a>
+								</div>
+								<div class="act-txt">
+									<a href="${pVo.productUrl}" target="_blank">
+										<span>${pVo.productName}</span>
+									</a>
+								</div>
+								<div class="act-price">
+									<del>
+										<span class="zm-coin">¥</span>${pVo.marketPrice}
+									</del>
+									<strong class="list_price"><span class="zm-coin">¥</span>${pVo.productPrice}</strong>
+								</div>
+								<div class="act-shop shop-pic">
+									<img alt="${pVo.siteName}" src="/img/${pVo.siteId}.png" />
+								</div>
+							</div>
+						</div>
+						 </#list>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="data-main ">
+			<div class="row">
+				<div class="col-md-9 jumbotron listbotron-padding">
+				    <input type="hidden" name="sid" value='${model["sid"]}'/>
+					<div class="row-fluid" id="sContainer">
+					</div>
+				</div>
+				<div class="col-md-3 mgsbotron-padding">
+					<div class="msg-container">
+						<div class="row-fluid ">
+							<div class="col-md-12">
+								<div class="msg-col-box">
+									<div class="list-pic">
+										<a href="http://item.yhd.com/item/8095858" target="_blank">
+											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="msg-col-box">
+									<div class="list-pic">
+										<a href="http://item.yhd.com/item/8095858" target="_blank">
+											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
+											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="hidden-xs" id="footer-outer">
+		<div class="columns"></div>
+		<div class="text-center">
+			Copyright &copy; 2014 LEZOMAO.COM 版权所有
+			<p>鄂ICP备14009865号</p>
+		</div>
+	</footer>
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script type="text/javascript">
+	<script type="text/javascript">
+	var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa9ae2d488204441bbdd903e86109496b' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	
+	<script type="text/javascript">
 	$(document).ready(function() {
         function Queryer(){
              this._maxCount = 5;
@@ -46,6 +167,12 @@
               this.addResult(oData);
               return;
            }
+           var _this = this;
+           if(!this._myChecker){
+               this._myChecker= setInterval(function(){
+                  _this.query();
+               },2000) ; 
+           }
            if(this._count==this._maxCount) {
              this.stop();
            }
@@ -54,7 +181,7 @@
             var _this_ =this;
             $.ajax({  
                 type: "GET",  
-                url: "/search/query?sid="+ this._sid,  
+                url: "/search/query?sid="+ _this_._sid,  
                 dataType: 'json',  
                 success: function(data){ 
                 	_this_.check(data);
@@ -64,7 +191,7 @@
                 }  
             });
         };
-        Queryer.prototype.addResult=function(oCallBack){
+        Queryer.prototype.addResult2=function(oCallBack){
 			var oData = eval('('+oCallBack.data+')');
 			var oDocs = oData.docs;
 			if(!oDocs){
@@ -87,12 +214,37 @@
 				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</strong>\n';
 				searchHtml+='</div>\n';
 				searchHtml+='<div class="shop-pic">\n';
-				searchHtml+='<img alt="siteName" src="/img/'+oDoc.productUrl+'.png" />\n';
+				searchHtml+='<img alt="siteName" src="/img/'+oDoc.siteId+'.png" />\n';
 				searchHtml+='</div></div>\n';
 			}
-			 $("#testSpan").html(searchHtml);
-			console.warn(searchHtml);
-			alert(searchHtml);
+			 $("#sContainer").html(searchHtml);
+			 return false;
+		};
+        Queryer.prototype.addResult=function(oCallBack){
+			var oData = eval('('+oCallBack.data+')');
+			var oDocs = oData.docs;
+			if(!oDocs){
+				return;
+			}
+			var searchHtml = "";
+			for(var i=0;i<oDocs.length;i++){
+				var oDoc = oDocs[i];
+				searchHtml+='<div class="col-md-4"><div class="list-col-box">\n';
+				searchHtml+='<div class="list-pic">\n';
+				searchHtml+='<a href="${pVo.productUrl}" target="_blank"><img alt="${pVo.productName}" src="${pVo.imgUrl}" /></a>\n';
+				searchHtml+='</div>\n';
+				searchHtml+='<div class="list-txt">\n';
+				searchHtml+='<a href="${pVo.productUrl}" target="_blank"> <span>${pVo.productName}</span></a>\n';
+				searchHtml+='</div>\n';
+				searchHtml+='<div class="list-price">\n';
+				searchHtml+='<del><span class="zm-coin">¥</span>${pVo.marketPrice}</del>\n';
+				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>${pVo.productPrice}</strong>\n';
+				searchHtml+='</div>\n';
+				searchHtml+='<div class="shop-pic"><img alt="${pVo.siteName}" src="/img/${pVo.siteId}.png" /></div>\n';
+				searchHtml+='</div></div>\n';
+			}
+			 $("#sContainer").html(searchHtml);
+			 return false;
 		};
 		var oQueryer = new Queryer();
 		oQueryer.start();

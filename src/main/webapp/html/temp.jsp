@@ -218,43 +218,47 @@
         };
         Queryer.prototype.start = function(){
         	this._sid = $("input[name=sid][value]").val();
-            this.check();
+            this.query();
         };
         Queryer.prototype.stop = function(){
            if(this._myChecker){
               clearInterval(this._myChecker);
            }
         };
-        Queryer.prototype.check = function(){
-           this.query();
+        Queryer.prototype.check = function(oData){
            this._count++;
-           if(this._data && this._data.code==2){
+           if(oData && oData.code==2){
               this.stop();
-              this.addResult(this._data);
+              this.addResult(oData);
               return;
-           }else if(!this._myChecker){
-               this._myChecker= setInterval(this.check,3000) ; 
            }
-           if(this._count<this._maxCount) {
+           var _this = this;
+           if(!this._myChecker){
+               this._myChecker= setInterval(function(){
+                  _this.query();
+               },2000) ; 
+           }
+           if(this._count==this._maxCount) {
              this.stop();
            }
         };
         Queryer.prototype.query = function(){
+            var _this_ =this;
             $.ajax({  
                 type: "GET",  
-                url: "/search/query?sid="+ this._sid,  
+                url: "/search/query?sid="+ _this_._sid,  
                 dataType: 'json',  
                 success: function(data){ 
-                	this._data = data;
+                	_this_.check(data);
                 },  
                 error:function(data){  
-                    this.stop();
+                    _this_.stop();
                 }  
             });
         };
-        Queryer.prototype.addResult=function(data){
-		    alert(data);
-			var oDocs = data.docs;
+        Queryer.prototype.addResult=function(oCallBack){
+			var oData = eval('('+oCallBack.data+')');
+			var oDocs = oData.docs;
 			if(!oDocs){
 				return;
 			}
@@ -275,12 +279,11 @@
 				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</strong>\n';
 				searchHtml+='</div>\n';
 				searchHtml+='<div class="shop-pic">\n';
-				searchHtml+='<img alt="siteName" src="/img/'+oDoc.productUrl+'.png" />\n';
+				searchHtml+='<img alt="siteName" src="/img/'+oDoc.siteId+'.png" />\n';
 				searchHtml+='</div></div>\n';
 			}
 			 $("#testSpan").html(searchHtml);
-			console.warn(searchHtml);
-			alert(searchHtml);
+			 return false;
 		};
 		var oQueryer = new Queryer();
 		oQueryer.start();

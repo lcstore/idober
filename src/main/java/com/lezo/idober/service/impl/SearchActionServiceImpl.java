@@ -46,7 +46,7 @@ public class SearchActionServiceImpl implements SearchActionService {
 	}
 
 	private String getFields(String keyWord) {
-		return "siteId%2cproductCode%2cproductName%2cproductUrl%2cmarketPrice";
+		return "siteId%2cproductCode%2cproductName%2cproductUrl%2cmarketPrice%2cimgUrl%2cunionUrl%2ccategoryNav";
 	}
 
 	private String getQueryWord(String keyWord) throws UnsupportedEncodingException {
