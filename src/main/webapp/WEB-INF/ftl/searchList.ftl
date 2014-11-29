@@ -111,22 +111,8 @@
 						<div class="row-fluid ">
 							<div class="col-md-12">
 								<div class="msg-col-box">
-									<div class="list-pic">
-										<a href="http://item.yhd.com/item/8095858" target="_blank">
-											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
-										</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="msg-col-box">
-									<div class="list-pic">
-										<a href="http://item.yhd.com/item/8095858" target="_blank">
-											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
-										</a>
-									</div>
+								   <h3>更新日志：</h3>
+								   <span>1.新增搜索功能</span>
 								</div>
 							</div>
 						</div>
@@ -136,7 +122,12 @@
 		</div>
 	</div>
 	<footer class="hidden-xs" id="footer-outer">
-		<div class="columns"></div>
+		<div class="columns">
+		  <script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa9ae2d488204441bbdd903e86109496b' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
 		<div class="text-center">
 			Copyright &copy; 2014 LEZOMAO.COM 版权所有
 			<p>鄂ICP备14009865号</p>
@@ -145,11 +136,6 @@
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-	var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa9ae2d488204441bbdd903e86109496b' type='text/javascript'%3E%3C/script%3E"));
-	</script>
-	
 	<script type="text/javascript">
 	$(document).ready(function() {
         function Queryer(){

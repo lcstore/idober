@@ -38,11 +38,11 @@
 						</ul>
 					</div>
 					<div class="col-md-4">
-						<form class="navbar-form navbar-left" role="search" action="/search/build" target="_blank">
+						<form id="qForm" class="navbar-form navbar-left"  role="search" action="/search/build" target="_blank">
 							<div class="form-group">
-								<input type="text" size="40" class="form-control"
-									placeholder="Search" name="q">
-								<button type="submit" class="btn btn-success">Go</button>
+								<input id="qWord" class="form-control" type="text" size="40" 
+									value="牛奶" name="q">
+								<button id="qBtn"class="btn btn-success"  type="submit" >Go</button>
 							</div>
 						</form>
 					</div>
@@ -132,22 +132,8 @@
 						<div class="row-fluid ">
 							<div class="col-md-12">
 								<div class="msg-col-box">
-									<div class="list-pic">
-										<a href="http://item.yhd.com/item/8095858" target="_blank">
-											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
-										</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="msg-col-box">
-									<div class="list-pic">
-										<a href="http://item.yhd.com/item/8095858" target="_blank">
-											<img alt="Olay 玉兰油 新生塑颜金纯活能水 150ml"
-											src="http://d8.yihaodianimg.com/N03/M05/C0/A3/CgQCtVI_4nyAUV-1AAC4cSD25lI41901_60x60.jpg" />
-										</a>
-									</div>
+								   <h3>更新日志：</h3>
+								   <span>1.新增搜索功能</span>
 								</div>
 							</div>
 						</div>
@@ -171,5 +157,16 @@
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+	$(document).ready(function() {
+	   $("#qBtn").click(function(){
+	      var qWordNode = $("#qWord");
+	      var qWord =qWordNode.val();
+	      if(qWord){
+		    $('qForm').submit();
+	      }
+		});
+	});
+	</script>
 </body>
 </html>

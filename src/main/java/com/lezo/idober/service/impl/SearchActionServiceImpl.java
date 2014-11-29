@@ -90,6 +90,10 @@ public class SearchActionServiceImpl implements SearchActionService {
 		} else {
 			SearchHisDto hasDto = dataList.get(0);
 			returnVo.setCode(hasDto.getStatus());
+			for (SearchHisDto dto : dataList) {
+				dto.setQueryHit(dto.getQueryHit() + 1);
+			}
+			searchHisService.batchUpdateDtos(dataList);
 			if (hasDto.getStatus() == SearchHisDto.STATUS_DONE) {
 				returnVo.setMsg("success");
 				JSONObject rObject = handleResult(hasDto.getQueryResult());
