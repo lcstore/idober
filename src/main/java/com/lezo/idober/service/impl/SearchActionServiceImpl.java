@@ -4,20 +4,33 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.lezo.idober.service.SearchActionService;
 import com.lezo.idober.vo.ActionReturnVo;
+import com.lezo.iscript.service.crawler.dto.ProductStatDto;
 import com.lezo.iscript.service.crawler.dto.SearchHisDto;
+import com.lezo.iscript.service.crawler.service.ProductStatService;
 import com.lezo.iscript.service.crawler.service.SearchHisService;
+import com.lezo.iscript.utils.JSONUtils;
 
 @Component
 public class SearchActionServiceImpl implements SearchActionService {
 	@Autowired
 	private SearchHisService searchHisService;
+	@Autowired
+	private ProductStatService productStatService;
 
 	@Override
 	public Long buildSearch(String keyWord, Integer curPage, Integer pageSize) throws Exception {
@@ -79,10 +92,50 @@ public class SearchActionServiceImpl implements SearchActionService {
 			returnVo.setCode(hasDto.getStatus());
 			if (hasDto.getStatus() == SearchHisDto.STATUS_DONE) {
 				returnVo.setMsg("success");
-				returnVo.setData(hasDto.getQueryResult());
+				JSONObject rObject = handleResult(hasDto.getQueryResult());
+				returnVo.setData(rObject.toString());
 			}
 		}
 		return returnVo;
+	}
+
+	private JSONObject handleResult(String queryResult) {
+		JSONObject rObject = JSONUtils.getJSONObject(queryResult);
+		Integer numFound = JSONUtils.getInteger(rObject, "numFound");
+		if (numFound < 1) {
+			return rObject;
+		}
+		JSONArray docArray = JSONUtils.get(rObject, "docs");
+		Map<Integer, Set<String>> siteCodeMap = new HashMap<Integer, Set<String>>();
+		Map<String, JSONObject> keyObjectMap = new HashMap<String, JSONObject>();
+		for (int i = 0; i < docArray.length(); i++) {
+			JSONObject dObject = null;
+			try {
+				dObject = docArray.getJSONObject(i);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				continue;
+			}
+			Integer siteId = JSONUtils.getInteger(dObject, "siteId");
+			String productCode = JSONUtils.getString(dObject, "productCode");
+			Set<String> codeSet = siteCodeMap.get(siteId);
+			if (codeSet == null) {
+				codeSet = new HashSet<String>();
+				siteCodeMap.put(siteId, codeSet);
+			}
+			codeSet.add(productCode);
+			String key = siteId + ":" + productCode;
+			keyObjectMap.put(key, dObject);
+		}
+		for (Entry<Integer, Set<String>> entry : siteCodeMap.entrySet()) {
+			List<ProductStatDto> statList = productStatService.getProductStatDtos(new ArrayList<String>(entry.getValue()), entry.getKey(), 1);
+			for (ProductStatDto stat : statList) {
+				String key = stat.getSiteId() + ":" + stat.getProductCode();
+				JSONObject dObject = keyObjectMap.get(key);
+				JSONUtils.put(dObject, "productPrice", stat.getProductPrice());
+			}
+		}
+		return rObject;
 	}
 
 }

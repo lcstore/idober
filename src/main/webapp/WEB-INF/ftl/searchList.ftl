@@ -42,10 +42,10 @@
 							<div class="form-group">
 						       <#if model["qWord"] = null> 
 								  <input type="text" size="40" class="form-control"
-									placeholder="Search" value="牛奶">
+									placeholder="Search" value="牛奶" name="q">
 								<#else> 
 								  <input type="text" size="40" class="form-control"
-									placeholder="Search" value="${model["qWord"]}">
+									placeholder="Search" value="${model["qWord"]}" name="q">
 								</#if>
 								<button type="submit" class="btn btn-success">Go</button>
 							</div>
@@ -197,35 +197,6 @@
                 }  
             });
         };
-        Queryer.prototype.addResult2=function(oCallBack){
-			var oData = eval('('+oCallBack.data+')');
-			var oDocs = oData.docs;
-			if(!oDocs){
-				return;
-			}
-			var searchHtml = "";
-			for(var i=0;i<oDocs.length;i++){
-				var oDoc = oDocs[i];
-				searchHtml+='<div class="col-md-4">\n';
-				searchHtml+='<div class="list-pic">\n';
-				searchHtml+='<a href="'+oDoc.productUrl+'" target="_blank">\n';
-				searchHtml+='<img alt="'+oDoc.productName+'" src="'+oDoc.imgUrl+'" />\n';
-				searchHtml+='</a></div>\n';
-				searchHtml+='<div class="list-txt">\n';
-				searchHtml+='<a href="'+oDoc.productUrl+'" target="_blank">\n';
-				searchHtml+='<span>'+oDoc.productName+'</span>\n';
-				searchHtml+='</a></div>\n';
-				searchHtml+='<div class="list-price">\n';
-				searchHtml+='<del><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</del>\n';
-				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</strong>\n';
-				searchHtml+='</div>\n';
-				searchHtml+='<div class="shop-pic">\n';
-				searchHtml+='<img alt="siteName" src="/img/'+oDoc.siteId+'.png" />\n';
-				searchHtml+='</div></div>\n';
-			}
-			 $("#sContainer").html(searchHtml);
-			 return false;
-		};
         Queryer.prototype.addResult=function(oCallBack){
 			var oData = eval('('+oCallBack.data+')');
 			var oDocs = oData.docs;
@@ -244,7 +215,11 @@
 				searchHtml+='</div>\n';
 				searchHtml+='<div class="list-price">\n';
 				searchHtml+='<del><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</del>\n';
-				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</strong>\n';
+				if(oDoc.productPrice && oDoc.productPrice>=0){
+					searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>'+oDoc.productPrice+'</strong>\n';
+				}else {
+					searchHtml+='<strong class="list_price">暂无报价</strong>\n';
+				}
 				searchHtml+='</div>\n';
 				searchHtml+='<div class="shop-pic"><img alt="'+oDoc.siteName+'" src="/img/'+oDoc.siteId+'.png" /></div>\n';
 				searchHtml+='</div></div>\n';
