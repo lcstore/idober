@@ -205,89 +205,95 @@
 			<p>鄂ICP备14009865号</p>
 		</div>
 	</footer>
-	<input type="hidden" name="sid" value='${model["sid"]}'/>
+	<input type="hidden" name="sid" value='${model["sid"]}' />
 	<span id="testSpan"></span>
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-	$(document).ready(function() {
-        function Queryer(){
-             this._maxCount = 5;
-             this._count = 0;
-        };
-        Queryer.prototype.start = function(){
-        	this._sid = $("input[name=sid][value]").val();
-            this.query();
-        };
-        Queryer.prototype.stop = function(){
-           if(this._myChecker){
-              clearInterval(this._myChecker);
-           }
-        };
-        Queryer.prototype.check = function(oData){
-           this._count++;
-           if(oData && oData.code==2){
-              this.stop();
-              this.addResult(oData);
-              return;
-           }
-           var _this = this;
-           if(!this._myChecker){
-               this._myChecker= setInterval(function(){
-                  _this.query();
-               },2000) ; 
-           }
-           if(this._count==this._maxCount) {
-             this.stop();
-           }
-        };
-        Queryer.prototype.query = function(){
-            var _this_ =this;
-            $.ajax({  
-                type: "GET",  
-                url: "/search/query?sid="+ _this_._sid,  
-                dataType: 'json',  
-                success: function(data){ 
-                	_this_.check(data);
-                },  
-                error:function(data){  
-                    _this_.stop();
-                }  
-            });
-        };
-        Queryer.prototype.addResult=function(oCallBack){
-			var oData = eval('('+oCallBack.data+')');
-			var oDocs = oData.docs;
-			if(!oDocs){
-				return;
-			}
-			var searchHtml = "";
-			for(var i=0;i<oDocs.length;i++){
-				var oDoc = oDocs[i];
-				searchHtml+='<div class="col-md-4">\n';
-				searchHtml+='<div class="list-pic">\n';
-				searchHtml+='<a href="'+oDoc.productUrl+'" target="_blank">\n';
-				searchHtml+='<img alt="'+oDoc.productName+'" src="'+oDoc.imgUrl+'" />\n';
-				searchHtml+='</a></div>\n';
-				searchHtml+='<div class="list-txt">\n';
-				searchHtml+='<a href="'+oDoc.productUrl+'" target="_blank">\n';
-				searchHtml+='<span>'+oDoc.productName+'</span>\n';
-				searchHtml+='</a></div>\n';
-				searchHtml+='<div class="list-price">\n';
-				searchHtml+='<del><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</del>\n';
-				searchHtml+='<strong class="list_price"><span class="zm-coin">¥</span>'+oDoc.marketPrice+'</strong>\n';
-				searchHtml+='</div>\n';
-				searchHtml+='<div class="shop-pic">\n';
-				searchHtml+='<img alt="siteName" src="/img/'+oDoc.siteId+'.png" />\n';
-				searchHtml+='</div></div>\n';
-			}
-			 $("#testSpan").html(searchHtml);
-			 return false;
-		};
-		var oQueryer = new Queryer();
-		oQueryer.start();
-	});
+		$(document)
+				.ready(
+						function() {
+							function Queryer() {
+								this._maxCount = 5;
+								this._count = 0;
+							}
+							;
+							Queryer.prototype.start = function() {
+								this._sid = $("input[name=sid][value]").val();
+								this.query();
+							};
+							Queryer.prototype.stop = function() {
+								if (this._myChecker) {
+									clearInterval(this._myChecker);
+								}
+							};
+							Queryer.prototype.check = function(oData) {
+								this._count++;
+								if (oData && oData.code == 2) {
+									this.stop();
+									this.addResult(oData);
+									return;
+								}
+								var _this = this;
+								if (!this._myChecker) {
+									this._myChecker = setInterval(function() {
+										_this.query();
+									}, 2000);
+								}
+								if (this._count == this._maxCount) {
+									this.stop();
+								}
+							};
+							Queryer.prototype.query = function() {
+								var _this_ = this;
+								$.ajax({
+									type : "GET",
+									url : "/search/query?sid=" + _this_._sid,
+									dataType : 'json',
+									success : function(data) {
+										_this_.check(data);
+									},
+									error : function(data) {
+										_this_.stop();
+									}
+								});
+							};
+							Queryer.prototype.addResult = function(oCallBack) {
+								var oData = eval('(' + oCallBack.data + ')');
+								var oDocs = oData.docs;
+								if (!oDocs) {
+									return;
+								}
+								var searchHtml = "";
+								for (var i = 0; i < oDocs.length; i++) {
+									var oDoc = oDocs[i];
+									searchHtml += '<div class="col-md-4">\n';
+									searchHtml += '<div class="list-pic">\n';
+									searchHtml += '<a href="'+oDoc.productUrl+'" target="_blank">\n';
+									searchHtml += '<img alt="'+oDoc.productName+'" src="'+oDoc.imgUrl+'" />\n';
+									searchHtml += '</a></div>\n';
+									searchHtml += '<div class="list-txt">\n';
+									searchHtml += '<a href="'+oDoc.productUrl+'" target="_blank">\n';
+									searchHtml += '<span>' + oDoc.productName
+											+ '</span>\n';
+									searchHtml += '</a></div>\n';
+									searchHtml += '<div class="list-price">\n';
+									searchHtml += '<del><span class="zm-coin">¥</span>'
+											+ oDoc.marketPrice + '</del>\n';
+									searchHtml += '<strong class="list_price"><span class="zm-coin">¥</span>'
+											+ oDoc.marketPrice + '</strong>\n';
+									searchHtml += '</div>\n';
+									searchHtml += '<div class="shop-pic">\n';
+									searchHtml += '<img alt="siteName" src="/img/'+oDoc.siteId+'.png" />\n';
+									searchHtml += '</div></div>\n';
+								}
+								$("#testSpan").html(searchHtml);
+								return false;
+							};
+							var oQueryer = new Queryer();
+							oQueryer.start();
+						});
 	</script>
 </body>
 </html>
