@@ -39,6 +39,7 @@
 							<li><a href="#">购实惠</a></li>
 						</ul>
 					</div>
+					<input type="hidden" value="${pVo.id}" style="display: none;"/>
 					<div class="col-md-4">
 						<form class="navbar-form navbar-left" role="search"
 							action="/search/build">

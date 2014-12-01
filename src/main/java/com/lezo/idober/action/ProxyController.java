@@ -1,5 +1,7 @@
 package com.lezo.idober.action;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,10 +20,17 @@ import com.lezo.iscript.spring.context.SpringBeanUtils;
 public class ProxyController {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ProxyController.class);
 	private ProxyHomeService proxyHomeService = SpringBeanUtils.getBean(ProxyHomeService.class);
+	private static final Comparator<ProxyHomeDto> DEL_ASC_COMPARATOR = new Comparator<ProxyHomeDto>() {
+		@Override
+		public int compare(ProxyHomeDto o1, ProxyHomeDto o2) {
+			return o1.getIsDelete().compareTo(o2.getIsDelete());
+		}
+	};
 
-	@RequestMapping("list")
+	@RequestMapping("home")
 	public String buildSearch(@ModelAttribute("model") ModelMap model, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "12") Integer pageSize) {
-		List<ProxyHomeDto> proxyList = proxyHomeService.getProxyHomeDtoByStatus(null);
+		List<ProxyHomeDto> proxyList = proxyHomeService.getProxyHomeDtoByStatus(null, null);
+		Collections.sort(proxyList, DEL_ASC_COMPARATOR);
 		model.addAttribute("proxyList", proxyList);
 		return "proxyList";
 	}

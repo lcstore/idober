@@ -71,7 +71,8 @@
 			<div class="jumbotron actbox-padding">
 				<div class="container-fluid">
 					<div class="row">
-						<table  border="1">
+						<table class='table table-bordered table-striped'>
+						 <thead>
 							<tr>
 								<th>ID</th>
 								<th>HOME</th>
@@ -81,28 +82,35 @@
 								<th>STATUS</th>
 								<th>CREATE_TIME</th>
 								<th>UPDATE_TIME</th>
-								<th colspan="2">修改操作</th>
+								<th>修改操作</th>
+								<th><button id="addBtn"class="btn btn-success"  type="button" >添加</button></th>
 							</tr>
+						 </thead>
+						 <tbody>
 							<#if (model["proxyList"]??)>
 							   <#if (model["proxyList"]?size>0)>
 							      <#list model["proxyList"] as pVo>
-									<tr>
-										<td>${pVo.id}</td>
-										<td>${pVo.homeUrl}</td>
-										<td>${pVo.configParser}</td>
-										<td>${pVo.maxPage}</td>
-										<td>${pVo.isDelete}</td>
-										<td>${pVo.status}</td>
-										<td>${pVo.createTime?datetime}</td>
-										<td>${pVo.updateTime?datetime}</td>
-										<td><button id="updateBtn"class="btn btn-success"  type="button" >修改</button></td>
-										<td><button type="button" class="btn btn-success" id="addBtn" style="margin-left: 10px;">添加</button></td>
+									<tr id="rid_${pVo.id}">
+										<td name="id">${pVo.id}</td>
+										<td name="homeUrl">${pVo.homeUrl}</td>
+										<td name="configParser">${pVo.configParser}</td>
+										<td name="maxPage">${pVo.maxPage}</td>
+										<td name="isDelete">${pVo.isDelete}</td>
+										<td name="status">${pVo.status}</td>
+										<td name="createTime">${pVo.createTime?datetime}</td>
+										<td name="updateTime">${pVo.updateTime?datetime}</td>
+										<td class="callBtn">
+										<button id="updateBtn_${pVo.id}" class="btn btn-success"  type="button" >修改</button>
+										<button id="saveBtn_${pVo.id}" class="btn btn-success"  type="button" style="display: none;">保存</button>
+										</td>
+										<td class="callBtn"><button id="execBtn__${pVo.id}"class="btn btn-success"  type="button" >执行</button></td>
 									</tr>
 								 </#list>
 							    <#else>
-							       	<tr colspan="10" ><button id="addBtn"class="btn btn-success"  type="button" >添加</button></tr>
+							      <tr ><td>无结果</td></tr>
 							     </#if>
 							</#if>
+							 </tbody>
 						</table>
 					</div>
 				</div>
@@ -124,5 +132,39 @@
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script
 		src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript">
+		$(document).ready(function() {
+		    $("[id^=updateBtn_]").click(function(){
+		         var oCurEle = $(this);
+		         var oTdEles = oCurEle.parent().siblings('td:not(.callBtn)');
+			     oTdEles.each(function(){
+			        var sTxt = $(this).text();
+			        var sName = $(this).attr('name');
+			        var sInput = '<input type="text" name="'+sName+'" value="'+sTxt+'"/>';
+				    $(this).html(sInput);
+				 });
+				  var sId = $(this).attr('id');
+			      sId = sId.replace('updateBtn_','saveBtn_');
+			      $('#'+sId).show();
+			      $(this).hide();
+			});
+		    $("[id^=saveBtn_]").click(function(){
+		         var oCurEle = $(this);
+		         alert(oCurEle.html());
+		         var oTdEles = oCurEle.parent().siblings('td:not(.callBtn) input');
+		         var oParam = {};
+			     oTdEles.each(function(){
+			        var sTxt = $(this).val();
+			        var sName = $(this).attr('name');
+			        oParam[sName]=sTxt;
+				    var oPEle = $(this).parent();
+				    $(this).remove();
+				    oPEle.text(sTxt);
+				 });
+				 alert('dd:'+JSON.stringify(oParam));
+			});
+		});
+	</script>
 </body>
 </html>
