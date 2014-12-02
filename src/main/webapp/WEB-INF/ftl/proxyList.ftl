@@ -103,7 +103,11 @@
 										<button id="updateBtn_${pVo.id}" class="btn btn-success"  type="button" >修改</button>
 										<button id="saveBtn_${pVo.id}" class="btn btn-success"  type="button" style="display: none;">保存</button>
 										</td>
-										<td class="callBtn"><button id="execBtn__${pVo.id}"class="btn btn-success"  type="button" >执行</button></td>
+										<#if (pVo.isDelete==1)>
+										   <td class="callBtn"><button id="execBtn_${pVo.id}"class="btn btn-default"  type="button" disabled="disabled">执行</button></td>
+										<#else>
+										   <td class="callBtn"><button id="execBtn_${pVo.id}"class="btn btn-success"  type="button" >执行</button></td>
+										</#if>
 									</tr>
 								 </#list>
 							    <#else>
@@ -135,34 +139,101 @@
 		
 		<script type="text/javascript">
 		$(document).ready(function() {
-		    $("[id^=updateBtn_]").click(function(){
+		    $("[id^=updateBtn_]").on('click',function(){
 		         var oCurEle = $(this);
 		         var oTdEles = oCurEle.parent().siblings('td:not(.callBtn)');
 			     oTdEles.each(function(){
 			        var sTxt = $(this).text();
 			        var sName = $(this).attr('name');
-			        var sInput = '<input type="text" name="'+sName+'" value="'+sTxt+'"/>';
-				    $(this).html(sInput);
+			        if(sName.indexOf('Time')<0){
+				        var sInput = '<input type="text" name="'+sName+'" value="'+sTxt+'"/>';
+					    $(this).html(sInput);
+			        }
 				 });
 				  var sId = $(this).attr('id');
 			      sId = sId.replace('updateBtn_','saveBtn_');
 			      $('#'+sId).show();
 			      $(this).hide();
 			});
-		    $("[id^=saveBtn_]").click(function(){
+		    $("[id^=saveBtn_]").on('click',function(){
 		         var oCurEle = $(this);
-		         alert(oCurEle.html());
-		         var oTdEles = oCurEle.parent().siblings('td:not(.callBtn) input');
+		         var oTdEles = oCurEle.parent().siblings('td[name]');
 		         var oParam = {};
 			     oTdEles.each(function(){
-			        var sTxt = $(this).val();
+			        var sTxt = $(this).find('input[name]').val();
 			        var sName = $(this).attr('name');
-			        oParam[sName]=sTxt;
-				    var oPEle = $(this).parent();
-				    $(this).remove();
-				    oPEle.text(sTxt);
+			        if(sName.indexOf('Time')<0){
+			          oParam[sName]=sTxt;
+			        }
+				    $(this).html(sTxt);
 				 });
-				 alert('dd:'+JSON.stringify(oParam));
+				var oSaveEls = $(this);
+				$.post("/proxy/usource",oParam, function(data) {
+				    var sId = oSaveEls.attr('id');
+					var sUpdateId = sId.replace('saveBtn_','updateBtn_');
+					$('#'+sUpdateId).show();
+					oSaveEls.hide();
+					var sExecId = sId.replace('saveBtn_','execBtn__');
+					var oExecNode = $('#'+sExecId);
+					if(oParam.isDelete==0){
+					  oExecNode.removeAttr('disabled');
+					  oExecNode.attr('class','btn btn-success');
+					}else{
+					  oExecNode.attr('disabled','disabled');
+					  oExecNode.attr('class','btn btn-default');
+					}
+				});
+			});
+		    $("[id^=execBtn_]").on('click',function(){
+		         var oCurEle = $(this);
+		         var oTdEles = oCurEle.parent().siblings('td[name]');
+		         var oParam = {};
+			     oTdEles.each(function(){
+			        var sName = $(this).attr('name');
+			        var sTxt = $(this).text();
+			        if(sName.indexOf('Time')<0){
+			          oParam[sName]=sTxt;
+			        }
+				 });
+				$.post("/proxy/execsrc",oParam, function(data) {
+				    oCurEle.append('<span class="badge">'+data+'</span>');
+				});
+			});
+		    $("[id=addBtn]").click(function(){
+		            var oDate = new Date();
+		            var sMonth = oDate.getMonth()<9?'0'+(oDate.getMonth()+1):oDate.getMonth()+1;
+		            var sDate = oDate.getDate()<10?'0'+oDate.getDate():oDate.getDate();
+		            var sCurDate =  oDate.getFullYear()+'-'+sMonth+'-'+sDate;
+		            sCurDate +=' '+oDate.getHours()+':'+oDate.getMinutes()+':'+oDate.getSeconds();
+		            var iMaxId=0;
+		            $('tr[id^=rid_]').each(function(){
+		                 var iCurId= $(this).attr('id').replace('rid_','') - 0;
+		                 alert('iCurId:'+iCurId);
+		                 if(iCurId > iMaxId){
+		                    iMaxId = iCurId;
+		                 }
+					 });
+					 alert(iMaxId);
+					var iNextId = iMaxId +1;
+		    		var sHtml = '';
+					sHtml +='<tr id="rid_'+iNextId+'">';
+					sHtml +='<td name="id"><input type="text" name="id"></td>';
+					sHtml +='<td name="homeUrl"><input type="text" name="homeUrl" value=""></td>';
+					sHtml +='<td name="configParser"><input type="text" name="configParser" value="ConfigProxyCollector"></td>';
+					sHtml +='<td name="maxPage"><input type="text" name="maxPage" value="1"></td>';
+					sHtml +='<td name="isDelete"><input type="text" name="isDelete" value="0"></td>';
+					sHtml +='<td name="status"><input type="text" name="status" value="0"></td>';
+					sHtml +='<td name="createTime">'+sCurDate+'</td>';
+					sHtml +='<td name="updateTime">'+sCurDate+'</td>';
+					sHtml +='<td class="callBtn">';
+					sHtml +='<button id="updateBtn_'+iNextId+'" class="btn btn-success" type="button" style="display: none;">修改</button>';
+					sHtml +='<button id="saveBtn_'+iNextId+'" class="btn btn-success" type="button" style="">保存</button>';
+					sHtml +='</td>';
+					sHtml +='<td class="callBtn"><button id="execBtn_'+iNextId+'" class="btn btn-success" type="button">执行</button></td>';
+					sHtml +='</tr>';
+					
+					var oBodyNd = $('.row table tbody');
+					oBodyNd.append(sHtml);
 			});
 		});
 	</script>
