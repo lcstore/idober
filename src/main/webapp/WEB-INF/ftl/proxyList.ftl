@@ -139,7 +139,7 @@
 		
 		<script type="text/javascript">
 		$(document).ready(function() {
-		    $("[id^=updateBtn_]").on('click',function(){
+			$("body").on('click', "[id^=updateBtn_]", function () {
 		         var oCurEle = $(this);
 		         var oTdEles = oCurEle.parent().siblings('td:not(.callBtn)');
 			     oTdEles.each(function(){
@@ -155,7 +155,7 @@
 			      $('#'+sId).show();
 			      $(this).hide();
 			});
-		    $("[id^=saveBtn_]").on('click',function(){
+			$("body").on('click', "[id^=saveBtn_]", function () {
 		         var oCurEle = $(this);
 		         var oTdEles = oCurEle.parent().siblings('td[name]');
 		         var oParam = {};
@@ -184,7 +184,7 @@
 					}
 				});
 			});
-		    $("[id^=execBtn_]").on('click',function(){
+			$("body").on('click', "[id^=execBtn_]", function () {
 		         var oCurEle = $(this);
 		         var oTdEles = oCurEle.parent().siblings('td[name]');
 		         var oParam = {};
@@ -208,12 +208,10 @@
 		            var iMaxId=0;
 		            $('tr[id^=rid_]').each(function(){
 		                 var iCurId= $(this).attr('id').replace('rid_','') - 0;
-		                 alert('iCurId:'+iCurId);
 		                 if(iCurId > iMaxId){
 		                    iMaxId = iCurId;
 		                 }
 					 });
-					 alert(iMaxId);
 					var iNextId = iMaxId +1;
 		    		var sHtml = '';
 					sHtml +='<tr id="rid_'+iNextId+'">';
