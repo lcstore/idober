@@ -24,5 +24,6 @@
 		<mapper resource="mybatis/mybatis-mapper-promotionMap.xml" />
 		<mapper resource="mybatis/mybatis-mapper-searchHis.xml" />
 		<mapper resource="mybatis/mybatis-mapper-proxyHome.xml" />
+		<mapper resource="mybatis/mybatis-mapper-promotionTrack.xml" />
 	</mappers>
 </configuration>
