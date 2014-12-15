@@ -1,4 +1,4 @@
-searchList.ftl<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
