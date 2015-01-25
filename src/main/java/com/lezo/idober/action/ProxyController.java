@@ -36,7 +36,7 @@ public class ProxyController {
 		}
 	};
 
-	@RequestMapping("source")
+	@RequestMapping("")
 	public String listSource(@ModelAttribute("model") ModelMap model, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "12") Integer pageSize) {
 		List<ProxyHomeDto> proxyList = proxyHomeService.getProxyHomeDtoByStatus(null, null);
 		Collections.sort(proxyList, DEL_ASC_COMPARATOR);
