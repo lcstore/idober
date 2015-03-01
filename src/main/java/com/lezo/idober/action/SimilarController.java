@@ -3,7 +3,10 @@ package com.lezo.idober.action;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -53,18 +56,75 @@ public class SimilarController {
 		}
 		Integer offset = (curPage - 1) * pageSize;
 		offset = offset < 0 ? 0 : offset;
+		offset = 0;
 		List<String> pCodeList = new ArrayList<String>();
 		if (StringUtils.isNotEmpty(productCode)) {
 			pCodeList.add(productCode);
 		}
 		Integer count = similarService.getCountSimilarDtoByCodeAndPrice(similarCodeList, pCodeList, fromPrice, toPrice);
-		List<SimilarDto> dtoList = similarService.getSimilarDtoByCodeAndPrice(similarCodeList, pCodeList, fromPrice, toPrice, offset, pageSize);
-		Collections.sort(dtoList, PRICE_ASC_COMPARATOR);
+		List<SimilarDto> dtoList = similarService.getSimilarDtoByCodeAndPrice(similarCodeList, pCodeList, fromPrice, toPrice, offset, Integer.MAX_VALUE);
+		// Collections.sort(dtoList, PRICE_ASC_COMPARATOR);
+		Map<Integer, List<SimilarDto>> siteDtoMap = new HashMap<Integer, List<SimilarDto>>();
+		for (SimilarDto dto : dtoList) {
+			List<SimilarDto> siteList = siteDtoMap.get(dto.getSiteId());
+			if (siteList == null) {
+				siteList = new ArrayList<SimilarDto>();
+				siteDtoMap.put(dto.getSiteId(), siteList);
+			}
+			siteList.add(dto);
+		}
+		List<Entry<Integer, List<SimilarDto>>> entryList = new ArrayList<Entry<Integer, List<SimilarDto>>>(siteDtoMap.entrySet());
+		doSortSiteAvgPriceAsc(entryList);
+		dtoList.clear();
+		for (Entry<Integer, List<SimilarDto>> entry : entryList) {
+			Collections.sort(entry.getValue(), PRICE_ASC_COMPARATOR);
+			for (SimilarDto dto : entry.getValue()) {
+				dtoList.add(dto);
+			}
+		}
+		int fromIndex = (curPage - 1) * pageSize;
+		fromIndex = fromIndex < 0 ? 0 : fromIndex;
+		int toIndex = fromIndex + pageSize;
+		toIndex = toIndex < dtoList.size() ? toIndex : dtoList.size();
+		dtoList = dtoList.subList(fromIndex, toIndex);
 		PageReturnVo<List<SimilarDto>> pageReturnVo = new PageReturnVo<List<SimilarDto>>(curPage, pageSize);
 		pageReturnVo.setTotalRow(count);
 		pageReturnVo.setData(dtoList);
 		return pageReturnVo;
 		// return PageReturnVo.convert2PageReturn(dtoList, pageReturnVo);
+	}
+
+	private void doSortSiteAvgPriceAsc(List<Entry<Integer, List<SimilarDto>>> entryList) {
+		Collections.sort(entryList, new Comparator<Entry<Integer, List<SimilarDto>>>() {
+			@Override
+			public int compare(Entry<Integer, List<SimilarDto>> o1, Entry<Integer, List<SimilarDto>> o2) {
+				Float priceSumLeft = 0F;
+				int countLeft = 0;
+				for (SimilarDto dto : o1.getValue()) {
+					if (dto.getProductPrice() != null) {
+						priceSumLeft += dto.getProductPrice();
+						countLeft++;
+					}
+				}
+				if (countLeft == 0) {
+					return -1;
+				}
+				Float priceSumRight = 0F;
+				int countRight = 0;
+				for (SimilarDto dto : o2.getValue()) {
+					if (dto.getProductPrice() != null) {
+						priceSumRight += dto.getProductPrice();
+						countRight++;
+					}
+				}
+				if (countRight == 0) {
+					return 1;
+				}
+				Float avgLeft = priceSumLeft / countLeft;
+				Float avgRight = priceSumRight / countRight;
+				return avgLeft.compareTo(avgRight);
+			}
+		});
 	}
 
 	@RequestMapping("")
