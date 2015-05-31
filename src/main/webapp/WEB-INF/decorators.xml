@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/WEB-INF/pages/includes">
+<!--     <excludes>
+        <pattern>/Heartbeat.html</pattern>
+        <pattern>/index.jsp</pattern>
+        <pattern>/styles/*</pattern>
+        <pattern>/scripts/*</pattern>
+        <pattern>/images/*</pattern>
+        <pattern>/dojo/*</pattern>
+        <pattern>/struts/*</pattern>
+        <pattern>/errorHandlerServlet.xfc</pattern>
+        <pattern>/slide/*</pattern>
+        <pattern>/ajax/*</pattern>
+        <pattern>/includes/*</pattern>
+        <pattern>/audit/ajax/*</pattern>
+        <pattern>/help/index.html</pattern>
+        <pattern>/help/index.files/*</pattern>
+        <pattern>/guarantee/workflowInfo/*</pattern>
+    </excludes>
+    <decorator name="base" page="base.ftl">
+        <pattern>/*</pattern>
+    </decorator> -->
+</decorators>
