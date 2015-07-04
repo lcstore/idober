@@ -13,3 +13,4 @@ deploy.sh
 *.so
 
 /iscript-core-client/src/test/java/com/lezo/iscript/yeam/ConfigParserTest.java
+/logs/

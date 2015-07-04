@@ -1,0 +1,6 @@
+<sitemesh>
+	<!-- 不被sitemesh装饰的路径 -->
+	<mapping path="/assets/*" exclue="true" />
+
+	<mapping path="/*" decorator="/WEB-INF/ftl/decorator/main.ftl" />
+</sitemesh>

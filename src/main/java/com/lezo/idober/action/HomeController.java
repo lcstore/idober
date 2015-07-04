@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.log4j.spi.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,6 +28,7 @@ import com.lezo.iscript.service.crawler.service.ProductStatService;
 import com.lezo.iscript.service.crawler.service.PromotionMapService;
 import com.lezo.iscript.service.crawler.utils.ShopCacher;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
+import com.lezo.iscript.utils.PriceUtils;
 
 @Controller
 public class HomeController {
@@ -55,7 +55,8 @@ public class HomeController {
 		Integer isDelete = PromotionMapDto.DELETE_FALSE;
 		List<ProductStatDto> summaryStatList = new ArrayList<ProductStatDto>();
 		for (Integer siteId : siteList) {
-			List<String> pCodeList = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, promoteType, promoteStatus, isDelete);
+			List<String> pCodeList = promotionMapService.getProductCodeSetBySiteIdAndType(siteId, promoteType,
+					promoteStatus, isDelete);
 			List<ProductStatDto> statList = productStatService.getProductStatDtos(pCodeList, siteId, 1);
 			if (!statList.isEmpty()) {
 				summaryStatList.addAll(statList);
@@ -123,7 +124,8 @@ public class HomeController {
 		Map<String, ProductStatDto> statMap = getKeyMap(statList);
 		List<ProductVo> voList = new ArrayList<ProductVo>(statList.size());
 		for (Entry<Integer, Set<String>> entry : siteCodeMap.entrySet()) {
-			List<ProductDto> productList = productService.getProductDtos(new ArrayList<String>(entry.getValue()), entry.getKey());
+			List<ProductDto> productList = productService.getProductDtos(new ArrayList<String>(entry.getValue()),
+					entry.getKey());
 			ShopDto siteDto = ShopCacher.getInstance().getShopDto(entry.getKey());
 			String siteName = siteDto == null ? "" : siteDto.getShopName();
 			for (ProductDto pDto : productList) {
@@ -134,12 +136,12 @@ public class HomeController {
 				pVo.setUnionUrl(pDto.getUnionUrl());
 				pVo.setSiteName(siteName);
 				if (statDto != null) {
-					pVo.setMarketPrice(statDto.getMarketPrice());
+					pVo.setMarketPrice(PriceUtils.toPrice(statDto.getMarketPrice()));
 					pVo.setProductUrl(statDto.getProductUrl());
 					pVo.setProductCode(statDto.getProductCode());
 					pVo.setProductName(statDto.getProductName());
 					pVo.setSiteId(statDto.getSiteId());
-					pVo.setProductPrice(statDto.getProductPrice());
+					pVo.setProductPrice(PriceUtils.toPrice(statDto.getProductPrice()));
 				}
 				voList.add(pVo);
 			}
