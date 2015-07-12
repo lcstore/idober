@@ -24,7 +24,7 @@
 		  <#list tagRect.dataList as pVo>
 				<div class="col-lg-3">
 				    <a href="/cluster/${pVo.matchCode}" target="blank">
-					  <img src="/assets/img/intro01.png" alt="${pVo.productName}">
+					  <img src="${pVo.imgUrl}" alt="${pVo.productName}">
 					</a>
 					<a href="${pVo.productUrl}" target="blank">
 					   <h3>${pVo.productName}</h3>
@@ -33,8 +33,8 @@
 					<span>${pVo.tokenBrand}</span>
 					<span>${pVo.tokenCategory}</span>
 					</div>
-					<a href="${pVo.productUrl}" target="blank">去购买</a>
-					<a href="/cluster/${pVo.matchCode}" target="blank">去挑选</a>
+					<a href="${pVo.productUrl}" target="blank" class="btn btn-success">去购买</a>
+					<a href="/cluster/${pVo.matchCode}" target="blank" class="btn btn-primary">去挑选</a>
 				</div>
 			</#list>
 			</div>

@@ -1,6 +1,24 @@
 <sitemesh>
 	<!-- 不被sitemesh装饰的路径 -->
 	<mapping path="/assets/*" exclue="true" />
+	<!-- Map default decorator. This shall be applied to all paths if no other 
+		paths match. -->
+	<mapping decorator="/WEB-INF/ftl/decorator/main.ftl" />
 
-	<mapping path="/*" decorator="/WEB-INF/ftl/decorator/main.ftl" />
+	<!-- Map decorators to path patterns. -->
+	<mapping path="/admin/*" decorator="/another-decorator.html" />
+	<mapping path="/*.special.jsp" decorator="/special-decorator.html" />
+
+	<!-- Alternative convention. This is more verbose but allows multiple decorators 
+		to be applied to a single path. -->
+	<mapping>
+		<path>/articles/*</path>
+		<decorator>/decorators/article.html</decorator>
+		<decorator>/decorators/two-page-layout.html</decorator>
+		<decorator>/decorators/common.html</decorator>
+	</mapping>
+
+	<!-- Exclude path from decoration. -->
+	<mapping path="/javadoc/*" exclue="true" />
+	<mapping path="/brochures/*" exclue="true" />
 </sitemesh>
