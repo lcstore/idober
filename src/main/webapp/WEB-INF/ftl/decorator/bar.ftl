@@ -125,10 +125,63 @@
 	</div>
 	<!-- /Intro-->
 
-	<!-- tagRect start -->
+	<!-- Highlights - jumbotron -->
+	<div class="jumbotron no-padding ">
+		<div class="container text-center">
+		<div class="tagRect">手机数码</div>
+			<div class="row centered">
+				<div class="col-lg-4">
+					<img src="/assets/img/intro01.png" alt="">
+					<h3>Community</h3>
+					<p>Lorem Ipsum is simply dummy text of the printing and
+						typesetting industry.</p>
+				</div>
+				<div class="col-lg-4">
+					<img src="/assets/img/intro02.png" alt="">
+					<h3>Schedule</h3>
+					<p>Lorem Ipsum is simply dummy text of the printing and
+						typesetting industry.</p>
+				</div>
+				<div class="col-lg-4">
+					<img src="/assets/img/intro03.png" alt="">
+					<h3>Monitoring</h3>
+					<p>Lorem Ipsum is simply dummy text of the printing and
+						typesetting industry.</p>
+				</div>
+			</div>
+			<br>
+			<hr>
+		</div>
+	</div>
 	<sitemesh:write property='body'/>
-	<!-- tagRect end -->
-	
+	<!-- /Highlights -->
+	<div class="container">
+	    <div class="tagRect">进口食品</div>
+		<div class="row centered text-center">
+			<br>
+			<div class="col-lg-4">
+				<img src="/assets/img/intro01.png" alt="">
+				<h3>Community</h3>
+				<p>Lorem Ipsum is simply dummy text of the printing and
+					typesetting industry.</p>
+			</div>
+			<div class="col-lg-4">
+				<img src="/assets/img/intro02.png" alt="">
+				<h3>Schedule</h3>
+				<p>Lorem Ipsum is simply dummy text of the printing and
+					typesetting industry.</p>
+			</div>
+			<div class="col-lg-4">
+				<img src="/assets/img/intro03.png" alt="">
+				<h3>Monitoring</h3>
+				<p>Lorem Ipsum is simply dummy text of the printing and
+					typesetting industry.</p>
+			</div>
+		</div>
+		<br>
+		<hr>
+	</div>
+
 	<!-- Social links. @TODO: replace by link/instructions in template -->
 	<section id="social">
 		<div class="container">

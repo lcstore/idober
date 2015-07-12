@@ -16,7 +16,7 @@
 		ignore-unresolvable="true" />
 
 	<!-- 数据库访问参数配置 -->
-	<import resource="classpath:spring/spring-config-jdbc.xml" />
+	<!-- <import resource="classpath:spring/spring-config-jdbc.xml" /> -->
 	<import resource="classpath:spring/spring-context-init.xml" />
 
 
