@@ -6,19 +6,17 @@
 	<mapping decorator="/WEB-INF/ftl/decorator/main.ftl" />
 
 	<!-- Map decorators to path patterns. -->
-	<mapping path="/admin/*" decorator="/another-decorator.html" />
-	<mapping path="/*.special.jsp" decorator="/special-decorator.html" />
+	<!-- <mapping path="/admin/*" decorator="/another-decorator.html" /> -->
 
 	<!-- Alternative convention. This is more verbose but allows multiple decorators 
 		to be applied to a single path. -->
 	<mapping>
-		<path>/articles/*</path>
-		<decorator>/decorators/article.html</decorator>
-		<decorator>/decorators/two-page-layout.html</decorator>
-		<decorator>/decorators/common.html</decorator>
+		<path>/new/*</path>
+		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/summary.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
 	</mapping>
 
-	<!-- Exclude path from decoration. -->
-	<mapping path="/javadoc/*" exclue="true" />
-	<mapping path="/brochures/*" exclue="true" />
 </sitemesh>

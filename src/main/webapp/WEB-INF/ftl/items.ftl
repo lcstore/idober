@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="乐助猫,真实快捷的导购,助您购实惠、购正品,快捷购物不吃亏。">
 <meta name="Keywords" content="购实惠,购正品,进口食品,美容护理,家用电器,手机数码,LEZOMAO,乐助猫。">
-<title>乐助猫,购实惠,购正品,快捷购物不吃亏<sitemesh:write property='title'/></title>
+<title>乐助猫,购实惠,购正品,快捷购物不吃亏3432</title>
 
 </head>
 
 <body class="home">
+<!-- start items -->
 
  <#list model["tagRectList"] as tagRect>
 	<!-- Highlights - jumbotron -->
