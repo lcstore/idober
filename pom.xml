@@ -57,8 +57,14 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${jstl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lezo.iscript</groupId>
@@ -167,5 +173,7 @@
 		<iscript.version>1.0-SNAPSHOT</iscript.version>
 		<jackson.version>1.9.12</jackson.version>
 		<lombok.version>1.16.4</lombok.version>
+		<servlet-api.version>2.5</servlet-api.version>
+		<jstl.version>1.2</jstl.version>
 	</properties>
 </project>

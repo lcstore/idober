@@ -34,5 +34,6 @@
 		</div>
 	</div>
  </#list>
+ <script src="/assets/js/template.js?v=${version}"></script>
 </body>
 </html>

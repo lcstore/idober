@@ -10,36 +10,17 @@
 </head>
 
 <body class="home">
-
- <#list model["tagRectList"] as tagRect>
-	<!-- Highlights - jumbotron -->
-	<#if tagRect_index%2==0>
-	<div class="jumbotron no-padding ">
-	<#else>
 	<div class="container">
-	</#if>
-		<div class="container text-center">
-		<div class="tagRect">${tagRect.tagName}</div>
-			<div class="row centered">
-		  <#list tagRect.dataList as pVo>
-				<div class="col-lg-3">
-				    <a href="/cluster/${pVo.matchCode}" target="blank">
-					  <img src="${pVo.imgUrl}" alt="${pVo.productName}">
-					</a>
-					<a href="${pVo.productUrl}" target="blank">
-					   <h3>${pVo.productName}</h3>
-					</a>
-					<div>
-					<span>${pVo.tokenBrand}</span>
-					<span>${pVo.tokenCategory}</span>
-					</div>
-					<a href="${pVo.productUrl}" target="blank" class="btn btn-success">去购买</a>
-					<a href="/cluster/${pVo.matchCode}" target="blank" class="btn btn-primary">去挑选</a>
-				</div>
-			</#list>
-			</div>
-		</div>
+		  <#list model["clusterList"] as pVo>
+		     <div class="list-group">
+	          <a href="${pVo.productUrl}" class="list-group-item list-group-item-success">
+	            <span class="badge" >12</span>
+	            <span>${pVo.tokenBrand}</span>
+				<span>${pVo.tokenCategory}</span>
+	            ${pVo.productName}
+	          </a>
+	        </div>
+		</#list>
 	</div>
- </#list>
 </body>
 </html>

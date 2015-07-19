@@ -81,7 +81,7 @@
 
 	<!-- Freemarker配置 -->
 	<bean id="freemarkerConfig"
-		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		class="com.lezo.idober.ftls.CustomFreeMarkerConfigurer">
 		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
 		<property name="freemarkerSettings">
 			<props>

@@ -6,7 +6,7 @@
 </head>
 <body>
 	<!-- Fixed navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top headroom">
+	<div class="navbar navbar-inverse navbar-fixed-top headroom" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<!-- Button for smallest screens -->
@@ -17,6 +17,14 @@
 				</button>
 				<a class="navbar-brand" href="index.html"><img
 					src="/assets/img/logo.png" alt="Progressus HTML5 template"></a>
+			</div>
+			<div class="center-block">
+			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">
+					<div class="form-group input-append">
+						<input type="search" name="q" value="牛奶" class="form-control search-query" id="qWord">
+						<button type="submit" class="btn btn-success navbar-btn btn-sm" id="qBtn">Go</button>
+					</div>
+				</form>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">

@@ -3,7 +3,7 @@
 	<mapping path="/assets/*" exclue="true" />
 	<!-- Map default decorator. This shall be applied to all paths if no other 
 		paths match. -->
-	<mapping decorator="/WEB-INF/ftl/decorator/main.ftl" />
+	<!-- <mapping decorator="/WEB-INF/ftl/decorator/main.ftl" /> -->
 
 	<!-- Map decorators to path patterns. -->
 	<!-- <mapping path="/admin/*" decorator="/another-decorator.html" /> -->
@@ -12,6 +12,15 @@
 		to be applied to a single path. -->
 	<mapping>
 		<path>/new/*</path>
+		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/summary.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/searchbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
+	</mapping>
+	<mapping>
+		<path>/cluster/*</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/summary.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
