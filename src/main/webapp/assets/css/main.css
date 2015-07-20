@@ -77,11 +77,11 @@
 .slideUp {
 	top: -100px;
 }
-
+/*move fast and ease-out*/
 .headroom {
 	-webkit-transition: all 0.4s ease-out;
 	-moz-transition: all 0.4s ease-out;
-	-o-transition: all 0.4s ease-out;
+	-o-transition: all 0.4s ease-out; 
 	transition: all 0.4s ease-out;
 }
 
@@ -333,28 +333,37 @@ img.pull-left {
 	padding: 0;
 }
 
-
 input.search-query {
-    border-radius: 15px;
-    margin-bottom: 0;
-    padding-left: 14px;
-    padding-right: 14px;
+	border-radius: 15px;
+	margin-bottom: 0;
+	padding-left: 14px;
+	padding-right: 14px;
 }
-.form-search .input-append .search-query, .form-search .input-prepend .search-query {
-    border-radius: 0;
-}
+
 .form-search .input-append .search-query {
-    border-radius: 14px 0 0 14px;
+	border-radius: 14px 0 0 14px;
 }
+
 .form-search .input-append .btn {
-    border-radius: 0 14px 14px 0;
+	border-radius: 0 14px 14px 0;
 }
-.form-search .input-prepend .search-query {
-    border-radius: 0 14px 14px 0;
-}
-.form-search .input-prepend .btn {
-    border-radius: 14px 0 0 14px;
-}
+
 .input-append .btn {
-    margin-left: -1px;
+	margin-left: -1px;
+}
+
+.input-append {
+	display: inline-block;
+	font-size: 0;
+	margin-bottom: 10px;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.search-btn {
+	padding: 8px 20px;
+}
+
+.navbar-form.form-search {
+	margin-left:10%;
 }

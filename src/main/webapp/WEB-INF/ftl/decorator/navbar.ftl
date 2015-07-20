@@ -6,7 +6,7 @@
 </head>
 <body>
 	<!-- Fixed navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top headroom" role="navigation">
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<!-- Button for smallest screens -->
@@ -22,7 +22,7 @@
 			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">
 					<div class="form-group input-append">
 						<input type="search" name="q" value="牛奶" class="form-control search-query" id="qWord">
-						<button type="submit" class="btn btn-success navbar-btn btn-sm" id="qBtn">Go</button>
+						<button type="submit" class="btn btn-success search-btn" id="qBtn">Go</button>
 					</div>
 				</form>
 			</div>

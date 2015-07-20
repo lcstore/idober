@@ -7,7 +7,6 @@
 <body>
 	<!-- start summary -->
 	<div class="container text-center">
-		<br> <br>
 		<!-- START TIMER -->
 		<div id="timer" data-animated="FadeIn" class="animated FadeIn">
 			<p id="message"></p>
