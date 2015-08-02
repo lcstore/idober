@@ -21,7 +21,6 @@
 	<mapping>
 		<path>/cluster/*</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
-		<decorator>/WEB-INF/ftl/decorator/summary.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>

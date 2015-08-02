@@ -1,3 +1,8 @@
+body {
+    background-color: #eee;
+    overflow-x: hidden;
+}
+
 /* Header */
 #head {
 	background: #181015 url( ../img/bg_header.jpg) no-repeat;
