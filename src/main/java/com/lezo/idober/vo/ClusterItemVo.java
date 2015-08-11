@@ -30,4 +30,12 @@ public class ClusterItemVo implements Serializable {
 	private String tokenCategory;
 	private String tokenVary;
 
+	private Integer soldNum;
+	private Integer commentNum;
+	private Integer stockNum;
+	private Float minPrice;
+	private Float maxPrice;
+	private Integer goodComment;
+	private Integer poorComment;
+
 }

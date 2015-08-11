@@ -10,10 +10,7 @@
 
 <link rel="shortcut icon" href="/assets/img/gt_favicon.png">
 
-<link rel="stylesheet" media="screen"
-	href="/assets/css/font-open-sans.css?v=${version}">
 <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=${version}">
-<link rel="stylesheet" href="/assets/css/font-awesome.min.css?v=${version}">
 
 <!-- Custom styles for our template -->
 <link rel="stylesheet" href="/assets/css/bootstrap-theme.css?v=${version}"

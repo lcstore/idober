@@ -37,7 +37,7 @@ public class MatchServiceMock implements MatchService {
 		List<MatchDto> dtoList = new ArrayList<MatchDto>();
 		for (int i = 1; i <= 5; i++) {
 			MatchDto dto = new MatchDto();
-			dto.setImgUrl("/assets/img/intro01.png");
+			dto.setImgUrl("http://img13.360buyimg.com/n1/jfs/t151/192/1231473418/79998/ca97c053/53a7e84dNe9522ccd.jpg");
 			dto.setMatchCode(1L);
 			dto.setProductCode("12345-" + i);
 			dto.setSiteId(1001);
@@ -45,6 +45,8 @@ public class MatchServiceMock implements MatchService {
 			dto.setTokenBrand("iphone");
 			dto.setTokenCategory("手机");
 			dto.setProductUrl("http://jd.com/item/" + dto.getProductCode());
+			dto.setShopId(1001 + i);
+			dto.setMarketPrice(1000L);
 			dtoList.add(dto);
 		}
 		return dtoList;

@@ -17,14 +17,28 @@
 	<div class="container">
 		 <div class="row article-padding">
 		      <div class="article-list col-md-9">
-		        <article class="article-top">
-		          <div class="col-md-3">
-		            <a href="" >
-		              <img src="http://img13.360buyimg.com/n1/jfs/t151/192/1231473418/79998/ca97c053/53a7e84dNe9522ccd.jpg" class="leftbar"/>
-		            </a>
-		          </div>
-		            <div class="desc col-md-9"><a target="_blank" href="/p/5035961.html" class="title info_flow_news_title">专访蓝港总裁廖明香：从纯游戏公司到内容公司，蓝港的百亿故事？</a><div class="author"><a href="/posts/thethief"><span class="avatar before-fade-in after-fade-in" style="background-image: url(&quot;http://wx.qlogo.cn/mmopen/04pjpD5VDiaaLqoyKYMysPQ8oYoGiaBl8Wos8F7MOUanSick6HMSLO3icib538Gyic0H6iaMb2tRPMHs9N5aw47Wicticrib7yMZmccOph/0&quot;);"></span><span class="name">thethief</span></a><span class="time">&nbsp;•&nbsp;<abbr title="2015-08-01 14:28:26 +0800" class="timeago">2015/08/01 14:28</abbr></span></div><div class="brief">国内纯游戏公司，真没几家破百亿的。</div></div>
-		       </article>
+		        <#list model["clusterList"] as cArticle>
+			        <#if cArticle_index==0>
+					  <article class="article-top">
+					<#else>
+					   <article class="article-node">
+					</#if>
+			          <div class="col-md-3">
+			            <a href="${cArticle.productUrl}" >
+			              <img src="${cArticle.imgUrl}" class="leftbar"/>
+			            </a>
+			          </div>
+		             <div class="desc col-md-9">
+		             	<a target="_blank" href="${cArticle.productUrl}">${cArticle.productName}</a>
+		             	<div class="curPrice">${cArticle.currentPrice}</div>
+		             	<div class="brand">${cArticle.tokenBrand}</div>
+		             	<div class="brand">${cArticle.tokenCategory}</div>
+		             	<div class="brand">${cArticle.tokenVary}</div>
+		             	<div class="shop">${cArticle.shopId}</div>
+		             	
+                     </div>
+			       </article>
+		        </#list> 
 		        <article class="article-node">
 		          <div class="col-md-3">
 		            <a href="" >
