@@ -9,6 +9,16 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
+			<groupId>com.lezo.iscript</groupId>
+			<artifactId>iscript-service-crawler</artifactId>
+			<version>${iscript.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lezo.iscript</groupId>
+			<artifactId>iscript-common-rest</artifactId>
+			<version>${iscript.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
@@ -65,11 +75,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.lezo.iscript</groupId>
-			<artifactId>iscript-service-crawler</artifactId>
-			<version>${iscript.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>

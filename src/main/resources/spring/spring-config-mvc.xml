@@ -9,7 +9,7 @@
 	<!-- 启用spring mvc 注解 -->
 	<context:annotation-config />
 	<mvc:annotation-driven />
-	<context:component-scan base-package="com.lezo.idober.service.mock"
+	<context:component-scan base-package="com.lezo.idober.action"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
@@ -17,19 +17,11 @@
 			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 	
-	<!-- <context:component-scan base-package="com.lezo.idober.action"
-		use-default-filters="false">
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-		<context:include-filter type="annotation"
-			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
-	</context:component-scan> -->
-
 	<!-- 设置使用注解的类所在的jar包 -->
-	<!-- <context:component-scan base-package="com.lezo.iscript.service.crawler.dao"></context:component-scan>
+	<context:component-scan base-package="com.lezo.iscript.service.crawler.dao"></context:component-scan>
 	<context:component-scan base-package="com.lezo.iscript.service.crawler.service"></context:component-scan>
 	<context:component-scan base-package="com.lezo.idober.service"></context:component-scan>
- -->
+
 	<!-- 完成请求和注解POJO的映射 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />

@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,7 @@ import com.lezo.iscript.service.crawler.dto.SkuRankDto;
 import com.lezo.iscript.service.crawler.service.MatchService;
 import com.lezo.iscript.service.crawler.service.SkuRankService;
 
-@Controller
+//@Controller
 // @RequestMapping("new")
 public class NewHomeController {
 	@Autowired

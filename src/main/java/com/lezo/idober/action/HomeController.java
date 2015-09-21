@@ -12,7 +12,6 @@ import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,7 @@ import com.lezo.iscript.service.crawler.utils.ShopCacher;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
 import com.lezo.iscript.utils.PriceUtils;
 
-@Controller
+//@Controller
 public class HomeController {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(HomeController.class);
 	private ProductStatService productStatService = SpringBeanUtils.getBean(ProductStatService.class);
@@ -163,15 +162,6 @@ public class HomeController {
 
 	private String getDtoKey(ProductStatDto dto) {
 		return dto.getSiteId() + "-" + dto.getProductCode();
-	}
-
-	private void doPriceAsc(List<ProductStatDto> statList) {
-		Collections.sort(statList, new Comparator<ProductStatDto>() {
-			@Override
-			public int compare(ProductStatDto statLeft, ProductStatDto statRight) {
-				return statLeft.getProductPrice().compareTo(statRight.getProductPrice());
-			}
-		});
 	}
 
 	private void doCommentDesc(List<ProductStatDto> statList) {

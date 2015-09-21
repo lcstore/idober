@@ -11,7 +11,6 @@
 	<!-- Alternative convention. This is more verbose but allows multiple decorators 
 		to be applied to a single path. -->
 	<mapping>
-		<path>/new/*</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/summary.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
@@ -22,6 +21,13 @@
 		<path>/cluster/*</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
+	</mapping>
+	<mapping>
+		<path>/union/*</path>
+		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/blankbar.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
 	</mapping>

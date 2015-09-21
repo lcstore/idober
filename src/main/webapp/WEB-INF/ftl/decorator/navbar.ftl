@@ -21,7 +21,7 @@
 			<div class="center-block">
 			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">
 					<div class="form-group input-append">
-						<input type="search" name="q" value="牛奶" class="form-control search-query" id="qWord">
+					    <input type="search" name="q" value="牛奶" class="form-control search-query" id="qWord">
 						<button type="submit" class="btn btn-success search-btn" id="qBtn">Go</button>
 					</div>
 				</form>
