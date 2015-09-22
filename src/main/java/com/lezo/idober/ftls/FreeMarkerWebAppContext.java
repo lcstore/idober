@@ -15,6 +15,7 @@ import org.sitemesh.content.ContentProcessor;
 import org.sitemesh.webapp.WebAppContext;
 import org.sitemesh.webapp.contentfilter.ResponseMetaData;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewRendererServlet;
 
 import com.lezo.iscript.spring.context.SpringBeanUtils;
@@ -36,8 +37,8 @@ public class FreeMarkerWebAppContext extends WebAppContext {
     protected void decorate(String decoratorPath, Content content, Writer out) throws IOException {
         if (decoratorPath.indexOf("decorator") > 0 && decoratorPath.toLowerCase().endsWith(".ftl")) {
             CustomFreeMarkerConfigurer config = SpringBeanUtils.getBean(CustomFreeMarkerConfigurer.class);
-            String version = config.getConfiguration().getSharedVariable(CustomFreeMarkerConfigurer.KEY_VERSION)
-                    .toString();
+            // String version = config.getConfiguration().getSharedVariable(CustomFreeMarkerConfigurer.KEY_VERSION)
+            // .toString();
             Configuration configuration = config.getConfiguration();
             File file = new File(decoratorPath);
             String decoratorName = file.getParentFile().getName() + "/" + file.getName();
@@ -50,9 +51,9 @@ public class FreeMarkerWebAppContext extends WebAppContext {
                 e.printStackTrace();
             }
             // super.decorate(decoratorPath, content, srcOut);
-            String ftlContent = srcOut.toString();
-            ftlContent = ftlContent.replaceAll("\\$\\{version\\}", version);
-            out.append(ftlContent);
+            // String ftlContent = srcOut.toString();
+            // ftlContent = ftlContent.replaceAll("\\$\\{version\\}", version);
+            out.append(srcOut.toString());
         } else {
             super.decorate(decoratorPath, content, out);
         }
@@ -72,6 +73,16 @@ public class FreeMarkerWebAppContext extends WebAppContext {
             Map<String, Object> map = (Map<String, Object>) modelObj;
             dataModel.putAll(map);
         }
+        modelObj = request.getAttribute(View.PATH_VARIABLES);
+        if (modelObj != null && modelObj instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) modelObj;
+            dataModel.putAll(map);
+        }
+        // modelObj = request.getParameterMap();
+        // if (modelObj != null && modelObj instanceof Map) {
+        // Map<String, Object> map = (Map<String, Object>) modelObj;
+        // dataModel.putAll(map);
+        // }
         return dataModel;
     }
 }

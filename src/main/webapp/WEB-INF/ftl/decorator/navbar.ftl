@@ -21,7 +21,11 @@
 			<div class="center-block">
 			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">
 					<div class="form-group input-append">
-					    <input type="search" name="q" value="牛奶" class="form-control search-query" id="qWord">
+						<#if qWord==null>
+					      <input type="search" name="q" value="牛奶" class="form-control search-query" id="qWord">
+						<#else>
+					      <input type="search" name="q" value="${qWord}" class="form-control search-query" id="qWord">
+					     </#if>
 						<button type="submit" class="btn btn-success search-btn" id="qBtn">Go</button>
 					</div>
 				</form>

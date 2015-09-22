@@ -26,7 +26,9 @@ public class UnionController {
     private static JosRestClient client = new JosRestClient(appKey, appSecret, accessToken);
 
     @RequestMapping(value = "jd", method = RequestMethod.GET)
-    public String getUnionUrl(@RequestParam("code") String pCode, @ModelAttribute("model") ModelMap model)
+    public String getUnionUrl(@RequestParam("code") String pCode,
+            @RequestParam(value = "qWord", required = false) String qWord,
+            @ModelAttribute("model") ModelMap model)
             throws Exception {
         String method = "jingdong.service.promotion.getcode";
         method = "jingdong.service.promotion.batch.getcode";
@@ -64,6 +66,9 @@ public class UnionController {
             log.warn("error union,code:" + pCode + ",respone:" + rsObj);
         }
         model.put("union", pVo);
+        if (StringUtils.isNotBlank(qWord)) {
+            model.put("qWord", qWord);
+        }
         return "unions";
     }
 }
