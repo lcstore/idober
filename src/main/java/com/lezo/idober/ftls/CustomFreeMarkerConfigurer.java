@@ -11,28 +11,29 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 
 public class CustomFreeMarkerConfigurer extends FreeMarkerConfigurer {
-	public static final String KEY_VERSION = "version";
-	private String version = "" + System.currentTimeMillis();
+    public static final String KEY_VERSION = "version";
+    private String version = "" + System.currentTimeMillis();
 
-	public CustomFreeMarkerConfigurer() {
-		super();
-	}
+    public CustomFreeMarkerConfigurer() {
+        super();
+    }
 
-	@Override
-	public void afterPropertiesSet() throws IOException, TemplateException {
-		super.afterPropertiesSet();
-		getConfiguration().setSharedVariable(KEY_VERSION, version);
-	}
+    @Override
+    public void afterPropertiesSet() throws IOException,
+            TemplateException {
+        super.afterPropertiesSet();
+        getConfiguration().setSharedVariable(KEY_VERSION, version);
+    }
 
-	@Override
-	protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
-		templateLoaders.add(new ClassTemplateLoader(CustomFreeMarkerConfigurer.class, ""));
-	}
+    @Override
+    protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
+        templateLoaders.add(new ClassTemplateLoader(CustomFreeMarkerConfigurer.class, ""));
+    }
 
-	@Override
-	protected void postProcessConfiguration(Configuration config) throws IOException, TemplateException {
-		// TODO Auto-generated method stub
-		super.postProcessConfiguration(config);
-	}
+    @Override
+    protected void postProcessConfiguration(Configuration config) throws IOException,
+            TemplateException {
+        super.postProcessConfiguration(config);
+    }
 
 }
