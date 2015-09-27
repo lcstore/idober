@@ -22,6 +22,7 @@
 	<script src="/assets/js/html5shiv.js?v=${version}"></script>
 	<script src="/assets/js/respond.min.js?v=${version}"></script>
 	<![endif]-->
+	<script src="/assets/js/jquery-1.11.3.min.js?v=${version}"></script>
 </head>
 
 <body class="home">
@@ -30,7 +31,6 @@
     
     
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-	<script src="/assets/js/jquery-1.11.3.min.js?v=${version}"></script>
 	<script src="/assets/js/bootstrap-3.2.0.min.js?v=${version}"></script>
 	<script src="/assets/js/headroom.min.js?v=${version}"></script>
 	<script src="/assets/js/jQuery.headroom.min.js?v=${version}"></script>

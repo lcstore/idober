@@ -1,6 +1,6 @@
 body {
-    background-color: #eee;
-    overflow-x: hidden;
+	background-color: #eee;
+	overflow-x: hidden;
 }
 
 /* Header */
@@ -86,7 +86,7 @@ body {
 .headroom {
 	-webkit-transition: all 0.4s ease-out;
 	-moz-transition: all 0.4s ease-out;
-	-o-transition: all 0.4s ease-out; 
+	-o-transition: all 0.4s ease-out;
 	transition: all 0.4s ease-out;
 }
 
@@ -370,5 +370,10 @@ input.search-query {
 }
 
 .navbar-form.form-search {
-	margin-left:10%;
+	margin-left: 10%;
+}
+
+.list-pic {
+	width: 220px;
+	height: 220px;
 }
