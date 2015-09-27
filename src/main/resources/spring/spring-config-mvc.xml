@@ -29,8 +29,6 @@
 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
 
-	<mvc:resources mapping="/css/**" location="css/" />
-	<mvc:resources mapping="/img/**" location="/assets/img/" />
 	<mvc:resources location="/assets/**" mapping="/assets/"/>
 	<mvc:default-servlet-handler />  
 

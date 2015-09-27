@@ -18,7 +18,7 @@
 					  <#list oDocs as oDoc>
 						    <div class="col-md-3"><div class="list-col-box">
 					        <div class="list-pic">
-					        <a href="${oDoc.productUrl}" target="_blank"><img alt="${oDoc.productName}" src="${(oDoc.imgUrl)???string(oDoc.imgUrl,'/img/noimg220x220.jpg')}" /></a>
+					        <a href="${oDoc.productUrl}" target="_blank"><img alt="${oDoc.productName}" src="${(oDoc.imgUrl)???string(oDoc.imgUrl,'/assets/img/noimg220x220.jpg')}" /></a>
 					        </div>
 					        <div class="list-txt">
 					        <a href="${oDoc.productUrl}" target="_blank"> <span>${oDoc.productName}</span></a>
@@ -42,7 +42,7 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('img').error(function(){
-		       $(this).attr('src', '/img/noimg220x220.jpg');
+		       $(this).attr('src', '/assets/img/noimg220x220.jpg');
 		       $(this).error = null;
 		});
 	});
