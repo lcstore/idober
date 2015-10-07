@@ -42,6 +42,11 @@ public class SearchController {
             throws Exception {
         long start = System.currentTimeMillis();
         keyWord = keyWord.trim();
+        if (keyWord.startsWith("http")) {
+            model.put("url", keyWord);
+            model.addAttribute("qWord", keyWord);
+            return new ModelAndView("redirect:/union/", model);
+        }
         Matcher matcher = NUM_REG.matcher(keyWord);
         if (matcher.find()) {
             model.put("code", keyWord);

@@ -17,12 +17,15 @@
 	media="screen">
 <link rel="stylesheet" href="/assets/css/main.css?v=${version}">
 
-<!-- HTML5 shim and Respond.js?v=${version} IE8 support of HTML5 elements and media queries -->
-<!--[if lt IE 9]>
-	<script src="/assets/js/html5shiv.js?v=${version}"></script>
-	<script src="/assets/js/respond.min.js?v=${version}"></script>
-	<![endif]-->
 	<script src="/assets/js/jquery-1.11.3.min.js?v=${version}"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$('img').error(function(){
+		       $(this).attr('src', '/assets/img/noimg220x220.jpg');
+		       $(this).error = null;
+		});
+	});
+	</script>
 </head>
 
 <body class="home">

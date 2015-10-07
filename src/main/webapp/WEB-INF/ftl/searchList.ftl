@@ -39,13 +39,5 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript">
-	$(document).ready(function() {
-		$('img').error(function(){
-		       $(this).attr('src', '/assets/img/noimg220x220.jpg');
-		       $(this).error = null;
-		});
-	});
-	</script>
 </body>
 </html>

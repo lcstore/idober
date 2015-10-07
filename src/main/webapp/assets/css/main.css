@@ -377,3 +377,16 @@ input.search-query {
 	width: 220px;
 	height: 220px;
 }
+
+.item a {
+    color: #333;
+}
+.item a:hover {
+    color: #c10001 !important;
+}
+.item a:visited {
+    color: #551a8b !important;
+}
+a:hover {
+    text-decoration: underline;
+}

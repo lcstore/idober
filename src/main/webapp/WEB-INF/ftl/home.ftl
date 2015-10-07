@@ -21,14 +21,14 @@
 		<div class="tagRect">${tagRect.tagName}</div>
 			<div class="row centered">
 		    <#list tagRect.dataList as pVo>
-				<div class="col-lg-3 item">
+				<div class="col-lg-3">
 				    <div class="list-pic">
-					    <a href="/sku/${pVo.id}" target="blank">
+					    <a href="/item/${pVo.id}" target="blank">
 						  <img alt="${pVo.productName}" src="/assets/img/noimg220x220.jpg">
 						</a>
 					</div>
 					<div class="list-txt">
-					    <a href="/sku/${pVo.id}" target="_blank">${unifyOf(pVo.productName)}</a>
+					    <a href="/item/${pVo.id}" target="_blank"> <span>${unifyOf(pVo.productName)}</span></a>
 					</div>
 				</div>
 			</#list>

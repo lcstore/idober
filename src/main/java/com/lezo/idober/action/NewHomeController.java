@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lezo.idober.vo.ClusterItemVo;
 import com.lezo.idober.vo.ListItemVo;
 import com.lezo.idober.vo.TagRectVo;
+import com.lezo.iscript.service.crawler.dto.ItemDto;
 import com.lezo.iscript.service.crawler.dto.MatchDto;
 import com.lezo.iscript.service.crawler.dto.SkuRankDto;
+import com.lezo.iscript.service.crawler.service.ItemService;
 import com.lezo.iscript.service.crawler.service.MatchService;
 import com.lezo.iscript.service.crawler.service.SkuRankService;
 
@@ -29,6 +31,8 @@ public class NewHomeController {
      @Autowired
      private SkuRankService skuRankService;
      @Autowired
+    private ItemService itemService;
+    @Autowired
      private MatchService matchService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -40,11 +44,12 @@ public class NewHomeController {
          List<TagRectVo<ListItemVo>> tagRectVos = new ArrayList<TagRectVo<ListItemVo>>();
          for (Entry<String, String> entry : keyCategoryMap.entrySet()) {
             // List<SkuRankDto> dtoList = skuRankService.getDtoByCategoryOrBarnd(entry.getValue(), null, offset, limit);
-            List<SkuRankDto> dtoList = getDefaultSkuRank();
-             List<ListItemVo> voList = new ArrayList<ListItemVo>();
-             for (SkuRankDto dto : dtoList) {
+            List<ItemDto> itemList = itemService.getDtoByCategory(entry.getValue(), offset, limit);
+            List<ListItemVo> voList = new ArrayList<ListItemVo>();
+            for (ItemDto dto : itemList) {
                  ListItemVo itemVo = new ListItemVo();
                  BeanUtils.copyProperties(dto, itemVo);
+                itemVo.setId(dto.getMatchCode());
                  voList.add(itemVo);
              }
              TagRectVo<ListItemVo> tagRectVo = new TagRectVo<ListItemVo>();
@@ -54,7 +59,7 @@ public class NewHomeController {
          }
          model.addAttribute("tagRectList", tagRectVos);
          // return "hello";
-         return "items";
+        return "home";
      }
 
     private List<SkuRankDto> getDefaultSkuRank() {
@@ -80,7 +85,8 @@ public class NewHomeController {
      public String getCluster(@ModelAttribute("model") ModelMap model, @PathVariable Long matchCode) {
          List<Long> mCodeList = new ArrayList<Long>();
          mCodeList.add(matchCode);
-         List<MatchDto> dtoList = matchService.getMatchDtoByMatchCodes(mCodeList);
+        List<MatchDto> dtoList = null;
+        // List<MatchDto> dtoList = matchService.getMatchDtoByMatchCodes(mCodeList);
          List<ClusterItemVo> itemVos = new ArrayList<ClusterItemVo>(dtoList.size());
          for (MatchDto dto : dtoList) {
              ClusterItemVo itemVo = new ClusterItemVo();

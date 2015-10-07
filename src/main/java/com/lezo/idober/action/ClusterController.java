@@ -34,7 +34,8 @@ public class ClusterController {
 	public String getCluster(@ModelAttribute("model") ModelMap model, @PathVariable @RequestParam("mCode") Long mCode) {
 		List<Long> mCodeList = new ArrayList<Long>();
 		mCodeList.add(mCode);
-		List<MatchDto> dtoList = matchService.getMatchDtoByMatchCodes(mCodeList);
+        List<MatchDto> dtoList = null;
+        // List<MatchDto> dtoList = matchService.getMatchDtoByMatchCodes(mCodeList);
 		Map<String, MatchDto> key2MatchMap = new HashMap<String, MatchDto>();
 		Map<Integer, Set<String>> site2CodesMap = new HashMap<Integer, Set<String>>();
 		for (MatchDto dto : dtoList) {

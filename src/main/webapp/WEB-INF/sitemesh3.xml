@@ -18,7 +18,7 @@
 		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
 	</mapping>
 	<mapping>
-		<path>/cluster/*</path>
+		<path>/item/*</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
