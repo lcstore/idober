@@ -39,7 +39,8 @@ public class SkuController {
             if (!mDtoList.isEmpty()) {
                 targetUrl = mDtoList.get(0).getProductUrl();
             } else {
-                targetUrl = "/sku/error.html";
+                model.addAttribute("errormsg", "未知SKU:" + skuCode);
+                targetUrl = "error";
             }
         }
         return new ModelAndView("redirect:" + targetUrl, model);

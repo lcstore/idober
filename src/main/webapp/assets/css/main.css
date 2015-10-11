@@ -373,6 +373,10 @@ input.search-query {
 	margin-left: 10%;
 }
 
+
+.list-col-box{
+	width: 224px;
+}
 .list-pic {
 	width: 220px;
 	height: 220px;

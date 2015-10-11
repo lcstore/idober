@@ -19,20 +19,26 @@
 	</#if>
 		<div class="container">
 		<div class="tagRect">${tagRect.tagName}</div>
-			<div class="row centered">
 		    <#list tagRect.dataList as pVo>
+		    <#if (pVo_index%4==0) >
+			<div class="row centered">
+			</#if>
 				<div class="col-lg-3">
-				    <div class="list-pic">
-					    <a href="/item/${pVo.id}" target="blank">
-						  <img alt="${pVo.productName}" src="/assets/img/noimg220x220.jpg">
-						</a>
-					</div>
-					<div class="list-txt">
-					    <a href="/item/${pVo.id}" target="_blank"> <span>${unifyOf(pVo.productName)}</span></a>
+					<div class="list-col-box item">
+					    <div class="list-pic">
+						    <a href="/item/${pVo.id}" target="blank">
+							  <img alt="${pVo.productName}" src="/assets/img/noimg220x220.jpg">
+							</a>
+						</div>
+						<div class="list-txt">
+						    <a href="/item/${pVo.id}" target="_blank"> <span>${unifyOf(pVo.productName)}</span></a>
+						</div>
 					</div>
 				</div>
+			<#if ((pVo_index+1)%4==0) || (!pVo_has_next)>
+		      </div>
+			</#if>
 			</#list>
-			</div>
 		</div>
 	</div>
  </#list>

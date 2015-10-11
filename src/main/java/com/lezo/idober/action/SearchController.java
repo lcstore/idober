@@ -1,10 +1,16 @@
 package com.lezo.idober.action;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -20,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lezo.idober.service.SearchActionService;
 import com.lezo.idober.solr.EmbeddedSolrServerHolder;
-import com.lezo.idober.solr.SolrQueryFactory;
 import com.lezo.idober.vo.ActionReturnVo;
 import com.lezo.iscript.service.crawler.service.ProductService;
 import com.lezo.iscript.service.crawler.service.ProductStatService;
@@ -53,21 +58,82 @@ public class SearchController {
             model.addAttribute("qWord", keyWord);
             return new ModelAndView("redirect:/union/jd", model);
         }
-        SolrQuery solrQuery = SolrQueryFactory.newSolrQuery(keyWord, curPage, pageSize);
-        EmbeddedSolrServer server = EmbeddedSolrServerHolder.getInstance().getEmbeddedSolrServer();
-        QueryResponse respone = server.query(solrQuery);
-        SolrDocumentList docs = respone.getResults();
-        mapper.setSerializationInclusion(Inclusion.NON_NULL);
-        // 不序列化null
-        String qResponse = mapper.writeValueAsString(docs);
-        logger.info("msg:" + qResponse);
+        List<String> itemCodes = queryItemCodes(keyWord);
+        itemCodes = toPageItemCodes(itemCodes, curPage, pageSize);
+        String qResponse = "";
+        if (CollectionUtils.isNotEmpty(itemCodes)) {
+            SolrDocumentList docs = queryDocByItemCodes(itemCodes);
+            // 不序列化null
+            mapper.setSerializationInclusion(Inclusion.NON_NULL);
+            qResponse = mapper.writeValueAsString(docs);
+            logger.info("msg:" + qResponse);
+        }
         model.addAttribute("qWord", keyWord);
         model.addAttribute("qResponse", qResponse);
         long cost = System.currentTimeMillis() - start;
-        logger.info("search:{},page:{},cost:{}", keyWord, curPage, cost);
+        // logger.info("search:{},page:{},cost:{}", keyWord, curPage, cost);
 
         return new ModelAndView("searchList");
     }
+
+    private SolrDocumentList queryDocByItemCodes(List<String> itemCodes) throws Exception {
+        SolrQuery solrQuery = new SolrQuery();
+        StringBuilder sb = new StringBuilder();
+        for (String itemCode : itemCodes) {
+            if (sb.length() > 0) {
+                sb.append("OR");
+            }
+            sb.append("(skuCode:");
+            sb.append(itemCode);
+            sb.append(")");
+        }
+        solrQuery.add("q", sb.toString());
+        solrQuery.addField("matchCode");
+        solrQuery.addField("skuCode");
+        solrQuery.addField("productName");
+        solrQuery.addField("marketPrice");
+        solrQuery.addField("productPrice");
+        solrQuery.addField("imgUrl");
+        EmbeddedSolrServer server = EmbeddedSolrServerHolder.getInstance().getEmbeddedSolrServer();
+        QueryResponse resp = server.query(solrQuery);
+        return resp.getResults();
+    }
+
+    private List<String> toPageItemCodes(List<String> itemCodes, Integer curPage, Integer pageSize) {
+        if (CollectionUtils.isEmpty(itemCodes)) {
+            return itemCodes;
+        }
+        int fromIndex = (curPage - 1) * pageSize;
+        fromIndex = fromIndex < 0 ? 0 : fromIndex;
+        if (itemCodes.size() < fromIndex) {
+            return Collections.emptyList();
+        }
+        int toIndex = fromIndex + pageSize;
+        toIndex = toIndex > itemCodes.size() ? itemCodes.size() : toIndex;
+        return itemCodes.subList(fromIndex, toIndex);
+    }
+
+    private List<String> queryItemCodes(String keyWord) throws Exception {
+        String facetName = "itemCode";
+        SolrQuery solrQuery = new SolrQuery();
+        solrQuery.setParam("q", keyWord);
+        solrQuery.setFacet(true);
+        solrQuery.setFacetMinCount(1);
+        solrQuery.addFacetField(facetName);
+        solrQuery.setRows(0);
+        EmbeddedSolrServer server = EmbeddedSolrServerHolder.getInstance().getEmbeddedSolrServer();
+        QueryResponse respone = server.query(solrQuery);
+        FacetField faField = respone.getFacetField(facetName);
+        if (faField == null || faField.getValueCount() < 1) {
+            return Collections.emptyList();
+        }
+        List<String> itemList = new ArrayList<String>(faField.getValueCount());
+        for (Count valCount : faField.getValues()) {
+            itemList.add(valCount.getName());
+        }
+        return itemList;
+    }
+
 
     @RequestMapping("query")
     @ResponseBody
