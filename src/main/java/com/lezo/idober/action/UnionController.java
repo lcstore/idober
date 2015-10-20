@@ -93,7 +93,7 @@ public class UnionController {
                         JSONObject urlObj = urlArray.getJSONObject(i);
                         String unionUrl = JSONUtils.getString(urlObj, "url");
                         if (StringUtils.isNotBlank(unionUrl)) {
-                            pVo.setUnionUrl(unionUrl);
+                            pVo.setProductUrl(unionUrl);
                         }
                     }
                 }
@@ -136,7 +136,7 @@ public class UnionController {
                     JSONObject urlObj = urlArray.getJSONObject(i);
                     String unionUrl = JSONUtils.getString(urlObj, "product_url");
                     if (StringUtils.isNotBlank(unionUrl)) {
-                        pVo.setUnionUrl(unionUrl);
+                        pVo.setProductUrl(unionUrl);
                     }
                     pVo.setImgUrl(JSONUtils.getString(urlObj, "product_pic_url"));
                 }

@@ -15,13 +15,15 @@ public class UnifyOfMethod implements TemplateMethodModelEx {
             return null;
         }
         int index = -1;
-        String source = arguments.get(++index).toString();
+        Object srcObject = arguments.get(++index);
+        String source = srcObject == null ? null : srcObject.toString();
         if (source == null) {
             return null;
         }
         Integer maxLen = 20;
         if (arguments.size() > 1) {
-            maxLen = Integer.valueOf(arguments.get(++index).toString());
+            srcObject = arguments.get(++index);
+            maxLen = srcObject == null ? maxLen : Integer.valueOf(srcObject.toString());
         }
         String suffix = "...";
         if (arguments.size() > 2) {

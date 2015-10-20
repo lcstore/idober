@@ -15,7 +15,7 @@ public class ListItemVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;
-    private String productCode;
+    private String skuCode;
     private String productName;
     private String productUrl;
     private String imgUrl;

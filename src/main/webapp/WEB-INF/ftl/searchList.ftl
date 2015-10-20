@@ -13,7 +13,7 @@
 		<div class="act">
 			<div class="jumbotron actbox-padding">
 				<div class="container-fluid">
-					<#assign oDocs=model["qResponse"]?eval />
+					<#assign oDocs=model.qResponse?eval />
 					  <#list oDocs as oDoc>
 					  <#if (oDoc_index%4==0) >
 					<div class="row">

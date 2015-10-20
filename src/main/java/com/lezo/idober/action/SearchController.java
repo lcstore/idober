@@ -94,6 +94,7 @@ public class SearchController {
         solrQuery.addField("marketPrice");
         solrQuery.addField("productPrice");
         solrQuery.addField("imgUrl");
+        // solrQuery.addFilterQuery("stockNum:[1 TO * ]");
         EmbeddedSolrServer server = EmbeddedSolrServerHolder.getInstance().getEmbeddedSolrServer();
         QueryResponse resp = server.query(solrQuery);
         return resp.getResults();
@@ -115,8 +116,10 @@ public class SearchController {
 
     private List<String> queryItemCodes(String keyWord) throws Exception {
         String facetName = "itemCode";
-        SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setParam("q", keyWord);
+        SolrQuery solrQuery = new SolrQuery("{!frange l=0.4}query($qq)");
+        StringBuilder sb = new StringBuilder("copyText:");
+        sb.append(keyWord);
+        solrQuery.setParam("qq", sb.toString());
         solrQuery.setFacet(true);
         solrQuery.setFacetMinCount(1);
         solrQuery.addFacetField(facetName);
@@ -133,7 +136,6 @@ public class SearchController {
         }
         return itemList;
     }
-
 
     @RequestMapping("query")
     @ResponseBody
