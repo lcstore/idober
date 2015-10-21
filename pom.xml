@@ -133,6 +133,11 @@
 			<artifactId>mmseg4j-solr</artifactId>
 			<version>1.9.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.7</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>idober</finalName>

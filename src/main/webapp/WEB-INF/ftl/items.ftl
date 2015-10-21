@@ -18,7 +18,7 @@
 	<div class="container">
 	</#if>
 		<div class="container">
-		<div class="tagRect">${tagRect.tagName}</div>
+		<div class="tagRect">${unifyOf(tagRect.tagName,8,'')}</div>
 		    <#list tagRect.dataList as pVo>
 				<#if (pVo_index%4==0) >
 			<div class="row centered">
@@ -26,12 +26,12 @@
 				<div class="col-lg-3">
 				   <div class="list-col-box item">
 					    <div class="list-pic">
-						    <a href="/sku/${pVo.id}" target="blank">
+						    <a href="/sku/${pVo.skuCode}" target="blank">
 							  <img alt="${pVo.productName}" src="${((pVo.imgUrl)?length>0)?string((pVo.imgUrl),'/assets/img/noimg220x220.jpg')}">
 							</a>
 						</div>
 						<div class="list-txt">
-						    <a href="/sku/${pVo.id}" target="_blank">${unifyOf(pVo.productName)}</a>
+						    <a href="/sku/${pVo.skuCode}" target="_blank">${unifyOf(pVo.productName)}</a>
 						</div>
 						<div class="list-price">
 					        <del><span class="zm-coin">¥</span>${pVo.marketPrice}</del>
