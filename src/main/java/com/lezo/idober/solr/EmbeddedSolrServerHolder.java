@@ -1,7 +1,5 @@
 package com.lezo.idober.solr;
 
-import java.util.concurrent.TimeUnit;
-
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.slf4j.Logger;
 
@@ -15,14 +13,14 @@ public class EmbeddedSolrServerHolder {
 	}
 
 	public EmbeddedSolrServer getEmbeddedSolrServer() {
-		while (embeddedSolrServer == null) {
-			logger.warn("wait for embedded server init..");
-			try {
-				TimeUnit.MILLISECONDS.sleep(5);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+        // while (embeddedSolrServer == null) {
+        // logger.warn("wait for embedded server init..");
+        // try {
+        // TimeUnit.MILLISECONDS.sleep(5);
+        // } catch (InterruptedException e) {
+        // e.printStackTrace();
+        // }
+        // }
 		return embeddedSolrServer;
 	}
 
