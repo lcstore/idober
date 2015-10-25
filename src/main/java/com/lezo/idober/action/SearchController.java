@@ -1,6 +1,5 @@
 package com.lezo.idober.action;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -27,18 +26,6 @@ import com.lezo.idober.vo.ItemVo;
 public class SearchController {
     private static Logger logger = org.slf4j.LoggerFactory.getLogger(SearchController.class);
     private static final Pattern NUM_REG = Pattern.compile("^[0-9]+$");
-    private static String ITEM_SEARCH_FIELDS;
-
-    static {
-        StringBuilder sb = new StringBuilder();
-        for (Field fld : ItemVo.class.getDeclaredFields()) {
-            if (sb.length() > 0) {
-                sb.append(",");
-            }
-            sb.append(fld.getName());
-        }
-        ITEM_SEARCH_FIELDS = sb.toString();
-    }
 
     @RequestMapping("build")
     public ModelAndView buildSearch(@ModelAttribute("model") ModelMap model, @RequestParam(value = "q") String keyWord,
@@ -77,7 +64,7 @@ public class SearchController {
         solrQuery.add(params);
         solrQuery.add("group.offset", "0");
         solrQuery.add("group.limit", "10");
-        solrQuery.addField(ITEM_SEARCH_FIELDS);
+        solrQuery.addField(ItemVo.getSolrFields());
         QueryResponse resp = SolrUtils.getSolrServer().query(solrQuery);
         return resp.getBeans(ItemVo.class);
     }

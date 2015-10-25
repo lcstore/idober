@@ -8,6 +8,8 @@ import org.apache.solr.client.solrj.beans.Field;
 
 @Data
 public class ItemVo {
+    private static String ITEM_SEARCH_FIELDS;
+
     @Field
     private String itemCode;
     @Field
@@ -36,4 +38,22 @@ public class ItemVo {
     private Date createTime;
     @Field
     private Date updateTime;
+
+    public static String getSolrFields() {
+        if (ITEM_SEARCH_FIELDS == null) {
+            synchronized (ItemVo.class) {
+                if (ITEM_SEARCH_FIELDS == null) {
+                    StringBuilder sb = new StringBuilder();
+                    for (java.lang.reflect.Field fld : ItemVo.class.getDeclaredFields()) {
+                        if (sb.length() > 0) {
+                            sb.append(",");
+                        }
+                        sb.append(fld.getName());
+                    }
+                    ITEM_SEARCH_FIELDS = sb.toString();
+                }
+            }
+        }
+        return ITEM_SEARCH_FIELDS;
+    }
 }

@@ -8,6 +8,7 @@ public class SolrUtils {
 
     public static SolrServer getSolrServer() {
         return getEmbeddedSolrServer();
+        // return server;
     }
 
     public static SolrServer getEmbeddedSolrServer() {

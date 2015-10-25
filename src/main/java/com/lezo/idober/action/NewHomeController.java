@@ -1,11 +1,17 @@
 package com.lezo.idober.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.SolrParams;
+import org.apache.solr.servlet.SolrRequestParsers;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.ClusterItemVo;
-import com.lezo.idober.vo.ListItemVo;
+import com.lezo.idober.vo.ItemVo;
 import com.lezo.idober.vo.TagRectVo;
-import com.lezo.iscript.service.crawler.dto.ItemDto;
 import com.lezo.iscript.service.crawler.dto.MatchDto;
 import com.lezo.iscript.service.crawler.dto.SkuRankDto;
 import com.lezo.iscript.service.crawler.service.ItemService;
@@ -28,39 +34,58 @@ import com.lezo.iscript.service.crawler.service.SkuRankService;
 @Controller
 // @RequestMapping("new")
 public class NewHomeController {
-     @Autowired
-     private SkuRankService skuRankService;
-     @Autowired
+    @Autowired
+    private SkuRankService skuRankService;
+    @Autowired
     private ItemService itemService;
     @Autowired
-     private MatchService matchService;
+    private MatchService matchService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-     public String getCategoryPage(@ModelAttribute("model") ModelMap model) {
-         Map<String, String> keyCategoryMap = new HashMap<String, String>();
-         keyCategoryMap.put("手机数码", "手机");
-         int limit = 12;
-         int offset = 0;
-         List<TagRectVo<ListItemVo>> tagRectVos = new ArrayList<TagRectVo<ListItemVo>>();
-         for (Entry<String, String> entry : keyCategoryMap.entrySet()) {
+    public String getCategoryPage(@ModelAttribute("model") ModelMap model) throws Exception {
+        Map<String, String> keyCategoryMap = new HashMap<String, String>();
+        keyCategoryMap.put("手机数码", "手机");
+        keyCategoryMap.put("特色食品", "食品");
+        int limit = 12;
+        int offset = 0;
+        List<TagRectVo<ItemVo>> tagRectVos = new ArrayList<TagRectVo<ItemVo>>();
+        for (Entry<String, String> entry : keyCategoryMap.entrySet()) {
             // List<SkuRankDto> dtoList = skuRankService.getDtoByCategoryOrBarnd(entry.getValue(), null, offset, limit);
-            List<ItemDto> itemList = itemService.getDtoByCategory(entry.getValue(), offset, limit);
-            List<ListItemVo> voList = new ArrayList<ListItemVo>();
-            for (ItemDto dto : itemList) {
-                 ListItemVo itemVo = new ListItemVo();
-                 BeanUtils.copyProperties(dto, itemVo);
-                itemVo.setId(dto.getMatchCode());
-                 voList.add(itemVo);
-             }
-             TagRectVo<ListItemVo> tagRectVo = new TagRectVo<ListItemVo>();
-             tagRectVo.setTagName(entry.getKey());
-             tagRectVo.setDataList(voList);
-             tagRectVos.add(tagRectVo);
-         }
-         model.addAttribute("tagRectList", tagRectVos);
-         // return "hello";
+            // List<ItemDto> itemList = itemService.getDtoByCategory(entry.getValue(), offset, limit);
+            // List<ListItemVo> voList = new ArrayList<ListItemVo>();
+            // for (ItemDto dto : itemList) {
+            // ListItemVo itemVo = new ListItemVo();
+            // BeanUtils.copyProperties(dto, itemVo);
+            // itemVo.setId(dto.getMatchCode());
+            // voList.add(itemVo);
+            // }
+            List<ItemVo> itemList = queryDocByCategory(entry.getValue(), offset, limit);
+            TagRectVo<ItemVo> tagRectVo = new TagRectVo<ItemVo>();
+            tagRectVo.setTagName(entry.getKey());
+            tagRectVo.setDataList(itemList);
+            tagRectVos.add(tagRectVo);
+        }
+        model.addAttribute("tagRectList", tagRectVos);
+        // return "hello";
         return "home";
-     }
+    }
+
+    private List<ItemVo> queryDocByCategory(String keyWord, int offset, int limit) throws Exception {
+        if (StringUtils.isBlank(keyWord)) {
+            return Collections.emptyList();
+        }
+        SolrQuery solrQuery = new SolrQuery("{!frange l=0.4}query($qq)");
+        String queryString =
+                "group=true&group.field=itemCode&group.query=stockNum:[1%20TO%20*]&group.main=true&group.sort=commentNum%20desc&group.sort=score%20desc";
+        SolrParams params = SolrRequestParsers.parseQueryString(queryString);
+        solrQuery.set("qq", "categoryNav:" + keyWord);
+        solrQuery.add(params);
+        solrQuery.add("group.offset", "" + offset);
+        solrQuery.add("group.limit", "" + limit);
+        solrQuery.addField(ItemVo.getSolrFields());
+        QueryResponse resp = SolrUtils.getSolrServer().query(solrQuery);
+        return resp.getBeans(ItemVo.class);
+    }
 
     private List<SkuRankDto> getDefaultSkuRank() {
         List<SkuRankDto> dtoList = new ArrayList<SkuRankDto>();
@@ -82,18 +107,18 @@ public class NewHomeController {
     }
 
     @RequestMapping(value = "cluster/{matchCode}", method = RequestMethod.GET)
-     public String getCluster(@ModelAttribute("model") ModelMap model, @PathVariable Long matchCode) {
-         List<Long> mCodeList = new ArrayList<Long>();
-         mCodeList.add(matchCode);
+    public String getCluster(@ModelAttribute("model") ModelMap model, @PathVariable Long matchCode) {
+        List<Long> mCodeList = new ArrayList<Long>();
+        mCodeList.add(matchCode);
         List<MatchDto> dtoList = null;
         // List<MatchDto> dtoList = matchService.getMatchDtoByMatchCodes(mCodeList);
-         List<ClusterItemVo> itemVos = new ArrayList<ClusterItemVo>(dtoList.size());
-         for (MatchDto dto : dtoList) {
-             ClusterItemVo itemVo = new ClusterItemVo();
-             BeanUtils.copyProperties(dto, itemVo);
-             itemVos.add(itemVo);
-         }
-         model.addAttribute("clusterList", itemVos);
-         return "clusters";
-     }
+        List<ClusterItemVo> itemVos = new ArrayList<ClusterItemVo>(dtoList.size());
+        for (MatchDto dto : dtoList) {
+            ClusterItemVo itemVo = new ClusterItemVo();
+            BeanUtils.copyProperties(dto, itemVo);
+            itemVos.add(itemVo);
+        }
+        model.addAttribute("clusterList", itemVos);
+        return "clusters";
+    }
 }
