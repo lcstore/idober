@@ -18,8 +18,9 @@
 	</context:component-scan>
 
 	<!-- 设置使用注解的类所在的jar包 -->
-	<context:component-scan base-package="com.lezo.iscript.service.crawler.dao"></context:component-scan>
-	<context:component-scan base-package="com.lezo.iscript.service.crawler.service"></context:component-scan>
+	<context:component-scan base-package="com.lezo.iscript.service.crawler.dao"/>
+	<context:component-scan base-package="com.lezo.iscript.service.crawler.service"/>
+	<context:component-scan base-package="com.lezo.idober.config"/>
 	<context:component-scan base-package="com.lezo.idober.service"></context:component-scan>
 
 	<!-- 完成请求和注解POJO的映射 -->
@@ -74,6 +75,7 @@
 				<entry key="unifyOf">
 					<bean class="com.lezo.idober.ftls.UnifyOfMethod" />
 				</entry>
+				<entry key="tb_appkey" value="23250128"/>
 			</map>
 		</property>
 	</bean>

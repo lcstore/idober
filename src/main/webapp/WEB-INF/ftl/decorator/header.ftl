@@ -26,6 +26,15 @@
 		});
 	});
 	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?30004e90dc43728905c8695719ff4dae";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
 </head>
 
 <body class="home">
@@ -34,6 +43,7 @@
     
     
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+	<script src="http://l.tbcdn.cn/apps/top/x/sdk.js?appkey=${tb_appkey}"></script>
 	<script src="/assets/js/bootstrap-3.2.0.min.js?v=${version}"></script>
 	<script src="/assets/js/headroom.min.js?v=${version}"></script>
 	<script src="/assets/js/jQuery.headroom.min.js?v=${version}"></script>
