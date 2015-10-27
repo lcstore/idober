@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class AppConfig {
-    @Value("${app.env_name}")
+    @Value("${idober_env_name}")
     private String envName;
     @Value("${app.solr.server_url}")
     private String sorlServerUrl;
