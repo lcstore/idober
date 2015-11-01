@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lezo.idober.utils.SolrConstant;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.ItemVo;
 
@@ -61,13 +62,14 @@ public class SearchController {
         if (StringUtils.isBlank(keyWord)) {
             return Collections.emptyList();
         }
-        SolrQuery solrQuery = new SolrQuery(keyWord);
+        SolrQuery solrQuery = new SolrQuery(SolrConstant.SORL_QUERY_DEFAULT_FRANGE);
         String queryString =
                 "group=true&group.field=itemCode&group.query=stockNum:[1%20TO%20*]&group.main=true&group.sort=commentNum%20desc&group.sort=score%20desc";
         SolrParams params = SolrRequestParsers.parseQueryString(queryString);
         solrQuery.add(params);
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
+        solrQuery.set("qq", keyWord);
         solrQuery.addField(ItemVo.getSolrFields());
         QueryResponse resp = SolrUtils.getSolrServer().query(solrQuery);
         return resp.getBeans(ItemVo.class);

@@ -14,6 +14,8 @@
 	<!-- <util:properties id="settings" location="classpath:tasker.properties"></util:properties> -->
 	<context:property-placeholder location="classpath:jdbc.properties"
 		ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath:idober.properties"
+		ignore-unresolvable="true" system-properties-mode="OVERRIDE"/>
 
 	<!-- 数据库访问参数配置 -->
 	<import resource="classpath:spring/spring-config-jdbc.xml" />
