@@ -16,7 +16,7 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="index.html"><img
-					src="/assets/img/logo.png" alt="Progressus HTML5 template"></a>
+					src="/assets/img/logo.png" alt="乐助猫"></a>
 			</div>
 			<div class="center-block">
 			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">

@@ -13,8 +13,8 @@
   <strong>
     错误信息:
   </strong>
-   <#if model["errormsg"] !=null>
-      ${model["errormsg"]}
+   <#if model["ex"] !=null>
+      ${model["ex"]}
 	<#else>
 	  未知错误
     </#if>

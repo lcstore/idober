@@ -43,6 +43,7 @@
 		> <property name="marshaller"> <bean class="org.springframework.oxm.xstream.XStreamMarshaller"/> 
 		</property> </bean> </list> </property> </bean> -->
 
+
 	<!-- 针对freemarker的视图配置 -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
@@ -87,5 +88,24 @@
 		<property name="maxInMemorySize">
 			<value>4096</value>
 		</property>
+	</bean>
+
+
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Exception">errors/error</prop>
+			</props>
+		</property>
+		<property name="statusCodes">
+			<props>
+				<prop key="errors/error">500</prop>
+			</props>
+		</property>
+		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+		<property name="warnLogCategory" value="WARN"></property>
+		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+		<property name="defaultErrorView" value="errors/error"></property>
 	</bean>
 </beans>  

@@ -80,8 +80,8 @@ public class NewHomeController {
         SolrParams params = SolrRequestParsers.parseQueryString(queryString);
         solrQuery.set("qq", "categoryNav:" + keyWord);
         solrQuery.add(params);
-        solrQuery.add("group.offset", "" + offset);
-        solrQuery.add("group.limit", "" + limit);
+        solrQuery.setStart(offset);
+        solrQuery.setRows(limit);
         solrQuery.addField(ItemVo.getSolrFields());
         QueryResponse resp = SolrUtils.getSolrServer().query(solrQuery);
         return resp.getBeans(ItemVo.class);

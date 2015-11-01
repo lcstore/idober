@@ -32,6 +32,10 @@ public class SearchController {
             @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "12") Integer pageSize)
             throws Exception {
         long start = System.currentTimeMillis();
+        pageSize = pageSize < 12 ? 12 : pageSize;
+        int offset = (curPage - 1) * pageSize;
+        int limit = pageSize;
+        offset = offset < 0 ? 0 : offset;
         keyWord = keyWord.trim();
         if (keyWord.startsWith("http")) {
             model.put("url", keyWord);
@@ -44,7 +48,7 @@ public class SearchController {
             model.addAttribute("qWord", keyWord);
             return new ModelAndView("redirect:/union/jd", model);
         }
-        List<ItemVo> itemList = queryDocByWord(keyWord);
+        List<ItemVo> itemList = queryDocByWord(keyWord, offset, limit);
         model.addAttribute("qWord", keyWord);
         model.addAttribute("qResponse", itemList);
         long cost = System.currentTimeMillis() - start;
@@ -53,7 +57,7 @@ public class SearchController {
         return new ModelAndView("searchList");
     }
 
-    private List<ItemVo> queryDocByWord(String keyWord) throws Exception {
+    private List<ItemVo> queryDocByWord(String keyWord, int offset, int limit) throws Exception {
         if (StringUtils.isBlank(keyWord)) {
             return Collections.emptyList();
         }
@@ -62,8 +66,8 @@ public class SearchController {
                 "group=true&group.field=itemCode&group.query=stockNum:[1%20TO%20*]&group.main=true&group.sort=commentNum%20desc&group.sort=score%20desc";
         SolrParams params = SolrRequestParsers.parseQueryString(queryString);
         solrQuery.add(params);
-        solrQuery.add("group.offset", "0");
-        solrQuery.add("group.limit", "10");
+        solrQuery.setStart(offset);
+        solrQuery.setRows(limit);
         solrQuery.addField(ItemVo.getSolrFields());
         QueryResponse resp = SolrUtils.getSolrServer().query(solrQuery);
         return resp.getBeans(ItemVo.class);
