@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +22,8 @@ import com.lezo.iscript.service.crawler.service.TaskPriorityService;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
 import com.lezo.iscript.utils.JSONUtils;
 
-@Controller
-@RequestMapping("proxy")
+//@Controller
+//@RequestMapping("proxy")
 public class ProxyController {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ProxyController.class);
 	private ProxyHomeService proxyHomeService = SpringBeanUtils.getBean(ProxyHomeService.class);

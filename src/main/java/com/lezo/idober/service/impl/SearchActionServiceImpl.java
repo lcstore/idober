@@ -15,7 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.lezo.idober.service.SearchActionService;
 import com.lezo.idober.vo.ActionReturnVo;
@@ -25,7 +24,7 @@ import com.lezo.iscript.service.crawler.service.ProductStatService;
 import com.lezo.iscript.service.crawler.service.SearchHisService;
 import com.lezo.iscript.utils.JSONUtils;
 
-@Component
+//@Component
 public class SearchActionServiceImpl implements SearchActionService {
 	@Autowired
 	private SearchHisService searchHisService;

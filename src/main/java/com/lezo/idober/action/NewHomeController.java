@@ -13,7 +13,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.servlet.SolrRequestParsers;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,19 +27,10 @@ import com.lezo.idober.vo.ItemVo;
 import com.lezo.idober.vo.TagRectVo;
 import com.lezo.iscript.service.crawler.dto.MatchDto;
 import com.lezo.iscript.service.crawler.dto.SkuRankDto;
-import com.lezo.iscript.service.crawler.service.ItemService;
-import com.lezo.iscript.service.crawler.service.MatchService;
-import com.lezo.iscript.service.crawler.service.SkuRankService;
 
 @Controller
 // @RequestMapping("new")
 public class NewHomeController {
-    @Autowired
-    private SkuRankService skuRankService;
-    @Autowired
-    private ItemService itemService;
-    @Autowired
-    private MatchService matchService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getCategoryPage(@ModelAttribute("model") ModelMap model) throws Exception {

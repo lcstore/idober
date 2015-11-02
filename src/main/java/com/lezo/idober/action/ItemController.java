@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,13 +23,10 @@ import com.google.common.collect.Maps;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.SkuVo;
 import com.lezo.idober.vo.TagRectVo;
-import com.lezo.iscript.service.crawler.service.MatchService;
 
 @RequestMapping("item")
 @Controller
 public class ItemController {
-    @Autowired
-    private MatchService matchService;
     private static String SKU_SEARCH_FIELDS;
 
     static {

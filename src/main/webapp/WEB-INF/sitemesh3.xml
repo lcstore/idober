@@ -31,5 +31,12 @@
 		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
 	</mapping>
+	<mapping>
+		<path>/errors/*</path>
+		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/blankbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
+	</mapping>
 
 </sitemesh>

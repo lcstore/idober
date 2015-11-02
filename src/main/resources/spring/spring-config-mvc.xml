@@ -18,10 +18,10 @@
 	</context:component-scan>
 
 	<!-- 设置使用注解的类所在的jar包 -->
-	<context:component-scan base-package="com.lezo.iscript.service.crawler.dao"/>
-	<context:component-scan base-package="com.lezo.iscript.service.crawler.service"/>
+	<!-- <context:component-scan base-package="com.lezo.iscript.service.crawler.dao"/>
+	<context:component-scan base-package="com.lezo.iscript.service.crawler.service"/> -->
 	<context:component-scan base-package="com.lezo.idober.config"/>
-	<context:component-scan base-package="com.lezo.idober.service"></context:component-scan>
+	<context:component-scan base-package="com.lezo.idober.service"/>
 
 	<!-- 完成请求和注解POJO的映射 -->
 	<bean
@@ -32,18 +32,6 @@
 
 	<mvc:resources location="/assets/**" mapping="/assets/" />
 	<mvc:default-servlet-handler />
-
-	<!-- <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> 
-		<property name="defaultContentType" value="text/html" /> <property name="ignoreAcceptHeader" 
-		value="true" /> <property name="viewResolvers"> <list> <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
-		/> <property name="prefix" value="/WEB-INF/jsp" /> <property name="suffix" 
-		value=".jsp" /> </bean> </list> </property> <property name="defaultViews"> 
-		<list> <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/> 
-		for application/xml <bean class="org.springframework.web.servlet.view.xml.MarshallingView" 
-		> <property name="marshaller"> <bean class="org.springframework.oxm.xstream.XStreamMarshaller"/> 
-		</property> </bean> </list> </property> </bean> -->
-
 
 	<!-- 针对freemarker的视图配置 -->
 	<bean id="viewResolver"
@@ -100,11 +88,11 @@
 				<prop key="java.lang.Exception">errors/error</prop>
 			</props>
 		</property>
-		<property name="statusCodes">
+		<!-- <property name="statusCodes">
 			<props>
 				<prop key="errors/error">500</prop>
 			</props>
-		</property>
+		</property> -->
 		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
 		<property name="warnLogCategory" value="WARN"></property>
 		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->

@@ -1,8 +1,5 @@
 package com.lezo.idober.action;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,18 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.common.collect.Lists;
 import com.lezo.idober.utils.UnionUtils;
-import com.lezo.iscript.service.crawler.dto.MatchDto;
-import com.lezo.iscript.service.crawler.service.MatchService;
 
 @RequestMapping("sku")
 @Controller
 public class SkuController {
     private static final Integer SITE_ID_JD = 1001;
     private static final Integer SITE_ID_YHD = 1002;
-    @Autowired
-    private MatchService matchService;
 
     @RequestMapping(value = "{skuCode}", method = RequestMethod.GET)
     public ModelAndView getSku(@PathVariable String skuCode, @ModelAttribute("model") ModelMap model) throws Exception {
@@ -34,14 +26,8 @@ public class SkuController {
             targetUrl = UnionUtils.getYhdUnionByCode(sCodeArr[1]);
         }
         if (targetUrl == null) {
-            List<String> skuCodes = Lists.newArrayList(skuCode);
-            List<MatchDto> mDtoList = matchService.getDtoBySkuCodes(skuCodes, 0);
-            if (!mDtoList.isEmpty()) {
-                targetUrl = mDtoList.get(0).getProductUrl();
-            } else {
-                model.addAttribute("errormsg", "未知SKU:" + skuCode);
-                targetUrl = "error";
-            }
+            model.addAttribute("errormsg", "未知SKU:" + skuCode);
+            targetUrl = "error";
         }
         return new ModelAndView("redirect:" + targetUrl, model);
     }

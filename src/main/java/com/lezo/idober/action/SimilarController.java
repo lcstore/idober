@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +19,8 @@ import com.lezo.iscript.service.crawler.dto.SimilarDto;
 import com.lezo.iscript.service.crawler.service.SimilarService;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
 
-@Controller
-@RequestMapping("similar")
+//@Controller
+//@RequestMapping("similar")
 public class SimilarController {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(SimilarController.class);
 	private SimilarService similarService = SpringBeanUtils.getBean(SimilarService.class);
