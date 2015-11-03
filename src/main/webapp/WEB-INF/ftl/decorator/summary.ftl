@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <sitemesh:write property='head'/>
-    <title><sitemesh:write property='title'/></title>
 </head>
 <body>
 	<!-- start summary -->

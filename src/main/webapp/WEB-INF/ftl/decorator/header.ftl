@@ -7,8 +7,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>乐助猫,识低价、辨真假,比价购物更放心！</title>
-<meta name="Keywords" content="低价,正品,真假,折扣,优惠,进口食品,数码,双11,猫,LEZO,MAO,LEZOMAO,乐助猫。">
-<meta name="Description" content="乐助猫,识低价、辨真假,比价购物更放心！低价,正品,真假,折扣,">
+<meta name="Keywords" content="低价,实惠,正品,真假,折扣,优惠,进口食品,数码,双11,猫,LEZO,MAO,LEZOMAO,乐助猫">
+<meta name="Description" content="乐助猫,识低价、辨真假,比价购物更放心！低价,正品,真假,折扣">
 <sitemesh:write property='head'/>
 	<title><sitemesh:write property='title'/></title>
 

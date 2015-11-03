@@ -1,30 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="乐助猫,真实快捷的导购,助您购实惠、购正品,快捷购物不吃亏。">
-<meta name="Keywords" content="购实惠,购正品,进口食品,美容护理,家用电器,手机数码,LEZOMAO,乐助猫。">
-<title>乐助猫,购实惠,购正品,快捷购物不吃亏<sitemesh:write property='title'/></title>
-
-<link rel="shortcut icon" href="/assets/img/gt_favicon.png">
-
-<link rel="stylesheet" media="screen"
-	href="/assets/css/font-open-sans.css">
-<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="/assets/css/font-awesome.min.css">
-
-<!-- Custom styles for our template -->
-<link rel="stylesheet" href="/assets/css/bootstrap-theme.css"
-	media="screen">
-<link rel="stylesheet" href="/assets/css/main.css">
-
-<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!--[if lt IE 9]>
-	<script src="/assets/js/html5shiv.js"></script>
-	<script src="/assets/js/respond.min.js"></script>
-	<![endif]-->
+    <sitemesh:write property='head'/>
 </head>
 
 <body class="home">

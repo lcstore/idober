@@ -2,8 +2,6 @@
 <html lang="zh-cn">
 <head>
 <title>乐助猫,识低价、辨真假,比价购物更放心！</title>
-<link rel="stylesheet" href="../css/bootstrap.css">
-<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="../css/home.css">
 <!-- 添加标签图标16x16 -->
 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->
