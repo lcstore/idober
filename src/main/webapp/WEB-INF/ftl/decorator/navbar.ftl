@@ -14,8 +14,8 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html"><img
-					src="/assets/img/logo.png" alt="乐助猫"></a>
+				<a class="navbar-brand" href="/"><img
+					src="/assets/img/logo.png" alt="乐助猫,识低价、辨真假,比价购物更放心！"></a>
 			</div>
 			<div class="center-block">
 			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">
@@ -31,17 +31,10 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="about.html">About</a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">More Pages <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="sidebar-left.html">Left Sidebar</a></li>
-							<li class="active"><a href="sidebar-right.html">Right
-									Sidebar</a></li>
-						</ul></li>
-					<li><a href="contact.html">Contact</a></li>
-					<li><a class="btn" href="signin.html">SIGN IN / SIGN UP</a></li>
+					<li class="active"><a href="/">首页</a></li>
+					<li><a href="/">About</a></li>
+					<li><a href="/">Contact</a></li>
+					<li><a class="btn" href="/">SIGN IN / SIGN UP</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->

@@ -39,6 +39,7 @@
 	  s.parentNode.insertBefore(hm, s);
 	})();
 	</script>
+	 <script src="http://l.tbcdn.cn/apps/top/x/sdk.js?appkey=23250128"></script> 
 </head>
 
 <body class="home">

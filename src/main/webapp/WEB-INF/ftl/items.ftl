@@ -24,7 +24,7 @@
 				<div class="col-lg-3">
 				   <div class="list-col-box item">
 					    <div class="list-pic">
-						    <a href="/sku/${pVo.skuCode}" target="blank">
+						    <a href="/sku/${pVo.skuCode}" target="_blank">
 							  <img alt="${pVo.productName}" src="${((pVo.imgUrl)?length>0)?string((pVo.imgUrl),'/assets/img/noimg220x220.jpg')}">
 							</a>
 						</div>
