@@ -90,7 +90,7 @@
 	</servlet-mapping> -->
 
 	<!-- Any path (name) registered in solrconfig.xml will be sent to that filter -->
-<!-- 	<filter>
+	<filter>
 		<filter-name>SolrRequestFilter</filter-name>
 		<filter-class>com.lezo.idober.solr.CustomSolrDispatchFilter</filter-class>
 	</filter>
@@ -98,7 +98,7 @@
 		<filter-name>SolrRequestFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping> 
-	 -->
+	
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
