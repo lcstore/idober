@@ -29,7 +29,7 @@
 							</a>
 						</div>
 						<div class="list-txt">
-						    <a href="/sku/${pVo.skuCode}" target="_blank">${unifyOf(pVo.productName)}</a>
+						    <a href="/sku/${pVo.skuCode}" target="_blank" title="${oDoc.productName}">${unifyOf(pVo.productName)}</a>
 						</div>
 						<div class="list-price">
 					        <del><span class="zm-coin">¥</span>${pVo.marketPrice}</del>

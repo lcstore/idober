@@ -25,7 +25,7 @@
 						        	<a href="/item/${oDoc.matchCode}" target="_blank"><img alt="${oDoc.productName}" src="${((oDoc.imgUrl)?length>0)?string((oDoc.imgUrl),'/assets/img/noimg220x220.jpg')}" /></a>
 						        </div>
 						        <div class="list-txt">
-						        	<a href="/item/${oDoc.matchCode}" target="_blank"> <span>${unifyOf(oDoc.productName)}</span></a>
+						        	<a href="/item/${oDoc.matchCode}" target="_blank" title="${oDoc.productName}" > <span>${unifyOf(oDoc.productName)}</span></a>
 						        </div>
 						        <div class="list-price">
 							        <#if (oDoc.minPrice) && (oDoc.maxPrice) >
