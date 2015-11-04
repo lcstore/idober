@@ -394,3 +394,12 @@ input.search-query {
 a:hover {
     text-decoration: underline;
 }
+
+#logo-2015 .logo {
+    background: rgba(0, 0, 0, 0) url("../img/logo.jpg") no-repeat scroll 0 0;
+    display: block;
+    height: 60px;
+    margin-top: 0px;
+    text-indent: -200px;
+    width: 120px;
+}

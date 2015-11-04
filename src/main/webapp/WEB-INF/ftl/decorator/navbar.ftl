@@ -8,14 +8,9 @@
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<!-- Button for smallest screens -->
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-collapse">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/"><img
-					src="/assets/img/logo.png" alt="乐助猫,识低价、辨真假,比价购物更放心！"></a>
+			   <div id="logo-2015">
+				  <a class="navbar-brand logo" href="http://www.lezomao.com/">乐助猫</a>
+			   </div>
 			</div>
 			<div class="center-block">
 			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">
