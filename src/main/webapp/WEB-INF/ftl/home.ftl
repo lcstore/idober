@@ -8,11 +8,7 @@
 
  <#list model["tagRectList"] as tagRect>
 	<!-- Highlights - jumbotron -->
-	<#if tagRect_index%2==0>
-	<div class="jumbotron no-padding ">
-	<#else>
 	<div class="container">
-	</#if>
 		<div class="container">
 		<div class="tagRect">${tagRect.tagName}</div>
 		    <#list tagRect.dataList as oDoc>

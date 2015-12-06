@@ -6,7 +6,7 @@
 <body>
 	<div class="main data-box">
 		<div class="act">
-			<div class="jumbotron actbox-padding">
+			<div class="container">
 				<div class="container-fluid">
 				<#list model.qResponse as oDoc>
 					  <#if (oDoc_index%4==0) >

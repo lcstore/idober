@@ -36,6 +36,8 @@ public class UnionController {
     private static YhdRestClient yhdClient = new YhdRestClient(yhdAppKey, yhdAppSecret, yhdAccessToken);
     private static Pattern jdCodeReg = Pattern.compile("item.jd.com/([0-9]+).html");
     private static Pattern yhdCodeReg = Pattern.compile("item.yhd.com/item/([0-9]+)");
+    private static Pattern tmallCodeReg = Pattern
+            .compile(".(taobao|tmall).com.*?id=([0-9]{8,})");
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getUnionByUrl(@RequestParam("url") String url,
@@ -57,6 +59,13 @@ public class UnionController {
         model.put("union", pVo);
         if (StringUtils.isNotBlank(qWord)) {
             model.put("qWord", qWord);
+        }
+        matcher = tmallCodeReg.matcher(url);
+        if (matcher.find()) {
+            String itemId = matcher.group(2);
+            pVo.setProductCode(itemId);
+            pVo.setUnionUrl(url);
+            pVo.setSiteId(1013);
         }
         return "unions";
     }
@@ -148,4 +157,5 @@ public class UnionController {
         }
         return "unions";
     }
+
 }
