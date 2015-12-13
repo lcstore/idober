@@ -67,7 +67,7 @@ public class NewHomeController {
         }
         SolrQuery solrQuery = new SolrQuery(SolrConstant.SORL_QUERY_DEFAULT_FRANGE);
         String queryString =
-                "group=true&group.field=itemCode&group.query=stockNum:[1%20TO%20*]&group.main=true&group.sort=commentNum%20desc&group.sort=score%20desc";
+                "group=true&group.field=itemCode&group.query=stockNum:[1%20TO%20*]&group.main=true";
         SolrParams params = SolrRequestParsers.parseQueryString(queryString);
         solrQuery.set("qq", "categoryNav:" + keyWord);
         solrQuery.add(params);
