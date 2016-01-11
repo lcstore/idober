@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lezo.idober.solr.pojo.ItemSolr;
 import com.lezo.idober.utils.SolrConstant;
 import com.lezo.idober.utils.SolrUtils;
-import com.lezo.idober.vo.ItemVo;
 
 @Controller
 @RequestMapping("search")
@@ -49,7 +49,7 @@ public class SearchController {
             model.addAttribute("qWord", keyWord);
             return new ModelAndView("redirect:/union/jd", model);
         }
-        List<ItemVo> itemList = queryDocByWord(keyWord, offset, limit);
+        List<ItemSolr> itemList = queryDocByWord(keyWord, offset, limit);
         model.addAttribute("qWord", keyWord);
         model.addAttribute("qResponse", itemList);
         long cost = System.currentTimeMillis() - start;
@@ -58,7 +58,7 @@ public class SearchController {
         return new ModelAndView("searchList");
     }
 
-    private List<ItemVo> queryDocByWord(String keyWord, int offset, int limit) throws Exception {
+    private List<ItemSolr> queryDocByWord(String keyWord, int offset, int limit) throws Exception {
         if (StringUtils.isBlank(keyWord)) {
             return Collections.emptyList();
         }
@@ -70,9 +70,9 @@ public class SearchController {
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
         solrQuery.set("qq", keyWord);
-        solrQuery.addField(ItemVo.getSolrFields());
-        QueryResponse resp = SolrUtils.getSolrServer().query(solrQuery);
-        return resp.getBeans(ItemVo.class);
+        solrQuery.addField(ItemSolr.getSolrFields());
+        QueryResponse resp = SolrUtils.getSkuServer().query(solrQuery);
+        return resp.getBeans(ItemSolr.class);
     }
 
 }

@@ -2,68 +2,28 @@ package com.lezo.idober.solr;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.lang.reflect.Field;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.SolrParams;
-import org.apache.solr.servlet.SolrRequestParsers;
-import org.junit.Before;
-import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.lezo.idober.solr.pojo.ItemSolr;
 import com.lezo.idober.vo.SolrDocListVo;
 import com.lezo.idober.vo.SolrDocVo;
 import com.lezo.idober.vo.SolrFieldVo;
 
-public class SolrQueryTest {
-    HttpSolrServer server;
+public class LoadFile2DocMain {
 
-    @Before
-    public void setup() throws Exception {
-        server = new HttpSolrServer("http://www.lezomao.com/core0");
+    public static void main(String[] args) throws Exception {
+        // /apps/data/snapper/20151226/bdp-share
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
-        // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
-        // CoreContainer coreContainer = initializer.initialize();
-        // // server = new EmbeddedSolrServer(coreContainer, "collection1");
-        // server = new EmbeddedSolrServer(coreContainer, "core0");
-    }
+        HttpSolrServer server = new HttpSolrServer("http://www.lezomao.com/core0");
 
-    @Test
-    public void testQuery() throws Exception {
-        SolrQuery solrQuery = new SolrQuery("牛奶");
-        String queryString =
-                "group=true&group.field=itemCode&group.query=stockNum:[1%20TO%20*]&group.main=true&group.sort=commentNum%20desc&group.sort=score%20desc";
-        SolrParams params = SolrRequestParsers.parseQueryString(queryString);
-        solrQuery.add(params);
-        solrQuery.add("group.offset", "0");
-        solrQuery.add("group.limit", "10");
-        StringBuilder sb = new StringBuilder();
-        for (Field fld : ItemSolr.class.getDeclaredFields()) {
-            if (sb.length() > 0) {
-                sb.append(",");
-            }
-            sb.append(fld.getName());
-        }
-        solrQuery.addField(sb.toString());
-        // QueryRequest request = new QueryRequest(solrQuery);
-        // QueryResponse resp = request.process(server);
-        QueryResponse response = server.query(solrQuery);
-        List<ItemSolr> itemList = response.getBeans(ItemSolr.class);
-        System.err.println(JSON.toJSONString(itemList));
-    }
-
-    @Test
-    public void testSolrAddBdpShareByDir() throws Exception {
-        String path = "/apps/data/snapper/bdp-share";
+        String path = "/apps/data/snapper/20151227/bdp-share";
         File dirFile = new File(path);
         File[] dataFiles = dirFile.listFiles(new FileFilter() {
             @Override
@@ -74,27 +34,42 @@ public class SolrQueryTest {
         if (dataFiles == null) {
             return;
         }
+        int total = 0;
         int count = 0;
         for (File df : dataFiles) {
             List<String> lines = FileUtils.readLines(df);
             for (String line : lines) {
-                JSONObject gObj = JSON.parseObject(line);
-                String dChars = gObj.getString("data");
-                JSONObject dObject = JSON.parseObject(dChars);
-                dObject = dObject.getJSONObject("data");
-                JSONObject shareObj = dObject.getJSONObject("share");
-                JSONArray records = shareObj.getJSONArray("records");
+                JSONObject gObj = null;
+                JSONArray records = null;
+                try {
+                    gObj = JSON.parseObject(line);
+                    String dChars = gObj.getString("data");
+                    JSONObject dObject = JSON.parseObject(dChars);
+                    dObject = dObject.getJSONObject("data");
+                    String shareChars = dObject.getString("share");
+                    JSONObject shareObj = JSON.parseObject(shareChars);
+                    records = shareObj.getJSONArray("records");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("line:" + line);
+                    continue;
+                }
                 if (records == null) {
-                    return;
+                    continue;
                 }
                 for (int i = 0; i < records.size(); i++) {
                     JSONObject record = records.getJSONObject(i);
                     SolrInputDocument doc = createDocument(record);
-                    return;
-                    // server.add(doc);
-                    // count++;
+                    try {
+                        server.add(doc);
+                    } catch (Exception e) {
+                        server.add(doc);
+                    }
+                    count++;
+                    total++;
                 }
             }
+            System.err.println("total:" + total + ",count:" + count);
             if (count >= 500) {
                 server.commit();
                 count = 0;
@@ -103,9 +78,10 @@ public class SolrQueryTest {
         if (count > 0) {
             server.commit();
         }
+        System.err.println("total:" + total);
     }
 
-    private SolrInputDocument createDocument(JSONObject record) {
+    private static SolrInputDocument createDocument(JSONObject record) {
         String splitor = ";";
         String type = "bdp-share";
         SolrDocListVo docListVo = new SolrDocListVo();
@@ -136,15 +112,6 @@ public class SolrQueryTest {
         for (SolrFieldVo fld : docVo.getFields()) {
             doc.addField(fld.getKey(), fld.getValue());
         }
-        System.err.println(JSON.toJSONString(docListVo));
         return doc;
-    }
-
-    @Test
-    public void testSolrDelete() throws Exception {
-        String queryStr = "*:*";
-        server.deleteByQuery(queryStr);
-        server.commit();
-        server.optimize();
     }
 }

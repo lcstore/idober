@@ -1,4 +1,4 @@
-package com.lezo.idober.vo;
+package com.lezo.idober.solr.pojo;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 import org.apache.solr.client.solrj.beans.Field;
 
 @Data
-public class ItemVo {
+public class ItemSolr {
     private static String ITEM_SEARCH_FIELDS;
 
     @Field
@@ -41,10 +41,10 @@ public class ItemVo {
 
     public static String getSolrFields() {
         if (ITEM_SEARCH_FIELDS == null) {
-            synchronized (ItemVo.class) {
+            synchronized (ItemSolr.class) {
                 if (ITEM_SEARCH_FIELDS == null) {
                     StringBuilder sb = new StringBuilder();
-                    for (java.lang.reflect.Field fld : ItemVo.class.getDeclaredFields()) {
+                    for (java.lang.reflect.Field fld : ItemSolr.class.getDeclaredFields()) {
                         if (sb.length() > 0) {
                             sb.append(",");
                         }

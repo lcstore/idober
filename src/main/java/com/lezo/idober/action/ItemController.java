@@ -62,7 +62,7 @@ public class ItemController {
         solrQuery.addSort("score", ORDER.desc);
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
-        QueryResponse respone = SolrUtils.getSolrServer().query(solrQuery);
+        QueryResponse respone = SolrUtils.getSkuServer().query(solrQuery);
         Map<String, List<SkuVo>> cateMap = Maps.newHashMap();
         if (CollectionUtils.isNotEmpty(respone.getResults())) {
             List<SkuVo> skuVos = respone.getBeans(SkuVo.class);

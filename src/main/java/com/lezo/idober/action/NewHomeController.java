@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lezo.idober.solr.pojo.ItemSolr;
 import com.lezo.idober.utils.SolrConstant;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.ClusterItemVo;
-import com.lezo.idober.vo.ItemVo;
 import com.lezo.idober.vo.TagRectVo;
 import com.lezo.iscript.service.crawler.dto.MatchDto;
 import com.lezo.iscript.service.crawler.dto.SkuRankDto;
@@ -39,7 +39,7 @@ public class NewHomeController {
         keyCategoryMap.put("特色食品", "食品");
         int limit = 12;
         int offset = 0;
-        List<TagRectVo<ItemVo>> tagRectVos = new ArrayList<TagRectVo<ItemVo>>();
+        List<TagRectVo<ItemSolr>> tagRectVos = new ArrayList<TagRectVo<ItemSolr>>();
         for (Entry<String, String> entry : keyCategoryMap.entrySet()) {
             // List<SkuRankDto> dtoList = skuRankService.getDtoByCategoryOrBarnd(entry.getValue(), null, offset, limit);
             // List<ItemDto> itemList = itemService.getDtoByCategory(entry.getValue(), offset, limit);
@@ -50,8 +50,8 @@ public class NewHomeController {
             // itemVo.setId(dto.getMatchCode());
             // voList.add(itemVo);
             // }
-            List<ItemVo> itemList = queryDocByCategory(entry.getValue(), offset, limit);
-            TagRectVo<ItemVo> tagRectVo = new TagRectVo<ItemVo>();
+            List<ItemSolr> itemList = queryDocByCategory(entry.getValue(), offset, limit);
+            TagRectVo<ItemSolr> tagRectVo = new TagRectVo<ItemSolr>();
             tagRectVo.setTagName(entry.getKey());
             tagRectVo.setDataList(itemList);
             tagRectVos.add(tagRectVo);
@@ -61,7 +61,7 @@ public class NewHomeController {
         return "home";
     }
 
-    private List<ItemVo> queryDocByCategory(String keyWord, int offset, int limit) throws Exception {
+    private List<ItemSolr> queryDocByCategory(String keyWord, int offset, int limit) throws Exception {
         if (StringUtils.isBlank(keyWord)) {
             return Collections.emptyList();
         }
@@ -73,9 +73,9 @@ public class NewHomeController {
         solrQuery.add(params);
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
-        solrQuery.addField(ItemVo.getSolrFields());
-        QueryResponse resp = SolrUtils.getSolrServer().query(solrQuery);
-        return resp.getBeans(ItemVo.class);
+        solrQuery.addField(ItemSolr.getSolrFields());
+        QueryResponse resp = SolrUtils.getSkuServer().query(solrQuery);
+        return resp.getBeans(ItemSolr.class);
     }
 
     private List<SkuRankDto> getDefaultSkuRank() {
