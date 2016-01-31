@@ -29,7 +29,7 @@ public class SolrQueryTest {
 
     @Before
     public void setup() throws Exception {
-        server = new HttpSolrServer("http://www.lezomao.com/core0");
+        server = new HttpSolrServer("http://www.lezomao.com/core2");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
         // CoreContainer coreContainer = initializer.initialize();

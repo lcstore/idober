@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.SolrConstant;
@@ -49,8 +52,9 @@ public class MovieSearchController {
         if (StringUtils.isBlank(keyWord)) {
             return Collections.emptyList();
         }
+        keyWord = ClientUtils.escapeQueryChars(keyWord);
         SolrQuery solrQuery = new SolrQuery(SolrConstant.SORL_QUERY_DEFAULT_FRANGE);
-        String queryString = "title:" + keyWord;
+        String queryString = "names:" + keyWord;
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
         solrQuery.set("qq", queryString);
@@ -60,22 +64,22 @@ public class MovieSearchController {
         List<MovieVo> destList = Lists.newArrayList();
         for (MovieSolr solr : solrList) {
             MovieVo movieVo = new MovieVo();
-            movieVo.setTitle(solr.getTitle());
-            movieVo.setType(solr.getType());
-            com.alibaba.fastjson.JSONObject dObject = JSON.parseObject(solr.getContent());
-            String uk = dObject.getString("uk");
-            movieVo.setImgUrl(dObject.getString("avatar_url"));
-            if (dObject.containsKey("shorturl")) {
-                String sUrl = "http://yun.baidu.com/s/" + dObject.getString("shorturl");
-                movieVo.setUrl(sUrl);
-            } else if (dObject.containsKey("album_id")) {
-                movieVo.setClassify(MovieVo.CLASSIFY_GROUP);
-                String sUrl = "http://yun.baidu.com/pcloud/album/info?uk=" + uk + "&album_id="
-                                + dObject.getString("album_id");
-                movieVo.setUrl(sUrl);
-            } else {
-                String sUrl = "http://yun.baidu.com/share/link?uk=" + uk + "&shareid=" + dObject.getString("shareid");
-                movieVo.setUrl(sUrl);
+            BeanUtils.copyProperties(solr, movieVo);
+            if (StringUtils.isNotBlank(solr.getTorrents())) {
+                JSONArray tArray = JSONArray.parseArray(solr.getTorrents());
+                JSONArray sArray = new JSONArray();
+                JSONArray newArray = new JSONArray();
+                for (int i = 0; i < tArray.size(); i++) {
+                    JSONObject tObject = tArray.getJSONObject(i);
+                    String type = tObject.getString("type");
+                    if (type.endsWith("-share")) {
+                        sArray.add(tObject);
+                    } else if (newArray.isEmpty()) {
+                        newArray.add(tObject);
+                    }
+                }
+                movieVo.setTorrents(newArray.toJSONString());
+                movieVo.setShares(sArray.toJSONString());
             }
             destList.add(movieVo);
         }

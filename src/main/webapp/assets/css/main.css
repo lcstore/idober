@@ -373,33 +373,60 @@ input.search-query {
 	margin-left: 10%;
 }
 
-
-.list-col-box{
+.list-col-box {
 	width: 224px;
 }
+
 .list-pic {
 	width: 220px;
 	height: 220px;
 }
 
 .item a {
-    color: #333;
+	color: #333;
 }
+
 .item a:hover {
-    color: #c10001 !important;
+	color: #c10001 !important;
 }
+
 .item a:visited {
-    color: #551a8b !important;
+	color: #551a8b !important;
 }
+
 a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 #logo-2015 .logo {
-    background: rgba(0, 0, 0, 0) url("../img/logo.jpg") no-repeat scroll 0 0;
-    display: block;
-    height: 60px;
-    margin-top: 0px;
-    text-indent: -200px;
-    width: 120px;
+	background: rgba(0, 0, 0, 0) url("../img/logo.jpg") no-repeat scroll 0 0;
+	display: block;
+	height: 60px;
+	margin-top: 0px;
+	text-indent: -200px;
+	width: 120px;
+}
+
+.top-margin {
+	margin-top: 20px;
+}
+
+.no-padding-right {
+	padding-right: 0px;
+}
+
+.movie-left {
+	padding-left: 0px;
+}
+
+.movie-right {
+	padding-left: 0px;
+	height: 270px;
+}
+.movie-title-margin {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.movie-badge {
+	font-size:24px
 }

@@ -9,19 +9,43 @@
 			<div class="container">
 				<div class="container-fluid">
 				<#list model.qResponse as oDoc>
-					  <#if (oDoc_index%4==0) >
-					<div class="row">
-					   </#if>
-						   <div class="col-md-3">
-						      <div class="list-col-box">
-						        <div class="list-txt">
-						        	<a href="${oDoc.url}" target="_blank">${oDoc.title}</a>
-						        </div>
-						     </div>
+					<div class="row top-margin">
+						  <div class="col-md-3 movie-left">
+						       <img src="${oDoc.imgUrl}" class="img-thumbnail" style="width: 210px;height: 270px;" alt="${oDoc.name}"/>
 					      </div>
-					 <#if ((oDoc_index+1)%4==0) || (!oDoc_has_next)>
+					      <div class="col-md-9 movie-right">
+							      <ul class="list-group">
+								    <li class="list-group-item"><h1 class="movie-title-margin">${oDoc.name}<small>${oDoc.enname}</small><span class="badge movie-badge">${oDoc.year}</span></h1></li>
+								    <li class="list-group-item"><strong>导演：</strong>${oDoc.directors}</li>
+								    <li class="list-group-item"><strong>主演：</strong>${oDoc.actors}</li>
+								    <li class="list-group-item"><strong>国家地区：</strong>${oDoc.region}</li>
+								    <#assign oShares = oDoc.shares?eval>
+								    <#if (oShares?size>0) > 
+								        <li class="list-group-item"><strong>分享：</strong>
+								          <#list oShares as oShare>
+									        	<a href="${oShare.url}" target="_blank">${oShare.name}
+									        	</a>
+									        	  <#if oShare.secret?? > 
+									        	  <span>(${oShare.secret})</span>
+									        	  </#if>
+									        	  <#if  (oShare_has_next) > 
+									        	   <span>,&nbsp; </span>
+									        	  </#if>
+								          </#list>
+								        </li>
+									</#if> 
+								    <li class="list-group-item"><strong>下载地址：</strong>
+									    <#assign oTorrents = oDoc.torrents?eval>
+								        <#list oTorrents as oTor>
+									        	<strong>${oTor.name}</strong>
+									        	<a role="button" class="btn btn-success btn-xs" href="${oTor.url}">
+									        	  下载
+												</a>
+								        </#list>
+								    </li>
+								  </ul>
+					       </div>
 				      </div>
-					</#if>
 				</#list>
 				</div>
 			</div>
