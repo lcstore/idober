@@ -3,6 +3,7 @@ package com.lezo.idober.action;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -62,7 +63,22 @@ public class DocumentController {
                 for (SolrDocVo docVo : docs.getDocs()) {
                     SolrInputDocument doc = new SolrInputDocument();
                     for (SolrFieldVo fld : docVo.getFields()) {
-                        doc.addField(fld.getKey(), fld.getValue());
+                        if (core.equals("core2")) {
+                            Object valObject = fld.getValue();
+                            if (fld.getKey().equals("date")) {
+                                valObject = new Date(Long.valueOf(fld.getValue()));
+                            } else if (fld.getKey().equals("year")) {
+                                valObject = Integer.valueOf(fld.getValue());
+                            } else if (fld.getKey().equals("score")) {
+                                valObject = Float.valueOf(fld.getValue());
+                            } else if (fld.getKey().equals("tcount")) {
+                                valObject = Integer.valueOf(fld.getValue());
+                                doc.addField("utime", new Date());
+                            }
+                            doc.addField(fld.getKey(), valObject);
+                        } else {
+                            doc.addField(fld.getKey(), fld.getValue());
+                        }
                     }
                     try {
                         server.add(doc);

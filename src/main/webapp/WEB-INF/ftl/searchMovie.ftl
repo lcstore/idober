@@ -37,10 +37,9 @@
 								    <li class="list-group-item"><strong>下载地址：</strong>
 									    <#assign oTorrents = oDoc.torrents?eval>
 								        <#list oTorrents as oTor>
-									        	<strong>${oTor.name}</strong>
-									        	<a role="button" class="btn btn-success btn-xs" href="${oTor.url}">
-									        	  下载
-												</a>
+										      <a id="${oTor.id}" href="${oTor.url}" data-param="(JSON.stringify(oTor))">
+									        	 <strong>${((oTor.name)?length>0)?string((oTor.name),(oDoc.name))}</strong>
+											  </a>
 								        </#list>
 								    </li>
 								  </ul>

@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.servlet.SolrRequestParsers;
@@ -29,7 +30,7 @@ public class SolrQueryTest {
 
     @Before
     public void setup() throws Exception {
-        server = new HttpSolrServer("http://www.lezomao.com/core2");
+        server = new HttpSolrServer("http://www.lezomao.com/core0");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
         // CoreContainer coreContainer = initializer.initialize();
@@ -45,7 +46,7 @@ public class SolrQueryTest {
         SolrParams params = SolrRequestParsers.parseQueryString(queryString);
         solrQuery.add(params);
         solrQuery.add("group.offset", "0");
-        solrQuery.add("group.limit", "10");
+        solrQuery.add("group.limit", Integer.MAX_VALUE + "");
         StringBuilder sb = new StringBuilder();
         for (Field fld : ItemSolr.class.getDeclaredFields()) {
             if (sb.length() > 0) {
@@ -57,8 +58,43 @@ public class SolrQueryTest {
         // QueryRequest request = new QueryRequest(solrQuery);
         // QueryResponse resp = request.process(server);
         QueryResponse response = server.query(solrQuery);
-        List<ItemSolr> itemList = response.getBeans(ItemSolr.class);
-        System.err.println(JSON.toJSONString(itemList));
+        System.err.println(JSON.toJSONString(response.getResponse()));
+        // List<ItemSolr> itemList = response.getBeans(ItemSolr.class);
+        // System.err.println(JSON.toJSONString(itemList));
+    }
+
+    @Test
+    public void testQueryId() throws Exception {
+        SolrQuery solrQuery = new SolrQuery("q=(type:mtime-movie)");
+        solrQuery.setFields("id");
+        StringBuilder sb = new StringBuilder();
+        solrQuery.setStart(0);
+        solrQuery.setRows(1000);
+        while (true) {
+            // QueryRequest request = new QueryRequest(solrQuery);
+            // QueryResponse resp = request.process(server);
+            QueryResponse response = server.query(solrQuery);
+            for (SolrDocument rs : response.getResults()) {
+                String idString = rs.getFieldValue("id").toString();
+                idString = idString.split(";")[1];
+                if (sb.length() > 0) {
+                    sb.append(",");
+                }
+                sb.append(idString);
+            }
+            sb.append("\n");
+            if (response.getResults().size() < solrQuery.getRows()) {
+                break;
+            }
+            solrQuery.setStart(solrQuery.getStart() + solrQuery.getRows());
+        }
+
+        System.err.println(sb);
+        File file = new File("./test.txt");
+        FileUtils.writeStringToFile(file, sb.toString());
+        // System.err.println(JSON.toJSONString(response.getResults()));
+        // List<ItemSolr> itemList = response.getBeans(ItemSolr.class);
+        // System.err.println(JSON.toJSONString(itemList));
     }
 
     @Test

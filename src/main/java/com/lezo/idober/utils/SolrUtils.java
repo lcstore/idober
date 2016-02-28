@@ -45,7 +45,7 @@ public class SolrUtils {
     public static SolrServer getSolrServer(String coreName) throws SolrException {
         coreName = coreName == null ? StringUtils.EMPTY : coreName;
         SolrServer hasServer = SERVER_MAP.get(coreName);
-        if (hasServer == null) {
+        if (hasServer != null) {
             synchronized (SERVER_MAP) {
                 hasServer = SERVER_MAP.get(coreName);
                 if (hasServer == null) {

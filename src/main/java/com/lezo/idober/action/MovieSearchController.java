@@ -1,6 +1,7 @@
 package com.lezo.idober.action;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -72,7 +73,9 @@ public class MovieSearchController {
                 for (int i = 0; i < tArray.size(); i++) {
                     JSONObject tObject = tArray.getJSONObject(i);
                     String type = tObject.getString("type");
-                    if (type.endsWith("-share")) {
+                    if (StringUtils.isBlank(type)) {
+
+                    } else if (type.endsWith("-share")) {
                         sArray.add(tObject);
                     } else if (newArray.isEmpty()) {
                         newArray.add(tObject);
@@ -83,7 +86,17 @@ public class MovieSearchController {
             }
             destList.add(movieVo);
         }
+        Comparator<MovieVo> c = new Comparator<MovieVo>() {
+
+            @Override
+            public int compare(MovieVo o1, MovieVo o2) {
+                if (o2.getTcount() > 0 && o1.getTcount() > 0) {
+                    return o2.getYear().compareTo(o1.getYear());
+                }
+                return o2.getTcount() - o1.getTcount();
+            }
+        };
+        Collections.sort(destList, c);
         return destList;
     }
-
 }

@@ -56,6 +56,8 @@ public class MovieSolr {
     private String torrents;
     @Field
     private String content;
+    @Field
+    private int tcount;
 
     public static String getSolrFields() {
         if (SEARCH_FIELDS == null) {

@@ -21,6 +21,7 @@ public class MovieVo {
     private Float score;
     private String shares;
     private String torrents;
+    private int tcount;
     // private int classify;
     // private int upCount;
     // private int downCount;

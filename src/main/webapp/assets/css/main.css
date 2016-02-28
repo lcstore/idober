@@ -423,10 +423,53 @@ a:hover {
 	padding-left: 0px;
 	height: 270px;
 }
+
 .movie-title-margin {
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
 .movie-badge {
-	font-size:24px
+	font-size: 24px
+}
+
+.movie-box {
+	border: 1px solid #ECECEC;
+	background: #fff;
+}
+
+.daily-box {
+	padding-bottom: 15px;
+}
+
+.weekly-box {
+	border-right: 0;
+	border-left: 1px solid #ececec;
+	padding-bottom: 15px;
+}
+
+.daily-hot {
+	line-height: 25px;
+}
+
+.time-right {
+	float: right;
+}
+
+.weekly-title {
+	border-bottom: 1px solid #eee;
+}
+
+.daily-title h4, .weekly-title h4 {
+	color: #06A8E9;
+	font-weight: bold;
+}
+
+/* .weekly-box img {
+	width: 86px;
+	height: 122px;
+} */
+
+.weekly-box .content{
+    text-align: center;
 }
