@@ -35,7 +35,7 @@ public class FreeMarkerWebAppContext extends WebAppContext {
 
     @Override
     protected void decorate(String decoratorPath, Content content, Writer out) throws IOException {
-        if (decoratorPath.indexOf("decorator") > 0 && decoratorPath.toLowerCase().endsWith(".ftl")) {
+        if (decoratorPath.toLowerCase().endsWith(".ftl")) {
             CustomFreeMarkerConfigurer config = SpringBeanUtils.getBean(CustomFreeMarkerConfigurer.class);
             // String version = config.getConfiguration().getSharedVariable(CustomFreeMarkerConfigurer.KEY_VERSION)
             // .toString();
@@ -78,11 +78,11 @@ public class FreeMarkerWebAppContext extends WebAppContext {
             Map<String, Object> map = (Map<String, Object>) modelObj;
             dataModel.putAll(map);
         }
-        // modelObj = request.getParameterMap();
-        // if (modelObj != null && modelObj instanceof Map) {
-        // Map<String, Object> map = (Map<String, Object>) modelObj;
-        // dataModel.putAll(map);
-        // }
+        modelObj = request.getParameterMap();
+        if (modelObj != null && modelObj instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) modelObj;
+            dataModel.putAll(map);
+        }
         return dataModel;
     }
 }

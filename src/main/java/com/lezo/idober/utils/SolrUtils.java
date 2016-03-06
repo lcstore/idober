@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrException;
@@ -45,7 +46,7 @@ public class SolrUtils {
     public static SolrServer getSolrServer(String coreName) throws SolrException {
         coreName = coreName == null ? StringUtils.EMPTY : coreName;
         SolrServer hasServer = SERVER_MAP.get(coreName);
-        if (hasServer != null) {
+        if (hasServer == null) {
             synchronized (SERVER_MAP) {
                 hasServer = SERVER_MAP.get(coreName);
                 if (hasServer == null) {
@@ -64,5 +65,20 @@ public class SolrUtils {
             }
         }
         return hasServer;
+    }
+
+    public static <T> String getSolrFields(Class<T> solrClass) {
+        StringBuilder sb = new StringBuilder();
+        for (java.lang.reflect.Field fld : solrClass.getDeclaredFields()) {
+            Field annField = fld.getAnnotation(Field.class);
+            if (annField == null) {
+                continue;
+            }
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append(fld.getName());
+        }
+        return sb.toString();
     }
 }

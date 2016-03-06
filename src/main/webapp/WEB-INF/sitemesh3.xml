@@ -41,6 +41,9 @@
 	<mapping>
 		<path>/movie/*</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
+		<decorator>/WEB-INF/ftl/movie/MovieClassic.ftl</decorator>
+		<decorator>/WEB-INF/ftl/movie/MovieComing.ftl</decorator>
+		<decorator>/WEB-INF/ftl/movie/MovieHot.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/blankbar.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>

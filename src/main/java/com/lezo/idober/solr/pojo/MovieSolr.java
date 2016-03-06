@@ -1,15 +1,16 @@
 package com.lezo.idober.solr.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
 import org.apache.solr.client.solrj.beans.Field;
 
+import com.lezo.idober.utils.SolrUtils;
+
 @Data
 public class MovieSolr {
-    public static final String TEXT_SPLITOR = ";";
-    private static String SEARCH_FIELDS;
     @Field
     private String id;
     @Field
@@ -58,25 +59,12 @@ public class MovieSolr {
     private String content;
     @Field
     private int tcount;
+    @Field
+    private Date timestamp;
+    @Field
+    private List<Date> creation;
 
     public static String getSolrFields() {
-        if (SEARCH_FIELDS == null) {
-            synchronized (MovieSolr.class) {
-                if (SEARCH_FIELDS == null) {
-                    StringBuilder sb = new StringBuilder();
-                    for (java.lang.reflect.Field fld : MovieSolr.class.getDeclaredFields()) {
-                        if (fld.getName().equals("content")) {
-                            continue;
-                        }
-                        if (sb.length() > 0) {
-                            sb.append(",");
-                        }
-                        sb.append(fld.getName());
-                    }
-                    SEARCH_FIELDS = sb.toString();
-                }
-            }
-        }
-        return SEARCH_FIELDS;
+        return SolrUtils.getSolrFields(MovieSolr.class);
     }
 }

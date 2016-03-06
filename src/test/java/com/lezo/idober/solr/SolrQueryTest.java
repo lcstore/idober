@@ -1,36 +1,34 @@
 package com.lezo.idober.solr;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.lang.reflect.Field;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.servlet.SolrRequestParsers;
+import org.apache.solr.util.TimeZoneUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.lezo.idober.solr.pojo.ItemSolr;
-import com.lezo.idober.vo.SolrDocListVo;
-import com.lezo.idober.vo.SolrDocVo;
-import com.lezo.idober.vo.SolrFieldVo;
+import com.lezo.idober.solr.pojo.MovieSolr;
 
 public class SolrQueryTest {
     HttpSolrServer server;
 
     @Before
     public void setup() throws Exception {
-        server = new HttpSolrServer("http://www.lezomao.com/core0");
+        // server = new HttpSolrServer("http://www.lezomao.com/core3");
+        server = new HttpSolrServer("http://localhost:8081/core2");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
         // CoreContainer coreContainer = initializer.initialize();
@@ -64,17 +62,38 @@ public class SolrQueryTest {
     }
 
     @Test
+    public void testQueryKeyWord() throws Exception {
+        SolrQuery solrQuery = new SolrQuery();
+        solrQuery.set("q", "*");
+        solrQuery.setStart(0);
+        solrQuery.setRows(1000);
+        QueryResponse response = server.query(solrQuery);
+        System.err.println(JSON.toJSONString(response.getResults()));
+        List<MovieSolr> itemList = response.getBeans(MovieSolr.class);
+        System.err.println(JSON.toJSONString(itemList));
+        System.err.println(TimeZoneUtils.KNOWN_TIMEZONE_IDS);
+        for (MovieSolr item : itemList) {
+            Date newDate = item.getDate();
+            Calendar c = Calendar.getInstance(TimeZoneUtils.getTimeZone("UTC"));
+            c.setTime(newDate);
+            System.err.println(DateFormatUtils.format(c, DateFormatUtils.ISO_DATE_FORMAT.getPattern()));
+        }
+    }
+
+    @Test
     public void testQueryId() throws Exception {
-        SolrQuery solrQuery = new SolrQuery("q=(type:mtime-movie)");
+        SolrQuery solrQuery = new SolrQuery();
+        solrQuery.set("q", "type:mtime-movie");
         solrQuery.setFields("id");
         StringBuilder sb = new StringBuilder();
         solrQuery.setStart(0);
-        solrQuery.setRows(1000);
+        solrQuery.setRows(500);
         while (true) {
             // QueryRequest request = new QueryRequest(solrQuery);
             // QueryResponse resp = request.process(server);
             QueryResponse response = server.query(solrQuery);
             for (SolrDocument rs : response.getResults()) {
+                System.err.println(rs.toString());
                 String idString = rs.getFieldValue("id").toString();
                 idString = idString.split(";")[1];
                 if (sb.length() > 0) {
@@ -95,85 +114,6 @@ public class SolrQueryTest {
         // System.err.println(JSON.toJSONString(response.getResults()));
         // List<ItemSolr> itemList = response.getBeans(ItemSolr.class);
         // System.err.println(JSON.toJSONString(itemList));
-    }
-
-    @Test
-    public void testSolrAddBdpShareByDir() throws Exception {
-        String path = "/apps/data/snapper/bdp-share";
-        File dirFile = new File(path);
-        File[] dataFiles = dirFile.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isFile() && pathname.getName().endsWith(".data");
-            }
-        });
-        if (dataFiles == null) {
-            return;
-        }
-        int count = 0;
-        for (File df : dataFiles) {
-            List<String> lines = FileUtils.readLines(df);
-            for (String line : lines) {
-                JSONObject gObj = JSON.parseObject(line);
-                String dChars = gObj.getString("data");
-                JSONObject dObject = JSON.parseObject(dChars);
-                dObject = dObject.getJSONObject("data");
-                JSONObject shareObj = dObject.getJSONObject("share");
-                JSONArray records = shareObj.getJSONArray("records");
-                if (records == null) {
-                    return;
-                }
-                for (int i = 0; i < records.size(); i++) {
-                    JSONObject record = records.getJSONObject(i);
-                    SolrInputDocument doc = createDocument(record);
-                    return;
-                    // server.add(doc);
-                    // count++;
-                }
-            }
-            if (count >= 500) {
-                server.commit();
-                count = 0;
-            }
-        }
-        if (count > 0) {
-            server.commit();
-        }
-    }
-
-    private SolrInputDocument createDocument(JSONObject record) {
-        String splitor = ";";
-        String type = "bdp-share";
-        SolrDocListVo docListVo = new SolrDocListVo();
-        docListVo.setType("1");
-        List<SolrDocVo> docs = Lists.newArrayList();
-        docListVo.setDocs(docs);
-        SolrDocVo docVo = new SolrDocVo();
-        docs.add(docVo);
-
-        String idChars = type + splitor + record.getString("source_id");
-        docVo.addField(new SolrFieldVo("id", idChars));
-        docVo.addField(new SolrFieldVo("type", type));
-        docVo.addField(new SolrFieldVo("title", record.getString("title")));
-        StringBuilder sb = new StringBuilder();
-        sb.append(record.getString("title"));
-        sb.append(splitor);
-        sb.append(record.getString("uk"));
-        sb.append(splitor);
-        sb.append(record.getString("username"));
-        sb.append(splitor);
-        sb.append(record.getString("desc"));
-        docVo.addField(new SolrFieldVo("search", sb.toString()));
-        docVo.addField(new SolrFieldVo("code", record.getString("uk")));
-        record.remove("filelist");
-        docVo.addField(new SolrFieldVo("content", record.toJSONString()));
-
-        SolrInputDocument doc = new SolrInputDocument();
-        for (SolrFieldVo fld : docVo.getFields()) {
-            doc.addField(fld.getKey(), fld.getValue());
-        }
-        System.err.println(JSON.toJSONString(docListVo));
-        return doc;
     }
 
     @Test

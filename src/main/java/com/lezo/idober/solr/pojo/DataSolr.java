@@ -1,12 +1,17 @@
 package com.lezo.idober.solr.pojo;
 
+import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.solr.client.solrj.beans.Field;
+
+import com.lezo.idober.utils.SolrUtils;
 
 @Data
 public class DataSolr {
-    private static String SEARCH_FIELDS;
     @Field
     private String id;
     @Field
@@ -14,25 +19,24 @@ public class DataSolr {
     @Field
     private String title;
     @Field
-    private String code;
+    private String group;
+    @Field
+    private Integer ranking;
     @Field
     private String content;
+    @Field
+    private Date timestamp;
+    @Field
+    private List<Date> creation;
 
     public static String getSolrFields() {
-        if (SEARCH_FIELDS == null) {
-            synchronized (DataSolr.class) {
-                if (SEARCH_FIELDS == null) {
-                    StringBuilder sb = new StringBuilder();
-                    for (java.lang.reflect.Field fld : DataSolr.class.getDeclaredFields()) {
-                        if (sb.length() > 0) {
-                            sb.append(",");
-                        }
-                        sb.append(fld.getName());
-                    }
-                    SEARCH_FIELDS = sb.toString();
-                }
-            }
+        return SolrUtils.getSolrFields(DataSolr.class);
+    }
+
+    public Date getCreation() {
+        if (CollectionUtils.isNotEmpty(creation)) {
+            return creation.get(0);
         }
-        return SEARCH_FIELDS;
+        return null;
     }
 }

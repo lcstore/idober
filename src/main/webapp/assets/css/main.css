@@ -438,17 +438,17 @@ a:hover {
 	background: #fff;
 }
 
-.daily-box {
-	padding-bottom: 15px;
+.left-box {
+	 padding-bottom: 0px;
 }
 
-.weekly-box {
+.right-box {
 	border-right: 0;
 	border-left: 1px solid #ececec;
-	padding-bottom: 15px;
+	padding-bottom: 0px;
 }
 
-.daily-hot {
+.txtsize {
 	line-height: 25px;
 }
 
@@ -456,11 +456,11 @@ a:hover {
 	float: right;
 }
 
-.weekly-title {
+.movie-box .title {
 	border-bottom: 1px solid #eee;
 }
 
-.daily-title h4, .weekly-title h4 {
+.title h4 {
 	color: #06A8E9;
 	font-weight: bold;
 }
@@ -469,7 +469,47 @@ a:hover {
 	width: 86px;
 	height: 122px;
 } */
+.row.content {
+	text-align: center;
+}
 
-.weekly-box .content{
-    text-align: center;
+.box-mtop {
+	margin-top: 20px;
+	/* margin-bottom: 10px; */
+}
+
+.movie-bk {
+	background-color: #eee;
+}
+
+.name-box {
+	padding-bottom: 6px;
+	padding-top: 4px;
+}
+
+.rank-title {
+	float: left;
+	margin-right: 10px;
+	color: #06A8E9;
+	font-weight: bold;
+}
+
+.rank-content {
+	padding-left: 15px;
+	padding-right: 15px;
+	background-color: white;
+	margin-top: 0px;
+	padding-top: 6px;
+}
+
+.tab-box {
+	border-left-width: 1px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#movieRank {
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
 }
