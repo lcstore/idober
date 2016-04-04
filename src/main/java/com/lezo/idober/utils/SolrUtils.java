@@ -22,7 +22,6 @@ public class SolrUtils {
     private static final String CORE_SKU = "core1";
     private static final String CORE_MOVIE = "core2";
 
-
     public static SolrServer getDataServer() {
         return getSolrServer(CORE_DATA);
     }
@@ -51,7 +50,7 @@ public class SolrUtils {
                 hasServer = SERVER_MAP.get(coreName);
                 if (hasServer == null) {
                     AppConfig appConfig = SpringBeanUtils.getBean(AppConfig.class);
-                    if (ENV_NAME_DEV.equals(appConfig.getEnvName())) {
+                    if (appConfig.getEnvName() != null && ENV_NAME_DEV.equals(appConfig.getEnvName().toLowerCase())) {
                         hasServer = new HttpSolrServer(appConfig.getSorlServerUrl() + coreName);
                     } else {
                         if (!SolrUtils.coreContainer.getAllCoreNames().contains(coreName)) {

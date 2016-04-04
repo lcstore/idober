@@ -9,6 +9,26 @@
 	<!-- 启用spring mvc 注解 -->
 	<context:annotation-config />
 	<mvc:annotation-driven />
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!-- //把ByteArray加在Json前面 -->
+				<bean
+					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean id="jsonHttpMessageConverter"
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+
 	<context:component-scan base-package="com.lezo.idober.action"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
@@ -18,10 +38,10 @@
 	</context:component-scan>
 
 	<!-- 设置使用注解的类所在的jar包 -->
-	<!-- <context:component-scan base-package="com.lezo.iscript.service.crawler.dao"/>
-	<context:component-scan base-package="com.lezo.iscript.service.crawler.service"/> -->
-	<context:component-scan base-package="com.lezo.idober.config"/>
-	<context:component-scan base-package="com.lezo.idober.service"/>
+	<!-- <context:component-scan base-package="com.lezo.iscript.service.crawler.dao"/> 
+		<context:component-scan base-package="com.lezo.iscript.service.crawler.service"/> -->
+	<context:component-scan base-package="com.lezo.idober.config" />
+	<context:component-scan base-package="com.lezo.idober.service" />
 
 	<!-- 完成请求和注解POJO的映射 -->
 	<bean
@@ -64,7 +84,7 @@
 				<entry key="unifyOf">
 					<bean class="com.lezo.idober.ftls.UnifyOfMethod" />
 				</entry>
-				<entry key="tb_appkey" value="23250128"/>
+				<entry key="tb_appkey" value="23250128" />
 			</map>
 		</property>
 	</bean>
@@ -88,11 +108,8 @@
 				<prop key="java.lang.Exception">errors/error</prop>
 			</props>
 		</property>
-		<!-- <property name="statusCodes">
-			<props>
-				<prop key="errors/error">500</prop>
-			</props>
-		</property> -->
+		<!-- <property name="statusCodes"> <props> <prop key="errors/error">500</prop> 
+			</props> </property> -->
 		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
 		<property name="warnLogCategory" value="WARN"></property>
 		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.servlet.SolrRequestParsers;
@@ -27,8 +28,8 @@ public class SolrQueryTest {
 
     @Before
     public void setup() throws Exception {
-        // server = new HttpSolrServer("http://www.lezomao.com/core3");
-        server = new HttpSolrServer("http://localhost:8081/core2");
+        server = new HttpSolrServer("http://www.lezomao.com/core2");
+        // server = new HttpSolrServer("http://localhost:8081/core2");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
         // CoreContainer coreContainer = initializer.initialize();
@@ -118,7 +119,8 @@ public class SolrQueryTest {
 
     @Test
     public void testSolrDelete() throws Exception {
-        String queryStr = "*:*";
+        String title = ClientUtils.escapeQueryChars("2015;李恩熙;纯情");
+        String queryStr = "(id:" + title + ")";
         server.deleteByQuery(queryStr);
         server.commit();
         server.optimize();

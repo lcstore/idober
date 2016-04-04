@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title><sitemesh:write property='title' /></title>
     <sitemesh:write property='head'/>
 </head>
 <body>
@@ -13,10 +14,10 @@
 			   </div>
 			</div>
 			<div class="center-block">
-			   <form target="_blank" action="/search/build" role="search" class="navbar-form navbar-left form-search" id="qForm">
+			   <form target="_blank" action="/search/movie" role="search" class="navbar-form navbar-left form-search" id="qForm">
 					<div class="form-group input-append">
 						<#if qWord==null>
-					      <input type="search" name="q" value="牛奶" class="form-control search-query" id="qWord">
+					      <input type="search" name="q" value="荒野猎人" class="form-control search-query" id="qWord">
 						<#else>
 					      <input type="search" name="q" value="${qWord}" class="form-control search-query" id="qWord">
 					     </#if>
@@ -27,9 +28,9 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
 					<li class="active"><a href="/">首页</a></li>
-					<li><a href="/">About</a></li>
-					<li><a href="/">Contact</a></li>
-					<li><a class="btn" href="/">SIGN IN / SIGN UP</a></li>
+					<li><a href="/">花絮评说</a></li>
+					<li><a href="/">热点关注</a></li>
+					<li><a class="btn" href="/">登陆 / 注册</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->

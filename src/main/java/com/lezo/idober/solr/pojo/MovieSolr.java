@@ -7,6 +7,7 @@ import lombok.Data;
 
 import org.apache.solr.client.solrj.beans.Field;
 
+import com.lezo.idober.utils.AESCodecUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 @Data
@@ -66,5 +67,20 @@ public class MovieSolr {
 
     public static String getSolrFields() {
         return SolrUtils.getSolrFields(MovieSolr.class);
+    }
+
+    public String getEncryptId() {
+        if (id != null) {
+            try {
+                return AESCodecUtils.encrypt(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return id;
+    }
+
+    public String getId() {
+        return id;
     }
 }

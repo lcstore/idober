@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.SolrConstant;
 import com.lezo.idober.utils.SolrUtils;
-import com.lezo.idober.vo.MovieVo;
+import com.lezo.idober.vo.movie.MovieVo;
 
 @Controller
 @RequestMapping("search")
@@ -46,7 +46,7 @@ public class MovieSearchController {
         long cost = System.currentTimeMillis() - start;
         logger.info("search:{},page:{},count:{},cost:{}", keyWord, curPage, movieVos.size(), cost);
 
-        return new ModelAndView("searchMovie");
+        return new ModelAndView("MovieSearch");
     }
 
     private List<MovieVo> queryDocByWord(String keyWord, int offset, int limit) throws Exception {
@@ -66,6 +66,13 @@ public class MovieSearchController {
         for (MovieSolr solr : solrList) {
             MovieVo movieVo = new MovieVo();
             BeanUtils.copyProperties(solr, movieVo);
+            JSONObject ctObject = JSONObject.parseObject(solr.getContent());
+            if (ctObject != null) {
+                movieVo.setStory(ctObject.getString("story"));
+                if (StringUtils.isBlank(movieVo.getImgUrl())) {
+                    movieVo.setImgUrl(ctObject.getString("img_url"));
+                }
+            }
             if (StringUtils.isNotBlank(solr.getTorrents())) {
                 JSONArray tArray = JSONArray.parseArray(solr.getTorrents());
                 JSONArray sArray = new JSONArray();
@@ -73,9 +80,25 @@ public class MovieSearchController {
                 for (int i = 0; i < tArray.size(); i++) {
                     JSONObject tObject = tArray.getJSONObject(i);
                     String type = tObject.getString("type");
-                    if (StringUtils.isBlank(type)) {
-
-                    } else if (type.endsWith("-share")) {
+                    String source = tObject.getString("source");
+                    if (StringUtils.isBlank(type) && source.equals("bttiantang-torrent")) {
+                        tObject.remove("source");
+                        tObject.put("type", source);
+                        JSONObject pObject = tObject.getJSONObject("param");
+                        StringBuilder sb = new StringBuilder();
+                        for (String key : pObject.keySet()) {
+                            if (sb.length() > 0) {
+                                sb.append("&");
+                            }
+                            sb.append(key);
+                            sb.append("=");
+                            sb.append(pObject.getString(key));
+                        }
+                        tObject.put("param", sb.toString());
+                        if (newArray.isEmpty()) {
+                            newArray.add(tObject);
+                        }
+                    } else if (type != null && type.endsWith("-share")) {
                         sArray.add(tObject);
                     } else if (newArray.isEmpty()) {
                         newArray.add(tObject);
@@ -87,7 +110,6 @@ public class MovieSearchController {
             destList.add(movieVo);
         }
         Comparator<MovieVo> c = new Comparator<MovieVo>() {
-
             @Override
             public int compare(MovieVo o1, MovieVo o2) {
                 if (o2.getTcount() > 0 && o1.getTcount() > 0) {

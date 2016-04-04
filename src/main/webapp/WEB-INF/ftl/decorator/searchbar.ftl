@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title><sitemesh:write property='title' /></title>
     <sitemesh:write property='head'/>
 </head>
 <body>
