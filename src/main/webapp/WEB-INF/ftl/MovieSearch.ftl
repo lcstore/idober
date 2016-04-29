@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-<title>${model.qWord}-电影搜索</title>
+<meta name="keywords" content="低价,正品,折扣,优惠,电影下载,迅雷下载,个性电影,LEZOMAO,乐助猫,狸猫">
+<meta name="description" content="狸猫,识低价、辨真假,比价购物更放心！寻热门、觅经典,个性电影更贴心！">
+<meta name="title" content="${model.qWord}-搜索结果,种子下载,迅雷下载,高清下载,狸猫(LezoMao.com)" />
+<title>${model.qWord}-搜索结果,种子下载,迅雷下载,高清下载,狸猫(LezoMao.com)</title>
 </head>
 <body>
 	<div class="main data-box">
@@ -55,9 +58,9 @@
 											    <form id="form${oTor_index}" action="/movie/download">
 											         <strong>
 											         下载地址：
-													    <a href="${oTor.url}" >
+													    <span link="${oTor.url}" >
 												        	${unifyOf(((oTor.name)?length>0)?string((oTor.name),(oDoc.name)),70,'.')}
-														</a>
+														</span>
 													</strong>
 												    <input class="btn btn-default" type="hidden" name="u" value="${oTor.url}">
 												    <input class="btn btn-default" type="hidden" name="m" value="${oTor.method}">
@@ -69,9 +72,9 @@
 												 </form>
 											  <#else>
 											   <strong>下载地址：
-											   <a href="${oTor.url}" >
+											   <span link="${oTor.url}" >
     											   	${unifyOf(((oTor.name)?length>0)?string((oTor.name),(oDoc.name)),70,'.')}
-												</a>
+												</span>
 												</strong>
 											   <button type="button" class="btn btn-success btn-xs downbtn" onclick='window.location.href=urlcodesc.encode("${oTor.url}","thunder");'>
 											     迅雷下载

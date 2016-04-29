@@ -1,10 +1,12 @@
 package com.lezo.idober.action;
 
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +24,9 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.DateUtil;
+import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +39,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.lezo.idober.solr.pojo.DataSolr;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.SolrUtils;
@@ -147,7 +153,7 @@ public class DocumentController {
             content = ctObject.toJSONString();
             sGroup = "经典电影";
             addWeekMovieHomeByGroup(sGroup, content, docsList);
-
+            addTasks(docListVo);
             addDocs("core0", docListVo);
             JSONObject rsObject = getBuildResult(docsList);
             returnVo.setData(rsObject.toJSONString());
@@ -157,6 +163,47 @@ public class DocumentController {
             returnVo.setMsg(e.getMessage());
         }
         return returnVo;
+    }
+
+    private void addTasks(SolrDocListVo docListVo) {
+        List<SolrDocVo> docs = docListVo.getDocs();
+        if (CollectionUtils.isEmpty(docs)) {
+            return;
+        }
+        Set<String> nameSet = Sets.newHashSet();
+        for (int i = 0; i < docs.size(); i++) {
+            SolrDocVo oDoc = docs.get(i);
+            for (SolrFieldVo fld : oDoc.getFields()) {
+                if ("content".equals(fld.getKey())) {
+                    String sVal = fld.getValue();
+                    JSONObject dObj = JSON.parseObject(sVal);
+                    JSONArray dArray = dObj.getJSONArray("dataList");
+                    for (int ij = 0; ij < dArray.size(); ij++) {
+                        String sIdString = dArray.getString(ij);
+                        String[] unitArr = sIdString.split(";");
+                        if (unitArr.length >= 3) {
+                            nameSet.add(unitArr[unitArr.length - 1].trim());
+                        }
+                    }
+                }
+            }
+        }
+        for (String name : nameSet) {
+            String title = name;
+            try {
+                title = URLEncoder.encode(title, "UTF-8");
+                String url = "http://www.lezomao.com:8090/moviemgr/fetch?title=" + title;
+                String referrer = "http://www.lezomao.com";
+                Response resp =
+                        Jsoup.connect(url).referrer(referrer).method(Method.GET)
+                                .ignoreContentType(true).execute();
+                log.info("title:" + name + ",resp:" + resp.body());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        log.info("finish to offer task:" + nameSet.size());
+
     }
 
     private JSONObject createClassicContent(Integer destCount, Integer offset, Integer limit) throws Exception {
@@ -238,7 +285,7 @@ public class DocumentController {
     private JSONObject createDailyContent(Integer destCount, Integer offset, Integer limit) throws Exception {
         // Date fromTime = DateUtils.addDays(new Date(), -10);
         // String sFromTime = DateUtil.getThreadLocalDateFormat().format(fromTime);
-        Date fromTime = DateUtils.addDays(new Date(), -30);
+        Date fromTime = DateUtils.addDays(new Date(), -7);
         String sFromTime = DateUtil.getThreadLocalDateFormat().format(fromTime);
         StringBuilder sb = new StringBuilder();
         sb.append("(timestamp:[");

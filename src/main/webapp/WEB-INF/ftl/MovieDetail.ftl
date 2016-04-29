@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-<title>${oDoc.name}(${oDoc.year})</title>
+<#if (oDoc.id)?exists>
+<link rel="canonical" href="http://www.lezomao.com/movie/detail/${oDoc.id}"/>
+</#if> 
+<meta name="description" content="狸猫(LezoMao.com)，${oDoc.name}(${oDoc.year})，导演：${(oDoc.directors)?replace(';', '、')}，主演：${(oDoc.actors)?replace(';', '、')}，类型：${(oDoc.actors)?replace(';', '、')}"/>
+<meta name="keywords" content="狸猫、乐助猫、lezo、lezomao,${(oDoc.directors)?replace(';', '、')},${(oDoc.actors)?replace(';', '、')},${oDoc.name}(${oDoc.year}),${oDoc.enname},种子下载,迅雷下载,高清下载" />
+<meta name="title" content="${oDoc.name}${oDoc.enname}(${oDoc.year}),种子下载,迅雷下载,高清下载 -  乐助猫,狸猫(LezoMao.com)" />
+<title>${oDoc.name}${oDoc.enname}(${oDoc.year}),种子下载,迅雷下载,高清下载-  乐助猫,狸猫(LezoMao.com)</title>
 </head>
 <body>
 	<div class="main data-box">
@@ -72,15 +78,15 @@
 	           <button id="searchMovie" type="button" class="btn btn-warning btn-xs downbtn" title="${oDoc.name}">
 	             去找找
 			   </button>
-			   <span id='searchmsg' class="alert alert-info  btn-xs hidden">已派小猫去寻找下载地址,请耐心等待。5分钟后再刷新页面查看。</span>
+			   <span id='searchmsg' class="alert alert-info  btn-xs hidden"></span>
 		    </#if>
 	        <#list oTorrents as oTor>
 	            <div id="tor${oTor_index}" class="torblock" >
 	              <#if (oTor.type == 'bttiantang-torrent') >
 				    <form id="form${oTor_index}" action="/movie/download">
-					    <a href="${oTor.url}" >
+					    <span link="${oTor.url}" >
 				        	 <strong>${((oTor.name)?length>0)?string((oTor.name),(oDoc.name))}</strong>
-						</a>
+						</span>
 					    <input class="btn btn-default" type="hidden" name="u" value="${oTor.url}">
 					    <input class="btn btn-default" type="hidden" name="m" value="${oTor.method}">
 					    <input class="btn btn-default" type="hidden" name="p" value="${oTor.param}">
@@ -90,9 +96,9 @@
 					    </button>
 					 </form>
 				  <#else>
-				    <a href="${oTor.url}" >
+				    <span link="${oTor.url}" >
 				       <strong>${unifyOf(((oTor.name)?length>0)?string((oTor.name),(oDoc.name)),70,'.')}</strong>
-				   </a>
+				   </span>
 				   <button type="button" class="btn btn-success btn-xs downbtn" onclick='window.location.href=urlcodesc.encode("${oTor.url}","thunder");'>
 				     迅雷下载
 				   </button>

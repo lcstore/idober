@@ -41,13 +41,13 @@ public class MovieVo {
     }
 
     public void setId(String id) {
-        if (id != null) {
-            try {
-                id = AESCodecUtils.encrypt(id);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        // if (id != null) {
+        // try {
+        // id = AESCodecUtils.encrypt(id);
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // }
         this.id = id;
     }
 }

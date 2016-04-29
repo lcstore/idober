@@ -7,14 +7,14 @@
 <body>
 <div class="container box-mtop"  id="movieClassic">
 		<div class="row movie-box">
-					<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 left-box">	
+					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9 left-box">	
 					    <div class="title"><h4>经典电影</h4></div>
 					    <#assign colCount="6"?number >
 					    <#list classicVos as oMovie>
 					       <#if ((oMovie_index%colCount)==0) >
 					      	<div class="row content movie-bk">
 						   </#if>
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								<div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
 								   <a href="/movie/detail/${oMovie.code}" target="_blank">
 									  <img src="${oMovie.imgUrl}" alt="${oMovie.title}" class="img-rounded">
 									</a>
@@ -31,7 +31,7 @@
 					    </#list>
 					
 					</div>
-				<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3  right-box movie-bk" id="movieRank">
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3  right-box movie-bk" id="movieRank">
 				      <div class="tabbable">
 					      <ul class="nav nav-tabs tab-box">
 					        <span class="rank-title"><h4>票房榜</h4></span>

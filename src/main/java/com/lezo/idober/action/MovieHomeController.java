@@ -35,12 +35,12 @@ import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.movie.MovieElementVo;
 import com.lezo.iscript.utils.BatchIterator;
 
-@RequestMapping("movie")
+//@RequestMapping("movie")
 @Controller
 @Log4j
 public class MovieHomeController {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = { "/", "movie/" }, method = RequestMethod.GET)
     public String getHotMovie(@ModelAttribute("model") ModelMap model) throws Exception {
         try {
             Integer offset = 0;

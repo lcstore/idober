@@ -95,6 +95,7 @@ public class MovieSearchController {
                             sb.append(pObject.getString(key));
                         }
                         tObject.put("param", sb.toString());
+                        tObject.put("url", "");
                         if (newArray.isEmpty()) {
                             newArray.add(tObject);
                         }

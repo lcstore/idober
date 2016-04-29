@@ -8,23 +8,23 @@
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
-			<div class="navbar-header">
+		 <div class="row">
+		    <div class="col-xs-12 col-sm-12 col-md-3">
+			<div class="navbar-header center-header">
 			   <div id="logo-2015">
-				  <a class="navbar-brand logo" href="http://www.lezomao.com/">乐助猫</a>
+				  <a class="navbar-brand logo" href="http://www.lezomao.com/">狸猫</a>
 			   </div>
 			</div>
-			<div class="center-block">
-			   <form target="_blank" action="/search/movie" role="search" class="navbar-form navbar-left form-search" id="qForm">
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-4">
+			   <form target="_blank" action="${qAction!'/search/movie'}" role="search" class="navbar-form navbar-left form-search" id="qForm">
 					<div class="form-group input-append">
-						<#if qWord==null>
-					      <input type="search" name="q" value="荒野猎人" class="form-control search-query" id="qWord">
-						<#else>
-					      <input type="search" name="q" value="${qWord}" class="form-control search-query" id="qWord">
-					     </#if>
+					      <input type="search" name="q" value="${qWord!'荒野猎人'}" class="form-control search-query" id="qWord">
 						<button type="submit" class="btn btn-success search-btn" id="qBtn">Go</button>
 					</div>
 				</form>
 			</div>
+			<div class="col-xs-12 col-sm-12 col-md-5">
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
 					<li class="active"><a href="/">首页</a></li>
@@ -33,7 +33,8 @@
 					<li><a class="btn" href="/">登陆 / 注册</a></li>
 				</ul>
 			</div>
-			<!--/.nav-collapse -->
+			</div>
+		  </div><!--/div.row -->
 		</div>
 	</div>
 	<!-- /.navbar -->

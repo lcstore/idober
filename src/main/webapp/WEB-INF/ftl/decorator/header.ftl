@@ -6,9 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="Keywords" content="低价,正品,折扣,优惠,电影,热门,经典,LEZOMAO,乐助猫">
-<meta name="Description" content="乐助猫,识低价、辨真假,比价购物更放心！寻热门、觅经典,个性电影更贴心！">
-<title><sitemesh:write property='title' />-乐助猫</title>
+
+<title><sitemesh:write property='title' /></title>
 <sitemesh:write property='head'/>
 
 <link rel="shortcut icon" href="/assets/img/gt_favicon.png">

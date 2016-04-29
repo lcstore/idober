@@ -13,7 +13,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.servlet.SolrRequestParsers;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +27,7 @@ import com.lezo.idober.vo.TagRectVo;
 import com.lezo.iscript.service.crawler.dto.MatchDto;
 import com.lezo.iscript.service.crawler.dto.SkuRankDto;
 
-@Controller
+//@Controller
 // @RequestMapping("new")
 public class NewHomeController {
 

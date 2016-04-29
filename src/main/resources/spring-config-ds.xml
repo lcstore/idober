@@ -23,7 +23,7 @@
 
 
 	<import resource="classpath:spring/spring-config-mvc.xml" />
-	<!-- <import resource="classpath:spring/spring-bean-crawler.xml" /> -->
+	<!-- <import resource="classpath:spring/spring-bean-session.xml" /> -->
 	<import resource="classpath:spring/spring-bean-idober.xml" />
 	
 </beans>  

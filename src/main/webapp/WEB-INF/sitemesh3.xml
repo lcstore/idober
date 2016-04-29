@@ -11,11 +11,6 @@
 	<!-- Alternative convention. This is more verbose but allows multiple decorators 
 		to be applied to a single path. -->
 	<mapping>
-		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
-		<decorator>/WEB-INF/ftl/decorator/summary.ftl</decorator>
-		<decorator>/WEB-INF/ftl/decorator/activity.ftl</decorator>
-		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
-		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
 	</mapping>
 	<mapping>
 		<path>/item/*</path>
@@ -39,7 +34,7 @@
 		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
 	</mapping>
 	<mapping>
-		<path>/movie/</path>
+		<path>/</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
 		<decorator>/WEB-INF/ftl/movie/MovieClassic.ftl</decorator>
 		<decorator>/WEB-INF/ftl/movie/MovieComing.ftl</decorator>
@@ -57,6 +52,13 @@
 	</mapping>
 	<mapping>
 		<path>/movie/detail/*</path>
+		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/blankbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>
+		<decorator>/WEB-INF/ftl/decorator/header.ftl</decorator>
+	</mapping>
+	<mapping>
+		<path>/editmgr/funny</path>
 		<decorator>/WEB-INF/ftl/decorator/footer.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/blankbar.ftl</decorator>
 		<decorator>/WEB-INF/ftl/decorator/navbar.ftl</decorator>

@@ -42,7 +42,7 @@ public class HomeController {
 	 * @param model
 	 * @return The index view (FTL)
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "item/", method = RequestMethod.GET)
 	public String index(@ModelAttribute("model") ModelMap model) {
 		long start = System.currentTimeMillis();
 		PromotionMapService promotionMapService = SpringBeanUtils.getBean(PromotionMapService.class);

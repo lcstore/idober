@@ -1,6 +1,8 @@
 package com.lezo.idober.action;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,15 +29,46 @@ public class MovieDetailController {
 
     @RequestMapping(value = "{itemCode}", method = RequestMethod.GET)
     public String getItem(@PathVariable String itemCode, ModelMap model) throws Exception {
-        String idString = AESCodecUtils.decrypt(itemCode);
-        idString = ClientUtils.escapeQueryChars(idString);
-        SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setStart(0);
-        solrQuery.setRows(1);
-        solrQuery.set("q", "id:" + idString);
-        solrQuery.addField(MovieSolr.getSolrFields());
-        QueryResponse resp = SolrUtils.getMovieServer().query(solrQuery);
-        List<MovieSolr> mSolrs = resp.getBeans(MovieSolr.class);
+        // String idString = AESCodecUtils.decrypt(itemCode);
+        Pattern oReg = Pattern.compile("[a-zA-Z]+");
+        Matcher matcher = oReg.matcher(itemCode);
+        List<MovieSolr> mSolrs = null;
+        if (matcher.find()) {
+            String idString = AESCodecUtils.decrypt(itemCode);
+            String[] unitArr = idString.split(";");
+            if (unitArr.length >= 3) {
+                int index = -1;
+                String sYear = unitArr[++index];
+                StringBuilder sb = new StringBuilder();
+                for (int i = 1; i < unitArr.length - 1; i++) {
+                    if (sb.length() > 0) {
+                        sb.append(";");
+                    }
+                    sb.append(unitArr[i]);
+                }
+                String sDirector = sb.toString();
+                String sName = unitArr[unitArr.length - 1];
+                sDirector = ClientUtils.escapeQueryChars(sDirector);
+                sName = ClientUtils.escapeQueryChars(sName);
+                SolrQuery solrQuery = new SolrQuery();
+                solrQuery.setStart(0);
+                solrQuery.setRows(1);
+                solrQuery.set("q", "(year:" + sYear + " AND directors:" + sDirector + " AND names:" + sName + ")");
+                solrQuery.addField(MovieSolr.getSolrFields());
+                QueryResponse resp = SolrUtils.getMovieServer().query(solrQuery);
+                mSolrs = resp.getBeans(MovieSolr.class);
+            }
+        } else {
+            String idString = itemCode;
+            idString = ClientUtils.escapeQueryChars(idString);
+            SolrQuery solrQuery = new SolrQuery();
+            solrQuery.setStart(0);
+            solrQuery.setRows(1);
+            solrQuery.set("q", "id:" + idString);
+            solrQuery.addField(MovieSolr.getSolrFields());
+            QueryResponse resp = SolrUtils.getMovieServer().query(solrQuery);
+            mSolrs = resp.getBeans(MovieSolr.class);
+        }
         if (CollectionUtils.isEmpty(mSolrs)) {
             // 404,跳转首页
         } else {
@@ -71,6 +104,7 @@ public class MovieDetailController {
                             sb.append(pObject.getString(key));
                         }
                         tObject.put("param", sb.toString());
+                        tObject.put("url", "");
                         newArray.add(tObject);
                     } else if (type != null && type.endsWith("-share")) {
                         sArray.add(tObject);

@@ -28,7 +28,7 @@ public class SolrQueryTest {
 
     @Before
     public void setup() throws Exception {
-        server = new HttpSolrServer("http://www.lezomao.com/core2");
+        server = new HttpSolrServer("http://www.lezomao.com/core0");
         // server = new HttpSolrServer("http://localhost:8081/core2");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
@@ -120,8 +120,8 @@ public class SolrQueryTest {
     @Test
     public void testSolrDelete() throws Exception {
         String title = ClientUtils.escapeQueryChars("2015;李恩熙;纯情");
-        String queryStr = "(id:" + title + ")";
-        server.deleteByQuery(queryStr);
+        String queryStr = "(type:)";
+        server.deleteByQuery("type:wx-mpdetail");
         server.commit();
         server.optimize();
     }
