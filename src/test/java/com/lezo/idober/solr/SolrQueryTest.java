@@ -6,8 +6,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import lombok.extern.log4j.Log4j;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -23,12 +31,13 @@ import com.alibaba.fastjson.JSON;
 import com.lezo.idober.solr.pojo.ItemSolr;
 import com.lezo.idober.solr.pojo.MovieSolr;
 
+@Log4j
 public class SolrQueryTest {
     HttpSolrServer server;
 
     @Before
     public void setup() throws Exception {
-        server = new HttpSolrServer("http://www.lezomao.com/core0");
+        // server = new HttpSolrServer("http://www.lezomao.com/core0");
         // server = new HttpSolrServer("http://localhost:8081/core2");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
@@ -121,8 +130,27 @@ public class SolrQueryTest {
     public void testSolrDelete() throws Exception {
         String title = ClientUtils.escapeQueryChars("2015;李恩熙;纯情");
         String queryStr = "(type:)";
-        server.deleteByQuery("type:wx-mpdetail");
+        server.deleteByQuery("type:douban-movieheat");
         server.commit();
         server.optimize();
+    }
+
+    @Test
+    public void testCommit() throws Exception {
+        String rawData = FileUtils.readFileToString(new File("/Users/lezo/Downloads/book.json"), "UTF-8");
+        String url = "http://localhost:8081/meta/update/json?commit=true";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost request = new HttpPost(url);
+        try {
+            request.addHeader("Content-Type", "application/json");
+            StringEntity entity = new StringEntity(rawData, "UTF-8");
+            entity.setContentType("application/json");
+            request.setEntity(entity);
+            HttpResponse resp = client.execute(request);
+            System.err.println("resp:" + resp.getStatusLine());
+            EntityUtils.consume(resp.getEntity());
+        } catch (Exception e) {
+            log.warn("commit cause:", e);
+        }
     }
 }

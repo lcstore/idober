@@ -1,6 +1,5 @@
 package com.lezo.idober.action;
 
-import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -170,7 +169,7 @@ public class DocumentController {
         if (CollectionUtils.isEmpty(docs)) {
             return;
         }
-        Set<String> nameSet = Sets.newHashSet();
+        Set<String> idSets = Sets.newHashSet();
         for (int i = 0; i < docs.size(); i++) {
             SolrDocVo oDoc = docs.get(i);
             for (SolrFieldVo fld : oDoc.getFields()) {
@@ -180,30 +179,71 @@ public class DocumentController {
                     JSONArray dArray = dObj.getJSONArray("dataList");
                     for (int ij = 0; ij < dArray.size(); ij++) {
                         String sIdString = dArray.getString(ij);
-                        String[] unitArr = sIdString.split(";");
-                        if (unitArr.length >= 3) {
-                            nameSet.add(unitArr[unitArr.length - 1].trim());
-                        }
+                        idSets.add(sIdString);
                     }
                 }
             }
         }
-        for (String name : nameSet) {
-            String title = name;
-            try {
-                title = URLEncoder.encode(title, "UTF-8");
-                String url = "http://www.lezomao.com:8090/moviemgr/fetch?title=" + title;
-                String referrer = "http://www.lezomao.com";
-                Response resp =
-                        Jsoup.connect(url).referrer(referrer).method(Method.GET)
-                                .ignoreContentType(true).execute();
-                log.info("title:" + name + ",resp:" + resp.body());
-            } catch (Exception e) {
-                e.printStackTrace();
+        //
+        try {
+            createTasks(Lists.newArrayList(idSets));
+            log.info("finish to offer task:" + idSets.size());
+        } catch (Exception e) {
+            log.info("fail to offer task:" + idSets.size() + ",cause:", e);
+        }
+
+    }
+
+    private void createTasks(List<String> idList) throws Exception {
+        BatchIterator<String> it = new BatchIterator<String>(idList, 100);
+        while (it.hasNext()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("(");
+            for (String id : it.next()) {
+                if (sb.length() > 1) {
+                    sb.append(" OR ");
+                }
+                sb.append("id:" + id);
+            }
+            sb.append(")");
+            SolrQuery solrQuery = new SolrQuery();
+            solrQuery.set("q", sb.toString());
+            solrQuery.setStart(0);
+            solrQuery.setRows(1000);
+            solrQuery.addField("content");
+            QueryResponse resp = SolrUtils.getMovieServer().query(solrQuery);
+            List<MovieSolr> newSolrs = resp.getBeans(MovieSolr.class);
+            if (CollectionUtils.isNotEmpty(newSolrs)) {
+                JSONArray taskArray = new JSONArray();
+                for (MovieSolr solr : newSolrs) {
+                    JSONObject cObject = JSONObject.parseObject(solr.getContent());
+                    String sSourceUrl = cObject.getString("source_url");
+                    if (StringUtils.isBlank(sSourceUrl)) {
+                        continue;
+                    }
+                    JSONObject tObject = new JSONObject();
+                    tObject.put("type", "mtime-movie-torrent");
+                    tObject.put("level", 1000);
+                    tObject.put("url", sSourceUrl);
+                    taskArray.add(tObject);
+                }
+                if (taskArray.size() > 0) {
+                    createTasks(taskArray);
+                }
             }
         }
-        log.info("finish to offer task:" + nameSet.size());
+    }
 
+    private void createTasks(JSONArray taskArray) throws Exception {
+        if (taskArray == null || taskArray.size() < 1) {
+            return;
+        }
+        String url = "http://www.lezomao.com:8090/taskmgr/createtasks";
+        String referrer = "http://www.lezomao.com/idober";
+        Response resp =
+                Jsoup.connect(url).referrer(referrer).method(Method.POST).data("tasks", taskArray.toJSONString())
+                        .ignoreContentType(true).execute();
+        log.info("resp:" + resp.body());
     }
 
     private JSONObject createClassicContent(Integer destCount, Integer offset, Integer limit) throws Exception {
@@ -321,8 +361,7 @@ public class DocumentController {
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
-        solrQuery.set("q", "(type:douban-movieheat)");
-        solrQuery.setSort("group", ORDER.desc);
+        solrQuery.set("q", "(type:douban-movieheat AND group:热门)");
         solrQuery.setSort("ranking", ORDER.asc);
         solrQuery.addField(DataSolr.getSolrFields());
         QueryResponse resp = SolrUtils.getDataServer().query(solrQuery);
@@ -382,11 +421,13 @@ public class DocumentController {
         List<MovieSolr> enRankMovies = queryMovieSolrByNameDateBatch(jsonList, 10, offset, limit);
         JSONObject enObject = new JSONObject();
         JSONArray dataList = new JSONArray();
+        JSONArray nameList = new JSONArray();
         enObject.put("dataList", dataList);
         for (MovieSolr ms : enRankMovies) {
             if (StringUtils.isBlank(ms.getDirectors())) {
                 continue;
             }
+            nameList.add(ms.getName());
             dataList.add(ms.getId());
             if (dataList.size() >= destCount) {
                 break;

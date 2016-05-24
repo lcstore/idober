@@ -358,7 +358,7 @@ input.search-query {
 }
 
 .input-append {
-	display: inline-block;
+	display: inline-flex;
 	font-size: 0;
 	margin-bottom: 10px;
 	vertical-align: middle;
@@ -373,6 +373,20 @@ input.search-query {
 	margin-left: 1%;
 }
 
+.channel-nav {
+	display: inline-flex;
+}
+li.login-nav {
+	display: inline-flex;
+}
+li.login-nav a.login-btn{
+    height: 38px;
+    padding: 10px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+}
 .list-col-box {
 	width: 224px;
 }

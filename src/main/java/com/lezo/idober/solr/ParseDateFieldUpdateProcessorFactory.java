@@ -74,7 +74,7 @@ public class ParseDateFieldUpdateProcessorFactory extends FieldMutatingUpdatePro
         };
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void init(NamedList args) {
 

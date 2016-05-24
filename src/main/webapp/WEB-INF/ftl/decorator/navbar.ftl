@@ -6,7 +6,7 @@
 </head>
 <body>
 	<!-- Fixed navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div id="top-navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 		 <div class="row">
 		    <div class="col-xs-12 col-sm-12 col-md-3">
@@ -25,14 +25,16 @@
 				</form>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-5">
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav pull-right">
+				<ul class="navbar-collapse collapse nav navbar-nav channel-nav">
 					<li class="active"><a href="/">首页</a></li>
 					<li><a href="/">花絮评说</a></li>
 					<li><a href="/">热点关注</a></li>
-					<li><a class="btn" href="/">登陆 / 注册</a></li>
+					<li class="login-nav">
+					<a href="#" class="btn btn-default btn-xs login-btn" role="button">登陆</a>
+					/
+					<a href="#" class="btn btn-default btn-xs login-btn" role="button">注册</a>
+					</li>
 				</ul>
-			</div>
 			</div>
 		  </div><!--/div.row -->
 		</div>

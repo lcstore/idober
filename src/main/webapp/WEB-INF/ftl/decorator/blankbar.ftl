@@ -5,8 +5,15 @@
     <sitemesh:write property='head'/>
 </head>
 <body>
-	<div class="blankbar" style="margin-top: 120px;" />
-	<!-- for next blankbar -->
+	<div class="blankbar"></div>
     <sitemesh:write property='body'/>
+  	<script type="text/javascript">
+	$(document).ready(function() {
+		var height = $("#top-navbar").height();
+		var blank = 40;
+		var margin = height+blank;
+       $(".blankbar").css("margin-top",margin);
+	});
+	</script>
 </body>
 </html>

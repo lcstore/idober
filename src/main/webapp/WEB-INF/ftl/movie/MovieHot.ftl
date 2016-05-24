@@ -15,7 +15,7 @@
 								    <span class="badge"> 
 								     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
 								    </span>
-								    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,12,".")}</a>
+								    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,10,".")}</a>
 								    <span class="time-right">${oRank.updateTime?string["MM-dd"]}</span>
 								   </div>
 							   </#list>
