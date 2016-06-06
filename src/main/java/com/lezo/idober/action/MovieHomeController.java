@@ -195,6 +195,7 @@ public class MovieHomeController {
 
     private List<MovieElementVo> toMovieRankVo(List<MovieSolr> enRankMovies) {
         List<MovieElementVo> enRankVos = Lists.newArrayList();
+        long hasMills = System.currentTimeMillis() - DateUtils.addDays(new Date(), -15).getTime();
         for (MovieSolr rankMovie : enRankMovies) {
             MovieElementVo rankVo = new MovieElementVo();
             rankVo.setTitle(rankMovie.getName());
@@ -207,6 +208,11 @@ public class MovieHomeController {
                     rankVo.setImgUrl(cObject.getString("img_url"));
                 }
             }
+            if (rankMovie.getDate() != null
+                    && System.currentTimeMillis() - rankMovie.getDate().getTime() < hasMills) {
+                rankVo.setIsNew(1);
+            }
+            rankVo.setTcount(rankMovie.getTcount());
             enRankVos.add(rankVo);
         }
         return enRankVos;

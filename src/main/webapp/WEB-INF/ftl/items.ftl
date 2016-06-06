@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>狸猫,识低价、辨真假,比价购物更放心！</title>
+<title>狸猫资讯,识低价、辨真假,比价购物更放心！</title>
 
 </head>
 

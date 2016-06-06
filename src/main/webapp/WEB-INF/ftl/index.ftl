@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-<title>狸猫,识低价、辨真假,比价购物更放心！</title>
+<title>狸猫资讯,识低价、辨真假,比价购物更放心！</title>
 <link rel="stylesheet" href="../css/home.css">
 <!-- 添加标签图标16x16 -->
 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->

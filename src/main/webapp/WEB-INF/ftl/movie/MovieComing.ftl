@@ -17,9 +17,18 @@
 								  <img src="${oMovie.imgUrl}" alt="${oMovie.title}" class="img-rounded">
 								</a>
 								<div class="name-box">
-								  <a href="/movie/detail/${oMovie.code}" title="${oMovie.title}" target="_blank">
-								    ${unifyOf(oMovie.title,12,".")}
-								  </a>
+								  
+								  <#if (oMovie.tcount>0)>
+									<h1 class="new-movie">
+									  <a href="/movie/detail/${oMovie.code}" title="${oMovie.title}" target="_blank">
+								          ${unifyOf(oMovie.title,12,".")}
+								      </a>
+								    </h1>
+								  <#else>
+								    <a href="/movie/detail/${oMovie.code}" title="${oMovie.title}" target="_blank">
+								          ${unifyOf(oMovie.title,12,".")}
+								     </a>
+								  </#if>
 								</div>
 						</div>
 					<#if (((oMovie_index+1)%colCount)==0) || (!oMovie_has_next)>

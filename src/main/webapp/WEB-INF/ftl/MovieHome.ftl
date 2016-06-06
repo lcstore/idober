@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <link rel="canonical" href="http://www.lezomao.com/"/>
-<meta name="keywords" content="低价,正品,折扣,优惠,电影下载,迅雷下载,电影天堂,种子下载,LEZOMAO,乐助猫,狸猫">
-<meta name="description" content="狸猫,识低价、辨真假,比价购物更放心！寻热门、觅经典,个性电影更贴心！">
-<meta name="title" content="狸猫,识低价、辨真假,比价购物更放心！寻热门、觅经典,个性电影更贴心！- 乐助猫,狸猫(LezoMao.com)" />
-<title>识低价、辨真假,比价购物更放心！寻热门、觅经典,个性电影更贴心！- 乐助猫,狸猫(LezoMao.com)</title>
+<meta name="keywords" content="狸猫资讯,为你所用,迅雷下载,种子下载,免费下载">
+<meta name="description" content="《狸猫资讯》(LezoMao.com)是一款智能的资讯软件,它会对信息加工提炼，为你推荐有价值的内容，让你更好更快获取资讯。为你所用，才是资讯！">
+<meta name="title" content="《狸猫资讯》为你所用，才是资讯！- LezoMao.com" />
+<title>《狸猫资讯》为你所用，才是资讯！- LezoMao.com</title>
 </head>
 
 <body class="home">

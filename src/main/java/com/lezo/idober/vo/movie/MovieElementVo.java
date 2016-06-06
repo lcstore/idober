@@ -10,6 +10,8 @@ public class MovieElementVo {
     private String code;
     private String imgUrl;
     private Date updateTime;
+    private int tcount;
+    private int isNew;
 
     public void setCode(String code) {
         // if (code != null) {

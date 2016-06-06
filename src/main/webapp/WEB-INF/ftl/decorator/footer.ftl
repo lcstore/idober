@@ -19,17 +19,16 @@
 						<h3 class="widget-title">联系我</h3>
 						<div class="widget-body">
 							<p>
-								 <a href="mailto:#">lezomao@126.com</a><br>
+								 <a href="mailto:#" rel="nofollow">lezomao@126.com</a><br>
 							</p>
 						</div>
 					</div>
 
 					<div class="col-md-6 widget">
-						<h3 class="widget-title">能做什么？</h3>
+						<h3 class="widget-title">我们的宗旨：</h3>
 						<div class="widget-body">
-							<p>便捷，快速比价购实惠。</p>
-							<p>贴心，降价优惠早知道。</p>
-							<p>狸猫，生活的好帮手。</p>
+							<p>价值，对信息筛选加工提炼，为你所用。</p>
+							<p>贴心，为你推荐关注的内容，提供贴心服务。</p>
 						</div>
 					</div>
 
@@ -49,10 +48,11 @@
 					<div class="col-md-5 widget">
 						<div class="widget-body">
 							<p class="simplenav">
-								<a href="www.lezomao.com">首页</a> 
-								| <a href="#">热点视频</a> 
-								| <b><a href="#">登陆</a></b>
-								| <b><a href="#">注册</a></b>
+								<a href="http://lezomao.com/">首页</a> 
+								|<a href="#">影视</a>
+								|<a href="#">科技</a>
+								|<a href="#" rel="nofollow">登陆</a>
+								|<a href="#"rel="nofollow" >注册</a>
 							</p>
 						</div>
 					</div>

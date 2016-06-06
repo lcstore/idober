@@ -12,5 +12,8 @@ public class HashIdTest {
         sCode = "" + sCode.hashCode();
         sCode = sCode.replace("-", "0");
         System.err.println(sCode);
+        for (int i = 0; i <= 20; i++) {
+            System.err.println("http://www.dy2018.com/" + i + "/");
+        }
     }
 }

@@ -12,11 +12,21 @@
 					      <div class="txtsize">
 					           <#list dailyObject.dailyRankVos as oRank>
 						           <div class="hot-bottom">
-								    <span class="badge"> 
-								     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
-								    </span>
-								    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,10,".")}</a>
-								    <span class="time-right">${oRank.updateTime?string["MM-dd"]}</span>
+						           <#if (oRank.isNew==1) >
+						             <h1 class="core-movie">
+						                <span class="badge"> 
+									     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
+									    </span>
+									    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,10,".")}</a>
+									     <span class="time-right">${oRank.updateTime?string["MM-dd"]}</span>
+						             </h1>
+						           <#else>
+						               <span class="badge"> 
+									     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
+									    </span>
+									    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,10,".")}</a>
+									    <span class="time-right">${oRank.updateTime?string["MM-dd"]}</span>
+						           </#if>
 								   </div>
 							   </#list>
 						  </div>

@@ -12,6 +12,7 @@ import org.apache.solr.common.util.NamedList;
 import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.response.SolrQueryResponse;
 import org.apache.solr.update.AddUpdateCommand;
+import org.apache.solr.update.MergeIndexesCommand;
 import org.apache.solr.update.processor.UniqFieldsUpdateProcessorFactory;
 import org.apache.solr.update.processor.UpdateRequestProcessor;
 
@@ -68,6 +69,11 @@ public class UniqFieldRegexUpdateProcessorFactory extends UniqFieldsUpdateProces
                 }
             }
             super.processAdd(cmd);
+        }
+
+        @Override
+        public void processMergeIndexes(MergeIndexesCommand cmd) throws IOException {
+            super.processMergeIndexes(cmd);
         }
 
     }

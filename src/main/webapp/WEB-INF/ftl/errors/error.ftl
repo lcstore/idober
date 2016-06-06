@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>狸猫,购实惠,购正品,快捷购物不吃亏</title>
+<title>狸猫资讯,购实惠,购正品,快捷购物不吃亏</title>
 
 </head>
 

@@ -19,7 +19,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.servlet.SolrRequestParsers;
@@ -37,7 +36,7 @@ public class SolrQueryTest {
 
     @Before
     public void setup() throws Exception {
-        // server = new HttpSolrServer("http://www.lezomao.com/core0");
+        server = new HttpSolrServer("http://www.lezomao.com/core2");
         // server = new HttpSolrServer("http://localhost:8081/core2");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new CoreContainer.Initializer();
@@ -93,8 +92,8 @@ public class SolrQueryTest {
     @Test
     public void testQueryId() throws Exception {
         SolrQuery solrQuery = new SolrQuery();
-        solrQuery.set("q", "type:mtime-movie");
-        solrQuery.setFields("id");
+        solrQuery.set("q", "id:01413794354");
+        // solrQuery.setFields("id");
         StringBuilder sb = new StringBuilder();
         solrQuery.setStart(0);
         solrQuery.setRows(500);
@@ -104,6 +103,7 @@ public class SolrQueryTest {
             QueryResponse response = server.query(solrQuery);
             for (SolrDocument rs : response.getResults()) {
                 System.err.println(rs.toString());
+                System.err.println(rs.getFieldValue("release"));
                 String idString = rs.getFieldValue("id").toString();
                 idString = idString.split(";")[1];
                 if (sb.length() > 0) {
@@ -124,21 +124,25 @@ public class SolrQueryTest {
         // System.err.println(JSON.toJSONString(response.getResults()));
         // List<ItemSolr> itemList = response.getBeans(ItemSolr.class);
         // System.err.println(JSON.toJSONString(itemList));
+
     }
 
-    @Test
-    public void testSolrDelete() throws Exception {
-        String title = ClientUtils.escapeQueryChars("2015;李恩熙;纯情");
-        String queryStr = "(type:)";
-        server.deleteByQuery("type:douban-movieheat");
-        server.commit();
-        server.optimize();
-    }
+    // @Test
+    // public void testSolrDelete() throws Exception {
+    // String title = ClientUtils.escapeQueryChars("2015;李恩熙;纯情");
+    // String queryStr = "(type:)";
+    // String sQuery = ClientUtils.escapeQueryChars("type:xroxy-proxy");
+    // System.err.println(sQuery);
+    // server.deleteByQuery("*:*");
+    // server.commit();
+    // server.optimize();
+    // }
 
     @Test
     public void testCommit() throws Exception {
         String rawData = FileUtils.readFileToString(new File("/Users/lezo/Downloads/book.json"), "UTF-8");
-        String url = "http://localhost:8081/meta/update/json?commit=true";
+        String url = "http://localhost:8081/cmovie/update/json?commit=true";
+        url = "http://lezomao.com/cmovie/update/json?commit=true";
         HttpClient client = new DefaultHttpClient();
         HttpPost request = new HttpPost(url);
         try {

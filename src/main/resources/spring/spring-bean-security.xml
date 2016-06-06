@@ -1,17 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd">
 
-	    <context:annotation-config/>
-
-    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
-
-    <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
-         <property name="port" value="${redis.port}"/>
-    </bean>
-
-</beans>  
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="lezosolr" password="lezo@solr" authorities="ROLE_USER,ROLE_ADMIN" />
+				<user name="lezo" password="lezo@idober" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+	<beans:bean id="http403EntryPoint"
+		class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint">
+	</beans:bean>
+	<http pattern="/assets/**" security="none" />
+    <!-- 	
+     <http use-expressions="true" auto-config="false" entry-point-ref="http403EntryPoint">
+		<intercept-url pattern="/comment/**" access="hasRole('ROLE_USER')" />
+		<http-basic />
+	</http> 
+	-->
+	<http use-expressions="false" auto-config="false" entry-point-ref="http403EntryPoint">
+		<intercept-url pattern="/comment/**" access="ROLE_USER" />
+		<http-basic />
+	</http>
+</beans:beans>

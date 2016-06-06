@@ -376,17 +376,20 @@ input.search-query {
 .channel-nav {
 	display: inline-flex;
 }
+
 li.login-nav {
 	display: inline-flex;
 }
-li.login-nav a.login-btn{
-    height: 38px;
-    padding: 10px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-top-width: 1px;
+
+li.login-nav a.login-btn {
+	height: 38px;
+	padding: 10px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-width: 1px;
 }
+
 .list-col-box {
 	width: 224px;
 }
@@ -572,4 +575,16 @@ a:hover {
 	width: 195px;
 	height: 125px;
 	margin-left: 24px;
+}
+
+.core-movie {
+	margin-top: 5px;
+	margin-bottom: 0px;
+	font-size: 14px;
+}
+
+.new-movie {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 18px;
 }

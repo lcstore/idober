@@ -12,7 +12,7 @@
 		    <div class="col-xs-12 col-sm-12 col-md-3">
 			<div class="navbar-header center-header">
 			   <div id="logo-2015">
-				  <a class="navbar-brand logo" href="http://www.lezomao.com/">狸猫</a>
+				  <a class="navbar-brand logo" href="http://www.lezomao.com/">狸猫资讯</a>
 			   </div>
 			</div>
 			</div>
@@ -27,12 +27,12 @@
 			<div class="col-xs-12 col-sm-12 col-md-5">
 				<ul class="navbar-collapse collapse nav navbar-nav channel-nav">
 					<li class="active"><a href="/">首页</a></li>
-					<li><a href="/">花絮评说</a></li>
-					<li><a href="/">热点关注</a></li>
+					<li><a href="#">影视</a></li>
+					<li><a href="#">科技</a></li>
 					<li class="login-nav">
-					<a href="#" class="btn btn-default btn-xs login-btn" role="button">登陆</a>
+					<a href="#" rel="nofollow" class="btn btn-default btn-xs login-btn" role="button">登陆</a>
 					/
-					<a href="#" class="btn btn-default btn-xs login-btn" role="button">注册</a>
+					<a href="#" rel="nofollow" class="btn btn-default btn-xs login-btn" role="button">注册</a>
 					</li>
 				</ul>
 			</div>
