@@ -45,19 +45,12 @@
 						 <script src="http://s11.cnzz.com/z_stat.php?id=1258569694&web_id=1258569694" language="JavaScript"></script>
 						</div>
 					</div>
-					<div class="col-md-5 widget">
+					<div class="col-md-3 widget">
 						<div class="widget-body">
-							<p class="simplenav">
-								<a href="http://lezomao.com/">首页</a> 
-								|<a href="#">影视</a>
-								|<a href="#">科技</a>
-								|<a href="#" rel="nofollow">登陆</a>
-								|<a href="#"rel="nofollow" >注册</a>
-							</p>
 						</div>
 					</div>
 
-					<div class="col-md-6 widget">
+					<div class="col-md-8 widget">
 						<div class="widget-body text-center">
 							<div class="copyright">Copyright &copy; 2014, LEZOMAO.COM
 								版权所有</div>

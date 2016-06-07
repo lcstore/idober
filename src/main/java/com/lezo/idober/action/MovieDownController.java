@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("movie")
-public class MovieDownController {
+public class MovieDownController extends BaseController {
 
     @RequestMapping("download")
     public ResponseEntity<byte[]> download(@RequestParam(value = "u", required = false) String url,

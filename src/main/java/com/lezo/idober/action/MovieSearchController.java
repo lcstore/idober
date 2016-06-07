@@ -27,7 +27,7 @@ import com.lezo.idober.vo.movie.MovieVo;
 
 @Controller
 @RequestMapping("search")
-public class MovieSearchController {
+public class MovieSearchController extends BaseController {
     private static Logger logger = org.slf4j.LoggerFactory.getLogger(MovieSearchController.class);
 
     @RequestMapping("movie")

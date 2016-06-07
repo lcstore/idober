@@ -37,9 +37,6 @@
 	  s.parentNode.insertBefore(hm, s);
 	})();
 	</script>
-	<!--
-	  <script src="http://l.tbcdn.cn/apps/top/x/sdk.js?appkey=23250128"></script> 
-	  -->
 </head>
 
 <body class="home">
@@ -49,9 +46,6 @@
     
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 	<script src="/assets/js/bootstrap-3.2.0.min.js?v=${version}"></script>
-	<script src="/assets/js/headroom.min.js?v=${version}"></script>
-	<script src="/assets/js/jQuery.headroom.min.js?v=${version}"></script>
-	<script src="/assets/js/template.js?v=${version}"></script>
 	<script type="text/javascript">
 	    (function(win,doc){
 	        var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];

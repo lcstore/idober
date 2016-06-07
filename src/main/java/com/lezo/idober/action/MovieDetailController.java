@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,11 +27,12 @@ import com.lezo.idober.vo.movie.MovieVo;
 
 @RequestMapping("movie/detail")
 @Controller
-public class MovieDetailController {
+public class MovieDetailController extends BaseController {
 
     @RequestMapping(value = "{itemCode}", method = RequestMethod.GET)
     public String getItem(@PathVariable String itemCode, ModelMap model) throws Exception {
         // String idString = AESCodecUtils.decrypt(itemCode);
+        itemCode = Jsoup.clean(itemCode, Whitelist.basic());
         Pattern oReg = Pattern.compile("[a-zA-Z]+");
         Matcher matcher = oReg.matcher(itemCode);
         List<MovieSolr> mSolrs = null;
