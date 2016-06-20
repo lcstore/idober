@@ -12,8 +12,8 @@ public class HashIdTest {
         sCode = "" + sCode.hashCode();
         sCode = sCode.replace("-", "0");
         System.err.println(sCode);
-        for (int i = 0; i <= 20; i++) {
-            System.err.println("http://www.dy2018.com/" + i + "/");
-        }
+        String imgUrl = "http://img21.mtime.cn/mt/2011/07/29/114748.51099207_270X405X4.jpg";
+        imgUrl = imgUrl.replaceFirst("http:.{3,}?/", "/img/");
+        System.err.println(imgUrl);
     }
 }

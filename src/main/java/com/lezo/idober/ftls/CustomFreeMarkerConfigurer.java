@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
+import com.lezo.idober.config.AppConfig;
+import com.lezo.iscript.spring.context.SpringBeanUtils;
+
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
@@ -23,6 +26,8 @@ public class CustomFreeMarkerConfigurer extends FreeMarkerConfigurer {
             TemplateException {
         super.afterPropertiesSet();
         getConfiguration().setSharedVariable(KEY_VERSION, version);
+        AppConfig config = SpringBeanUtils.getBean(AppConfig.class);
+        getConfiguration().setSharedVariable("static_host", config.getStaticHost());
     }
 
     @Override

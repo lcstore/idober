@@ -36,7 +36,7 @@
 								    <#if (oShares?size>0) > 
 								        <li class="list-group-item"><strong>分享：</strong>
 								          <#list oShares as oShare>
-									        	<a href="${oShare.url}" target="_blank">${oShare.name}
+									        	<a rel="nofollow" href="${oShare.url}" target="_blank">${oShare.name}
 									        	</a>
 									        	  <#if oShare.secret?? > 
 									        	  <span>(${oShare.secret})</span>
@@ -92,6 +92,6 @@
 			</div>
 		</div>
 	</div>
-	<script src="/assets/js/custom/urlcodesc.js?v=${version}"></script>
+	<script src="${static_host}/assets/js/custom/urlcodesc.js?v=${version}"></script>
 </body>
 </html>

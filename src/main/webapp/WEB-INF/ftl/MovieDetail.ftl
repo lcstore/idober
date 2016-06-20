@@ -34,7 +34,7 @@
 								    <li class="list-group-item"><strong>主演：</strong>${oDoc.actors}</li>
 								    <li class="list-group-item"><strong>地区：</strong>${oDoc.region}</li>
 								    <li class="list-group-item"><strong>类型：</strong>${oDoc.genres}</li>
-								    <li class="list-group-item"><strong>上映：</strong>${oDoc.date?string("yyyy-MM-dd")}</li>
+								    <li class="list-group-item"><strong>上映：</strong>${(oDoc.date?string("yyyy-MM-dd"))!''}</li>
 								    <#assign oShares = ((oDoc.shares)!"[]")?eval>
 								    <#if (oShares?size>0) > 
 								        <li class="list-group-item"><strong>分享：</strong>
@@ -109,7 +109,7 @@
 		</div>
 	</div>
 	
-	<script src="/assets/js/custom/urlcodesc.js?v=${version}"></script>
-	<script src="/assets/js/custom/detail.js?v=${version}"></script>
+	<script src="${static_host}/assets/js/custom/urlcodesc.js?v=${version}"></script>
+	<script src="${static_host}/assets/js/custom/detail.js?v=${version}"></script>
 </body>
 </html>

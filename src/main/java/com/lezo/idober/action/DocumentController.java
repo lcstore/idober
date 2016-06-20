@@ -23,6 +23,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.DateUtil;
+import org.codehaus.jackson.map.annotate.JsonView;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -42,6 +43,7 @@ import com.google.common.collect.Sets;
 import com.lezo.idober.solr.pojo.DataSolr;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.SolrUtils;
+import com.lezo.idober.view.ReturnView;
 import com.lezo.idober.vo.ActionReturnVo;
 import com.lezo.idober.vo.SolrDocListVo;
 import com.lezo.idober.vo.SolrDocVo;
@@ -104,6 +106,7 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "movie", method = RequestMethod.GET)
+    @JsonView(ReturnView.StatusCode.class)
     @ResponseBody
     public ActionReturnVo buildMovieHome() {
         ActionReturnVo returnVo = new ActionReturnVo();
@@ -325,7 +328,7 @@ public class DocumentController {
     private JSONObject createDailyContent(Integer destCount, Integer offset, Integer limit) throws Exception {
         // Date fromTime = DateUtils.addDays(new Date(), -10);
         // String sFromTime = DateUtil.getThreadLocalDateFormat().format(fromTime);
-        Date fromTime = DateUtils.addDays(new Date(), -7);
+        Date fromTime = DateUtils.addDays(new Date(), -14);
         String sFromTime = DateUtil.getThreadLocalDateFormat().format(fromTime);
         StringBuilder sb = new StringBuilder();
         sb.append("(timestamp:[");

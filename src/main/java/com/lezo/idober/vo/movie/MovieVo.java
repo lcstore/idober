@@ -50,4 +50,8 @@ public class MovieVo {
         // }
         this.id = id;
     }
+
+    // public void setImgUrl(String imgUrl) {
+    // this.imgUrl = imgUrl.replaceFirst("http:.{3,}?/", "/img/");
+    // }
 }

@@ -14,4 +14,6 @@ public class AppConfig {
     private String envName;
     @Value("${app.solr.server_url}")
     private String sorlServerUrl;
+    @Value("${idober_static_host}")
+    private String staticHost;
 }

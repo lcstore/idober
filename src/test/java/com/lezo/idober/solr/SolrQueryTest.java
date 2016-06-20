@@ -141,8 +141,8 @@ public class SolrQueryTest {
     @Test
     public void testCommit() throws Exception {
         String rawData = FileUtils.readFileToString(new File("/Users/lezo/Downloads/book.json"), "UTF-8");
-        String url = "http://localhost:8081/cmovie/update/json?commit=true";
-        url = "http://lezomao.com/cmovie/update/json?commit=true";
+        String url = "http://localhost:8081/cmeta/update/json?commit=true";
+        url = "http://www.lezomao.com/cmovie/update/json?commit=true";
         HttpClient client = new DefaultHttpClient();
         HttpPost request = new HttpPost(url);
         try {

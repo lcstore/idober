@@ -2,9 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
 	<!-- 启用spring mvc 注解 -->
 	<context:annotation-config />
@@ -16,6 +16,16 @@
 				<!-- //把ByteArray加在Json前面 -->
 				<bean
 					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean id="jsonHttpMessageConverter"
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+							<value>application/json;charset=UTF-8</value>
+							<value>application/*+json;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
 			</list>
 		</property>
 	</bean>
@@ -29,13 +39,6 @@
 			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
-	<!-- 设置使用注解的类所在的jar包 -->
-	<!-- <context:component-scan base-package="com.lezo.iscript.service.crawler.dao"/> 
-		<context:component-scan base-package="com.lezo.iscript.service.crawler.service"/> -->
-	<context:component-scan base-package="com.lezo.idober.config" />
-	<context:component-scan base-package="com.lezo.idober.service" />
-	<context:component-scan base-package="com.lezo.idober.session" />
-
 	<!-- 完成请求和注解POJO的映射 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
@@ -43,7 +46,22 @@
 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
 
-	<mvc:resources location="/assets/**" mapping="/assets/" />
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/assets/**" />
+			<mvc:mapping path="/img/**" />
+			<bean id="webContentInterceptor"
+				class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+				<property name="cacheSeconds" value="864000" />
+				<property name="useExpiresHeader" value="true" />
+				<property name="useCacheControlHeader" value="true" />
+				<property name="useCacheControlNoStore" value="true" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<mvc:resources location="/assets/**" mapping="/assets/" >
+	</mvc:resources>
 	<mvc:default-servlet-handler />
 
 	<!-- 针对freemarker的视图配置 -->
@@ -70,6 +88,7 @@
 				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
 				<prop key="classic_compatible">true</prop>
 				<prop key="template_exception_handler">ignore</prop>
+				<prop key="auto_flush">false</prop>
 			</props>
 		</property>
 		<property name="freemarkerVariables">
@@ -111,5 +130,4 @@
 		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
 		<property name="defaultErrorView" value="errors/error"></property>
 	</bean>
-
 </beans>  

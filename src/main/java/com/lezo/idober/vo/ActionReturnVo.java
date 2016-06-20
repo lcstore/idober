@@ -2,6 +2,10 @@ package com.lezo.idober.vo;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.map.annotate.JsonView;
+
+import com.lezo.idober.view.ReturnView;
+
 /**
  * @author lezo
  * @email lcstore@126.com
@@ -14,8 +18,11 @@ public class ActionReturnVo implements Serializable {
     public static final Integer CODE_PARAM = 400;
     public static final Integer CODE_FAIL = 500;
 
+    @JsonView(ReturnView.StatusCode.class)
     private int code = CODE_OK;
+    @JsonView(ReturnView.StatusCode.class)
     private String msg = MSG_OK;
+    @JsonView(ReturnView.StatusCodeWithData.class)
     private Serializable data;
 
     public int getCode() {

@@ -12,19 +12,15 @@
      http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
      ">
 	<!-- <util:properties id="settings" location="classpath:tasker.properties"></util:properties> -->
-	<context:property-placeholder location="classpath:jdbc.properties"
-		ignore-unresolvable="true" />
-	<context:property-placeholder location="classpath:idober.properties"
-		ignore-unresolvable="true" system-properties-mode="OVERRIDE"/>
+	<context:property-placeholder location="classpath*:idober.properties"
+		ignore-unresolvable="true" system-properties-mode="OVERRIDE" />
 
 	<!-- 数据库访问参数配置 -->
-	<!-- <import resource="classpath:spring/spring-config-jdbc.xml" /> -->
 	<import resource="classpath:spring/spring-context-init.xml" />
-
-
-	<import resource="classpath:spring/spring-bean-timer.xml" />
-	<import resource="classpath:spring/spring-config-mvc.xml" />
-	<import resource="classpath:spring/spring-bean-security.xml" />
 	<import resource="classpath:spring/spring-bean-idober.xml" />
-	
+
+	<context:component-scan base-package="com.lezo.idober.config" />
+	<context:component-scan base-package="com.lezo.idober.service" />
+	<context:component-scan base-package="com.lezo.idober.session" />
+
 </beans>  

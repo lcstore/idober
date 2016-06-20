@@ -1,10 +1,8 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security.xsd">
-
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+		
 	<authentication-manager>
 		<authentication-provider>
 			<user-service>
@@ -16,13 +14,13 @@
 	<beans:bean id="http403EntryPoint"
 		class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint">
 	</beans:bean>
-	<http pattern="/assets/**" security="none" />
-    <!-- 	
-     <http use-expressions="true" auto-config="false" entry-point-ref="http403EntryPoint">
-		<intercept-url pattern="/comment/**" access="hasRole('ROLE_USER')" />
-		<http-basic />
-	</http> 
-	-->
+	<http pattern="/assets/**" security="none">
+	</http>
+	<http pattern="/img/**" security="none">
+	</http>
+	<!-- <http use-expressions="true" auto-config="false" entry-point-ref="http403EntryPoint"> 
+		<intercept-url pattern="/comment/**" access="hasRole('ROLE_USER')" /> <http-basic 
+		/> </http> -->
 	<http use-expressions="false" auto-config="false" entry-point-ref="http403EntryPoint">
 		<intercept-url pattern="/comment/**" access="ROLE_USER" />
 		<http-basic />
