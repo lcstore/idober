@@ -17,8 +17,8 @@ public class TimerTest extends BaseTest {
     public void testTimer() {
         AppConfig appConfig = SpringBeanUtils.getBean(AppConfig.class);
         appConfig.setEnvName("dev");
-        // fillTorrent2MovieTimer.run();
-        fillOldId2MovieTimer.run();
+        fillTorrent2MovieTimer.run();
+        // fillOldId2MovieTimer.run();
     }
 
 }

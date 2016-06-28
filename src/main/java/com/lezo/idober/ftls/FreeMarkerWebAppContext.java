@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewRendererServlet;
 
+import com.lezo.idober.error.CustomExceptionHandlerExceptionResolver;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
 
 import freemarker.template.Configuration;
@@ -26,11 +27,17 @@ import freemarker.template.TemplateException;
 
 public class FreeMarkerWebAppContext extends WebAppContext {
     private static final String KEY_MODEL = "model";
+    private HttpServletResponse response;
+    private HttpServletRequest request;
+    private boolean includeErrorPages;
 
     public FreeMarkerWebAppContext(String contentType, HttpServletRequest request, HttpServletResponse response,
             ServletContext servletContext, ContentProcessor contentProcessor, ResponseMetaData metaData,
             boolean includeErrorPages) {
         super(contentType, request, response, servletContext, contentProcessor, metaData, includeErrorPages);
+        this.response = response;
+        this.request = request;
+        this.includeErrorPages = includeErrorPages;
     }
 
     @Override
@@ -84,5 +91,16 @@ public class FreeMarkerWebAppContext extends WebAppContext {
             dataModel.putAll(map);
         }
         return dataModel;
+    }
+
+    @Override
+    public String getPath() {
+        if (includeErrorPages) {
+            Object errHandler = this.request.getAttribute(CustomExceptionHandlerExceptionResolver.KEY_ERROR_HANDLER);
+            if (errHandler != null) {
+                return errHandler.toString();
+            }
+        }
+        return super.getPath();
     }
 }

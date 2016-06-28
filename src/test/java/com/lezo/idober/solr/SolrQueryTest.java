@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import lombok.extern.log4j.Log4j;
 
@@ -27,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Sets;
 import com.lezo.idober.solr.pojo.ItemSolr;
 import com.lezo.idober.solr.pojo.MovieSolr;
 
@@ -92,9 +94,9 @@ public class SolrQueryTest {
     @Test
     public void testQueryId() throws Exception {
         SolrQuery solrQuery = new SolrQuery();
-        solrQuery.set("q", "id:01413794354");
-        // solrQuery.setFields("id");
-        StringBuilder sb = new StringBuilder();
+        solrQuery.set("q", "*:*");
+        solrQuery.setFields("name");
+        Set<String> lineSet = Sets.newHashSet();
         solrQuery.setStart(0);
         solrQuery.setRows(500);
         while (true) {
@@ -102,25 +104,18 @@ public class SolrQueryTest {
             // QueryResponse resp = request.process(server);
             QueryResponse response = server.query(solrQuery);
             for (SolrDocument rs : response.getResults()) {
-                System.err.println(rs.toString());
-                System.err.println(rs.getFieldValue("release"));
-                String idString = rs.getFieldValue("id").toString();
-                idString = idString.split(";")[1];
-                if (sb.length() > 0) {
-                    sb.append(",");
-                }
-                sb.append(idString);
+                String sName = rs.getFieldValue("name").toString();
+                System.err.println(sName);
+                lineSet.add(sName);
             }
-            sb.append("\n");
             if (response.getResults().size() < solrQuery.getRows()) {
                 break;
             }
             solrQuery.setStart(solrQuery.getStart() + solrQuery.getRows());
         }
 
-        System.err.println(sb);
         File file = new File("./test.txt");
-        FileUtils.writeStringToFile(file, sb.toString());
+        FileUtils.writeLines(file, lineSet);
         // System.err.println(JSON.toJSONString(response.getResults()));
         // List<ItemSolr> itemList = response.getBeans(ItemSolr.class);
         // System.err.println(JSON.toJSONString(itemList));

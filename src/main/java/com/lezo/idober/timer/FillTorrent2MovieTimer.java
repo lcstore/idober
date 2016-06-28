@@ -50,7 +50,7 @@ public class FillTorrent2MovieTimer implements Runnable {
         ArrayList<String> typeList = Lists.newArrayList();
         typeList.add("bttiantang-movie-torrent");
         typeList.add("xiamp4-movie-torrent");
-        typeList.add("xiamp4-movie-torrent");
+        typeList.add("dy2018-movie-torrent");
         StringBuilder sb = new StringBuilder();
         sb.append("type:(");
         for (int i = 0, len = typeList.size(); i < len; i++) {
@@ -197,8 +197,8 @@ public class FillTorrent2MovieTimer implements Runnable {
             if (srcArray != null) {
                 // TODO: 2.匹配数据合并
                 for (int index = 0, len = srcArray.size(); index < len; index++) {
-                    JSONObject srcObj = srcArray.getJSONObject(index);
-                    tArray.add(srcObj.toJSONString());
+                    Object srcObj = srcArray.get(index);
+                    tArray.add(srcObj.toString());
                 }
             }
 
@@ -233,7 +233,7 @@ public class FillTorrent2MovieTimer implements Runnable {
         if (StringUtils.isBlank(actors)) {
             return bSame;
         }
-        Collection<Object> actorList = mDoc.getFieldValues("actors");
+        Collection<Object> actorList = doc.getFieldValues("actors");
         if (CollectionUtils.isEmpty(actorList)) {
             return bSame;
         }
@@ -368,6 +368,7 @@ public class FillTorrent2MovieTimer implements Runnable {
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
         solrQuery.set("q", "tcount:0");
+        // solrQuery.set("q", "id:1094876573");
         QueryResponse resp = movieServer.query(solrQuery);
         return resp.getResults();
     }

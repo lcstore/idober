@@ -24,13 +24,13 @@ public class FreeMarkerSiteMeshFilter extends ConfigurableSiteMeshFilter {
     protected Filter setup() throws ServletException {
         ObjectFactory objectFactory = getObjectFactory();
         CustomSiteMeshFilterBuilder builder = new CustomSiteMeshFilterBuilder();
-
         new PropertiesFilterConfigurator(objectFactory, configProperties)
                 .configureFilter(builder);
 
         new XmlFilterConfigurator(getObjectFactory(),
                 loadConfigXml(filterConfig, getConfigFileName()))
                 .configureFilter(builder);
+        builder.setIncludeErrorPages(true);
 
         applyCustomConfiguration(builder);
 

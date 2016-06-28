@@ -19,7 +19,6 @@
 
 	<script src="${static_host}/assets/js/jquery-1.11.3.min.js?v=${version}"></script>
 	<script src="${static_host}/assets/js/custom/common-tools.js?v=${version}"></script>
-	<script src="${static_host}/assets/js/custom/analysis-tools.js?v=${version}"></script>
 </head>
 
 <body class="home">
@@ -27,6 +26,5 @@
     <sitemesh:write property='body'/>
     
 	<script src="${static_host}/assets/js/bootstrap-3.2.0.min.js?v=${version}"></script>
-	<script src="${static_host}/assets/js/custom/union-tools.js?v=${version}"></script>
 </body>
 </html>

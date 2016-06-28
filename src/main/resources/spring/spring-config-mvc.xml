@@ -46,7 +46,7 @@
 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
 
-	
+
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/assets/**" />
@@ -60,7 +60,7 @@
 			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-	<mvc:resources location="/assets/**" mapping="/assets/" >
+	<mvc:resources location="/assets/**" mapping="/assets/">
 	</mvc:resources>
 	<mvc:default-servlet-handler />
 
@@ -112,8 +112,9 @@
 		</property>
 	</bean>
 
+	<bean class="com.lezo.idober.error.CustomExceptionHandlerExceptionResolver" />
 
-	<bean
+<!-- 	<bean
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="exceptionMappings">
 			<props>
@@ -122,12 +123,12 @@
 		</property>
 		<property name="statusCodes">
 			<props>
-				<prop key="errors/error">404</prop>
+				<prop key="errors/error">500</prop>
 			</props>
 		</property>
-		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+		设置日志输出级别，不定义则默认不输出警告等错误日志信息
 		<property name="warnLogCategory" value="WARN"></property>
-		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+		默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置
 		<property name="defaultErrorView" value="errors/error"></property>
-	</bean>
+	</bean> -->
 </beans>  

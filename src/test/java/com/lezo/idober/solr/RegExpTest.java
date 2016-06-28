@@ -20,4 +20,16 @@ public class RegExpTest {
         }
         System.err.println("new:" + sName);
     }
+
+    @Test
+    public void testNum() {
+        String itemCode = "12323abd";
+        Pattern NUM_REG = Pattern.compile("^[0-9]+$");
+        Matcher matcher = NUM_REG.matcher(itemCode);
+        if (matcher.find()) {
+            System.err.println(itemCode + " is number");
+        } else {
+            System.err.println(itemCode + " is not a number");
+        }
+    }
 }

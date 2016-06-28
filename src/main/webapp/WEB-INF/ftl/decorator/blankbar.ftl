@@ -11,8 +11,9 @@
 	$(document).ready(function() {
 		var height = $("#top-navbar").height();
 		var blank = 40;
-		var margin = height+blank;
-       $(".blankbar").css("margin-top",margin);
+		var bHeight = height+blank;
+		console.log('bHeight:'+bHeight)
+       $(".blankbar").css("height",bHeight);
 	});
 	</script>
 </body>

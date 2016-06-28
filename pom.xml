@@ -197,8 +197,7 @@
 				<configuration>
 					<stopKey>stop</stopKey>
 					<stopPort>9999</stopPort>
-					<scanIntervalSeconds>1</scanIntervalSeconds>
-					<contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
+					<!-- <scanIntervalSeconds>1</scanIntervalSeconds> -->
 					<webApp>
 						<contextPath>/</contextPath>
 					</webApp>

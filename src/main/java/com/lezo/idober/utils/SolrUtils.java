@@ -1,5 +1,6 @@
 package com.lezo.idober.utils;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrException.ErrorCode;
 import org.apache.solr.core.CoreContainer;
 
+import com.google.common.collect.Sets;
 import com.lezo.idober.config.AppConfig;
 import com.lezo.iscript.spring.context.SpringBeanUtils;
 
@@ -79,5 +81,17 @@ public class SolrUtils {
             sb.append(fld.getName());
         }
         return sb.toString();
+    }
+
+    public static Set<String> getSolrFieldSet(Class<?> solrClass) {
+        Set<String> fieldSet = Sets.newHashSet();
+        for (java.lang.reflect.Field fld : solrClass.getDeclaredFields()) {
+            Field annField = fld.getAnnotation(Field.class);
+            if (annField == null) {
+                continue;
+            }
+            fieldSet.add(fld.getName());
+        }
+        return fieldSet;
     }
 }
