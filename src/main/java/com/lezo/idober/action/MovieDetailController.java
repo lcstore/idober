@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.AESCodecUtils;
+import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.movie.MovieVo;
 
@@ -31,7 +32,7 @@ public class MovieDetailController extends BaseController {
     @RequestMapping(value = "{itemCode}", method = RequestMethod.GET)
     public String getItem(@PathVariable String itemCode, ModelMap model) throws Exception {
         // String idString = AESCodecUtils.decrypt(itemCode);
-        itemCode = Jsoup.clean(itemCode, Whitelist.basic());
+        itemCode = ParamUtils.xssClean(itemCode);
         Pattern oReg = Pattern.compile("[a-zA-Z]+");
         Matcher matcher = oReg.matcher(itemCode);
         List<MovieSolr> mSolrs = null;

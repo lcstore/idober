@@ -4,11 +4,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-	<bean id="FillTorrent2MovieTimer" class="com.lezo.idober.timer.FillTorrent2MovieTimer">
-	</bean>
-	<bean id="FillOldId2MovieTimer" class="com.lezo.idober.timer.FillOldId2MovieTimer">
-	</bean>
-
+	<bean id="FillTorrent2MovieTimer" class="com.lezo.idober.timer.FillTorrent2MovieTimer" />
+	<bean id="FillOldId2MovieTimer" class="com.lezo.idober.timer.FillOldId2MovieTimer" />
+	<bean id="UnifyRegionTimer" class="com.lezo.idober.timer.UnifyRegionTimer" />
 
 	<!-- Enables the Spring Task @Scheduled programming model -->
 	<task:executor id="executor" pool-size="3" />

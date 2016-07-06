@@ -9,7 +9,7 @@
     
     
     <!-- start footer -->
-	<footer id="footer" class="top-space navbar navbar-fixed-bottom">
+	<footer id="footer" class="top-space">
 
 		<div class="footer1">
 			<div class="container">

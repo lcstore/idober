@@ -1,0 +1,229 @@
+AF	阿富汗	Afghanistan
+AX	奥兰群岛	Aland Islands 
+AL	阿尔巴尼亚	Albania 
+DZ	阿尔及利亚	Algeria 
+AS	美属萨摩亚	American Samoa 
+AD	安道尔	Andorra
+AO	安哥拉	Angola
+AI	安圭拉	Anguilla
+AG	安提瓜和巴布达	Antigua and Barbuda
+AR	阿根廷	Argentina
+AM	亚美尼亚	Armenia
+AW	阿鲁巴	Aruba
+AU	澳大利亚	Australia
+AT	奥地利	Austria
+AZ	阿塞拜疆	Azerbaijan
+BD	孟加拉	Bangladesh
+BH	巴林	Bahrain
+BS	巴哈马	Bahamas
+BB	巴巴多斯	Barbados
+BY	白俄罗斯	Belarus
+BE	比利时	Belgium
+BZ	伯利兹	Belize
+BJ	贝宁	Benin
+BM	百慕大	Bermuda
+BT	不丹	Bhutan
+BO	玻利维亚	Bolivia
+BA	波斯尼亚和黑塞哥维那	Bosnia and Herzegovina
+BW	博茨瓦纳	Botswana
+BV	布维岛	Bouvet Island 
+BR	巴西	Brazil
+BN	文莱	Brunei
+BG	保加利亚	Bulgaria
+BF	布基纳法索	Burkina Faso
+BI	布隆迪	Burundi 
+KH	柬埔寨	Cambodia
+CM	喀麦隆	Cameroon
+CA	加拿大	Canada
+CV	佛得角	Cape Verde
+CF	中非	Central African Republic
+TD	乍得	Chad
+CL	智利	Chile
+CX	圣诞岛	Christmas Islands 
+CC	科科斯（基林）群岛	Cocos (keeling) Islands 
+CO	哥伦比亚	Colombia
+KM	科摩罗	Comoros
+CD	刚果（金）	Congo (Congo-Kinshasa)
+CG	刚果	Congo
+CK	库克群岛	Cook Islands 
+CR	哥斯达黎加	Costa Rica
+CI	科特迪瓦	Cote D'Ivoire
+CN	中国	China
+HR	克罗地亚	Croatia
+CU	古巴	Cuba 
+CZ	捷克	Czech
+CY	塞浦路斯	Cyprus
+DK	丹麦	Denmark
+DJ	吉布提	Djibouti
+DM	多米尼加	Dominica
+　　	东帝汶	East Timor
+EC	厄瓜多尔	Ecuador
+EG	埃及	Egypt
+GQ	赤道几内亚	Equatorial Guinea
+ER	厄立特里亚	Eritrea
+EE	爱沙尼亚	Estonia
+ET	埃塞俄比亚	Ethiopia
+FO	法罗群岛	Faroe Islands 
+FJ	斐济	Fiji
+FI	芬兰	Finland
+FR	法国	France
+GF	法属圭亚那	Franch Guiana
+PF	法属波利尼西亚	French Polynesia
+GA	加蓬	Gabon
+GM	冈比亚	Gambia
+GE	格鲁吉亚	Georgia
+DE	德国	Germany
+GH	加纳	Ghana
+GI	直布罗陀	Gibraltar
+GR	希腊	Greece
+GD	格林纳达	Grenada
+GP	瓜德罗普岛	Guadeloupe
+GU	关岛	Guam
+GT	危地马拉	Guatemala
+GG	根西岛	Guernsey
+GW	几内亚比绍	Guinea-Bissau
+GN	几内亚	Guinea
+GY	圭亚那	Guyana
+HK	香港 （中国）	Hong Kong
+HT	海地	Haiti
+HN	洪都拉斯	Honduras
+HU	匈牙利	Hungary
+IS	冰岛	Iceland
+IN	印度	India
+ID	印度尼西亚	Indonesia
+IR	伊朗	Iran
+IQ	伊拉克	Iraq
+IE	爱尔兰	Ireland
+IM	马恩岛	Isle of Man 
+IL	以色列	Israel
+IT	意大利	Italy
+JM	牙买加	Jamaica
+JP	日本	Japan
+JE	泽西岛	Jersey
+JO	约旦	Jordan
+KZ	哈萨克斯坦	Kazakstan 
+KE	肯尼亚	Kenya
+KI	基里巴斯	Kiribati
+KR	韩国	Korea (South)
+KD	朝鲜	Korea (North)
+KW	科威特	Kuwait
+KG	吉尔吉斯斯坦	Kyrgyzstan
+LO	老挝	Laos
+LV	拉脱维亚	Latvia
+LB	黎巴嫩	Lebanon
+LS	莱索托	Lesotho
+LR	利比里亚	Liberia
+LY	利比亚	Libya
+LI	列支敦士登	Liechtenstein
+LT	立陶宛	Lithuania
+LU	卢森堡	Luxembourg
+MO	澳门（中国）	Macau
+MK	马其顿	Macedonia
+MW	马拉维	Malawi
+MY	马来西亚	Malaysia
+MG	马达加斯加	Madagascar
+MV	马尔代夫	Maldives
+ML	马里	Mali
+MT	马耳他	Malta
+MH	马绍尔群岛	Marshall Islands
+MQ	马提尼克岛	Martinique
+MR	毛里塔尼亚	Mauritania
+MU	毛里求斯	Mauritius
+YT	马约特	Mayotte
+MX	墨西哥	Mexico
+MF	密克罗尼西亚	Micronesia
+MD	摩尔多瓦	Moldova
+MC	摩纳哥	Monaco
+MN	蒙古	Mongolia
+ME	黑山	Montenegro
+MS	蒙特塞拉特	Montserrat
+MA	摩洛哥	Morocco
+MZ	莫桑比克	Mozambique
+MM	缅甸	Myanmar
+NA	纳米比亚	Namibia
+NR	瑙鲁	Nauru
+NP	尼泊尔	Nepal
+NL	荷兰	Netherlands
+NC	新喀里多尼亚	New Caledonia 
+NZ	新西兰	New Zealand
+NI	尼加拉瓜	Nicaragua
+NE	尼日尔	Niger
+NG	尼日利亚	Nigeria
+NU	纽埃	Niue
+NF	诺福克岛	Norfolk Island 
+NO	挪威	Norway
+OM	阿曼	Oman
+PK	巴基斯坦	Pakistan
+PW	帕劳	Palau
+PS	巴勒斯坦	Palestine
+PA	巴拿马	Panama
+PG	巴布亚新几内亚	Papua New Guinea
+PY	巴拉圭	Paraguay
+PE	秘鲁	Peru
+PH	菲律宾	Philippines
+PN	皮特凯恩群岛	Pitcairn Islands 
+PL	波兰	Poland
+PT	葡萄牙	Portugal
+PR	波多黎各	Puerto Rico
+QA	卡塔尔	Qatar
+RE	留尼汪岛	Reunion
+RO	罗马尼亚	Romania
+RW	卢旺达	Rwanda
+RU	俄罗斯联邦	Russian Federation
+SH	圣赫勒拿	Saint Helena 
+KN	圣基茨和尼维斯	Saint Kitts-Nevis
+LC	圣卢西亚	Saint Lucia
+VG	圣文森特和格林纳丁斯	Saint Vincent and the Grenadines 
+SV	萨尔瓦多	El Salvador
+WS	萨摩亚	Samoa
+SM	圣马力诺	San Marino
+ST	圣多美和普林西比	Sao Tome and Principe
+SA	沙特阿拉伯	Saudi Arabia
+SN	塞内加尔	Senegal
+SC	塞舌尔	Seychelles
+SL	塞拉利昂	Sierra Leone
+SG	新加坡	Singapore
+RS	塞尔维亚	Serbia
+SK	斯洛伐克	Slovakia
+SI	斯洛文尼亚	Slovenia
+SB	所罗门群岛	Solomon Islands
+SO	索马里	Somalia
+ZA	南非	South Africa
+ES	西班牙	Spain
+LK	斯里兰卡	Sri Lanka
+SD	苏丹	Sudan
+SR	苏里南	Suriname
+SZ	斯威士兰	Swaziland
+SE	瑞典	Sweden
+CH	瑞士	Switzerland
+SY	叙利亚	Syria
+TJ	塔吉克斯坦	Tajikistan
+TZ	坦桑尼亚	Tanzania
+TW	台湾 （中国）	Taiwan
+TH	泰国	Thailand
+TT	特立尼达和多巴哥	Trinidad and Tobago
+TL	东帝汶	Timor-Leste
+TG	多哥	Togo
+TK	托克劳	Tokelau
+TO	汤加	Tonga
+TN	突尼斯	Tunisia
+TR	土耳其	Turkey
+TM	土库曼斯坦	Turkmenistan
+TV	图瓦卢	Tuvalu
+UG	乌干达	Uganda
+UA	乌克兰	Ukraine
+AE	阿拉伯联合酋长国	United Arab Emirates
+UK	英国	United Kingdom
+US	美国	United States
+UY	乌拉圭	Uruguay
+UZ	乌兹别克斯坦	Uzbekistan
+VN	瓦努阿图	Vanuatu
+VA	梵蒂冈	Vatican City
+VE	委内瑞拉	Venezuela
+VN	越南	Vietnam
+WF	瓦利斯群岛和富图纳群岛	Wallis and Futuna 
+EH	西撒哈拉	Western Sahara 
+YE	也门	Yemen
+YU	南斯拉夫	Yugoslavia
+ZM	赞比亚	Zambia
+ZW	津巴布韦	Zimbabwe
