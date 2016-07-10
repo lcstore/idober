@@ -14,6 +14,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
 import org.apache.solr.client.solrj.request.ContentStreamUpdateRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -61,10 +62,12 @@ public class UnifyRegionTimer implements Runnable {
 				} catch (Exception e) {
 					log.warn("", e);
 				}
+				log.warn("offset:" + offset + ",limit:" + limit);
 				if (selectDocs == null) {
 					break;
 				}
 				try {
+					// removeRegions(selectDocs, movieServer);
 					unifyRegions(metaServer, movieServer, selectDocs);
 				} catch (Exception e) {
 					log.warn("", e);
@@ -72,7 +75,7 @@ public class UnifyRegionTimer implements Runnable {
 				if (selectDocs.size() < limit) {
 					break;
 				}
-				offset += limit;
+				// offset += limit;
 				total += limit;
 			}
 		} catch (Exception e) {
@@ -105,24 +108,28 @@ public class UnifyRegionTimer implements Runnable {
 			if (CollectionUtils.isEmpty(regionList)) {
 				JSONObject regionObject = new JSONObject();
 				regionObject.put("set", Lists.newArrayList());
-				dObject.put("_ex_region_txts", regionObject);
+				dObject.put("_ex_regions_ss", regionObject);
 				tArray.add(dObject);
 			} else {
 				try {
 					Set<String> regionSet = convertRegions(regionList);
 					SolrDocumentList synonymDocs = querySynonymDocs(regionSet, metaServer);
-					List<String> uRegions = Lists.newArrayList();
+					Set<String> uRegions = Sets.newLinkedHashSet();
 					if (synonymDocs != null) {
 						for (SolrDocument sDoc : synonymDocs) {
 							String sRegion = sDoc.getFieldValue("title").toString();
+							String sGroup = queryRegionGroup(sRegion, metaServer);
 							uRegions.add(sRegion);
+							if (StringUtils.isNotBlank(sGroup)) {
+								uRegions.add(sGroup.trim());
+							}
 						}
 					} else {
 						System.err.println("emptyRegions:" + ArrayUtils.toString(regionList));
 					}
 					JSONObject regionObject = new JSONObject();
 					regionObject.put("set", uRegions);
-					dObject.put("_ex_region_txts", regionObject);
+					dObject.put("_ex_regions_ss", regionObject);
 					tArray.add(dObject);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -144,6 +151,26 @@ public class UnifyRegionTimer implements Runnable {
 		request.setAction(AbstractUpdateRequest.ACTION.COMMIT, true, true);
 		NamedList<Object> resp = movieServer.request(request);
 		log.info("resp:" + resp.size() + ",update:" + tArray.size());
+	}
+
+	private String queryRegionGroup(String sRegion, SolrServer metaServer) {
+		sRegion = ClientUtils.escapeQueryChars(sRegion);
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(1);
+		solrQuery.addField("title");
+		solrQuery.set("q", "(type:idober-group-region AND group_ss:" + sRegion + ")");
+		try {
+			QueryResponse resp = metaServer.query(solrQuery);
+			SolrDocumentList docList = resp.getResults();
+			if (CollectionUtils.isNotEmpty(docList)) {
+				return docList.get(0).getFieldValue("title").toString();
+			}
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private SolrDocumentList querySynonymDocs(Set<String> regionSet, SolrServer metaServer) throws Exception {
@@ -175,6 +202,7 @@ public class UnifyRegionTimer implements Runnable {
 		Set<String> regionSet = Sets.newHashSet();
 		for (String region : regions) {
 			region = region.replaceAll("\\.", "");
+			region = region.replaceAll("[()（）]", "");
 			Matcher matcher = cnReg.matcher(region);
 			int index = 0;
 			if (matcher.find()) {
@@ -211,7 +239,8 @@ public class UnifyRegionTimer implements Runnable {
 		solrQuery.setStart(offset);
 		solrQuery.setRows(limit);
 		solrQuery.addField("id,regions");
-		solrQuery.set("q", "-_ex_region_txts:*");
+		solrQuery.set("q", "-_ex_regions_ss:*");
+		// solrQuery.set("q", "_ex_regions_ss:*");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();
 	}

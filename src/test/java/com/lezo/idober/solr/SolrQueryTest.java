@@ -51,7 +51,7 @@ public class SolrQueryTest {
 
 	@Before
 	public void setup() throws Exception {
-		server = new HttpSolrServer("http://www.lezomao.com/cmeta");
+		server = new HttpSolrServer("http://www.lezomao.com/cmovie");
 		// server = new HttpSolrServer("http://localhost:8081/core2");
 		System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
 		// CoreContainer.Initializer initializer = new
@@ -106,9 +106,22 @@ public class SolrQueryTest {
 
 	@Test
 	public void testQueryId() throws Exception {
+		String sRegions = "巴林,埃及,伊朗,伊拉克,以色列,约旦,科威特,黎巴嫩,阿曼,卡塔尔,沙特,叙利亚,阿联酋,也门,巴勒斯坦,阿尔及利亚,利比亚,摩洛哥,突尼斯,苏丹,毛里塔尼亚,索马里,土耳其,塞浦路斯,阿富汗";
+		StringBuilder sb = new StringBuilder();
+		String sHead = "(";
+		String[] regionArr = sRegions.split(",");
+		sb.append(sHead);
+		for (String region : regionArr) {
+			if (sb.length() > sHead.length()) {
+				sb.append(" OR ");
+			}
+			sb.append("regions:" + region);
+		}
+		sb.append(")");
+
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.set("q", "*:*");
-		solrQuery.setFields("id,regions");
+		solrQuery.set("q", sb.toString());
+		solrQuery.setFields("id,regions,code_s");
 		Set<String> lineSet = Sets.newHashSet();
 		solrQuery.setStart(0);
 		solrQuery.setRows(500);
@@ -118,13 +131,14 @@ public class SolrQueryTest {
 			// QueryResponse resp = request.process(server);
 			QueryResponse response = server.query(solrQuery);
 			for (SolrDocument rs : response.getResults()) {
-				// String sName = rs.getFieldValue("code_s").toString();
-				List<String> valList = (List<String>) rs.getFieldValue("regions");
-				if (valList == null) {
-					System.err.println("id:" + rs.getFieldValue("id"));
-					continue;
-				}
-				genreSet.addAll(valList);
+				String sName = rs.getFieldValue("code_s").toString();
+				// List<String> valList = (List<String>)
+				// rs.getFieldValue("regions");
+				// if (valList == null) {
+				// System.err.println("id:" + rs.getFieldValue("id"));
+				// continue;
+				// }
+				genreSet.add(sName);
 				// System.err.println(ArrayUtils.toString(valList));
 				// System.err.println(sName);
 				// lineSet.add(sName);
@@ -135,7 +149,7 @@ public class SolrQueryTest {
 			solrQuery.setStart(solrQuery.getStart() + solrQuery.getRows());
 		}
 
-		File file = new File("./test.txt");
+		File file = new File("./regionid.txt");
 		// FileUtils.writeLines(file, lineSet);
 		System.err.println("genreSet:" + ArrayUtils.toString(genreSet));
 		// System.err.println(JSON.toJSONString(response.getResults()));
@@ -147,8 +161,11 @@ public class SolrQueryTest {
 	@Test
 	public void testSolrDelete() throws Exception {
 		String title = ClientUtils.escapeQueryChars("2015;李恩熙;纯情");
-		server.deleteByQuery("type:idober-synonym-country");
-		server.commit();
+		String sCode = "3087983,1416965,4022892,25878938,5163613,11587751,4935237,2080758,5152338,5152988,6970903,5197275,26735048,3356169,5217689,4913451,26304922,25814818,5224418,3443074,4859587,4827916,2143726,4827913,2382175,5198271,11504662,26351686,5161148,20514906,4817865,26304917,3734999,26304914,10747823,4913460,5124254,4057629,5257263,2980501,4827943,25904959,5141916,10432794,1949469,5239615,5964718,26665961,25750656,2079017,1467555,1307921,5230691,26357312,5181236,3660045,5201828,5161620,5156238,3707151,24869795,3112475,1303021,4108145,5195406,2995839,26318927,10773181,25859779,26372275,6772835,20506209,3196851,19967915,2295922,1470926,25753130,3794542,24153417,1786231,5155175,1306497,2004813,1307745,25709180,10756792,7162413,5221598,5225286,26602798,6432898,5122285,6890858,4827558,24869225,2144590,25940440,26631680,26612848,5201582,6876023,10600932,5911867,24845500,26757916,4911828,10543898,26416888,4913490,25938111,26184634,2124561,6025778,26368192,2974293,4319783,1295091,2020284,10811424,4312247,4328236,25871022,4857694,21335050,1306477,11607763,3541413,1808463,25883576,1420238,6877676,26599709,4911818,1889989,5140881,26711394,5139272,5223481,26368183,25736564,24297947,3557197,25705576,1962964,26389659,1793200,25734187,25858719,21770915,4848063,10744774,1785455,2020160,6027617,1902055,4122062,26035476,1303521,2020165,3069316,6067653,1950306,20644921,21327486,26582034,5208957,5221971,3749967,25817161,26376758,2020096,1429096,5201578,2333119,11639504,25690094,5220460,11639506,5224855,3912039,1471781,1301897,1466326,1307600,6793179,5150850,1305776,5211226,1915202,26779882,26304167,5218218,3875178,26771664,25932513,2020398,26594129,1957771,2370838,5226172,5224889,5159005,25790682,6797486,24717053,5106228,3292168,3013955,1825608,5199180,6872436,2173101,7015794,1766028,25844183,6396687,6749688,1484556,1302347,2242100,1940634,26411846,10567535,26611769,26353888,2138310,4792515,26789744,3269038,3821371,4823915,3113365,1785214,4061433,10831689,25837560,26445304,5951578,3707608,26201173,1481864,1940748,26789736,5050899,2370859,25806102,3615909,4194574,3930017,26591554,1302620,6506835,6801433,4889773,5130905,2150178,26369869,5181710,26353868,2140783,26611091,21661465,1419941,4305055,4118863,1300817,2066486,1867787,2228536,6508107,3072172,4911831,26756851,25824555,11528255,11591774,3210585,26674009,1296231,3750799,3278841,2020100,5240088,5229131,11504579,5186817,5191487,5141499,26281011,10543625,26787751,1807679,3750569,4824344,1498628,5904313,2139026,1400935,25881908,1432730,1957872,26473829,3146077,1300827,3244595,5139885,5186567,5150747,6029589,3212310,25822579,4830249,6958861,25795900,5153319,1304962,1305467,4822433,5134014,3346890,4933242,25934403,3188244,25876710,5166339,1308024,1308309,26148503,1971113,1907993,10558851,1303471,6058999,2129988,4822427,6829378,25934423,25738507,2129985,6798130,6815114,3170678,2138467,4000427,26679552,5139463,3733989,5180121,26550248,5179617,3892798,3026808,26594137,2020413,5232574,2038162,20451324,25796203,2035663,4120082,3443538,4841877,25934435,11526116,5225026,1306976,1308625,21660933,2020140,6224545,3445575,6878229,3818021,5224996,26591645,2080294,1850000";
+		for (String code : sCode.split(",")) {
+			server.deleteByQuery("code_s:" + code);
+			server.commit();
+		}
 		server.optimize();
 	}
 
@@ -174,23 +191,34 @@ public class SolrQueryTest {
 
 	@Test
 	public void testKvCommit() throws Exception {
-		String type = "idober-kv-genres";
-		String srcString = "歌舞, 恐怖, 短片,武侠, 喜剧, 奇幻, 荒诞, 儿童, 剧情, 战争, 舞台艺术, 犯罪, 脱口秀, 动作, 冒险, 音乐, 动画, 记录, 古装, 纪录片,鬼怪, 情色, 成人, 悬疑, 真人秀, 灾难,家庭, 科幻, 运动, 纪录片, 戏曲, 历史, 传记,同性, 爱情,惊悚";
-		String[] srcArr = srcString.split(",");
-		Set<String> gSet = Sets.newHashSet(srcArr);
+		String type = "idober-group-region";
+		List<String> lines = FileUtils.readLines(new File("src/test/resources/region.txt"), "UTF-8");
+		String splitor = ",";
 		JSONArray tArray = new JSONArray();
-		for (String cnGenre : gSet) {
-			cnGenre = cnGenre.trim();
-			String pyGenre = PinyinHelper.convertToPinyinString(cnGenre, "", PinyinFormat.WITHOUT_TONE);
+		for (String line : lines) {
+			line = line.trim();
+			String[] mainArr = line.split("=");
+			String regionName = mainArr[0].trim();
+			String[] countryArr = mainArr[1].split(splitor);
 			JSONObject dObject = new JSONObject();
 			dObject.put("type", type);
-			dObject.put("cn_s", cnGenre);
-			dObject.put("py_s", pyGenre);
-			dObject.put("id", type + ";" + dObject.getString("py_s"));
+			dObject.put("title", regionName);
+			String sCode = PinyinHelper.convertToPinyinString(regionName, "", PinyinFormat.WITHOUT_TONE);
+			dObject.put("short_s", sCode);
+			Set<String> synSet = Sets.newHashSet();
+			for (String country : countryArr) {
+				synSet.add(country);
+			}
+			dObject.put("group_ss", synSet);
+			dObject.put("id", type + ";" + regionName);
 			tArray.add(dObject);
-
 		}
-		String rawData = tArray.toJSONString();
+		String sContent = tArray.toJSONString();
+		System.err.println(sContent);
+		doCommit(sContent);
+	}
+
+	public void doCommit(String rawData) {
 		System.err.println(rawData);
 		String url = "http://localhost:8081/cmeta/update/json?commit=true";
 		url = "http://www.lezomao.com/cmeta/update/json?commit=true";
@@ -228,9 +256,9 @@ public class SolrQueryTest {
 			}
 			sCnName = sCnName.replace("（中国）", "");
 			System.err.println("sCode:" + sCode + ",sCnName:" + sCnName + ",sEnName:" + sEnName);
-			sCode = sCode.trim();
-			sEnName = sEnName.trim();
-			sCnName = sCnName.trim();
+			sCode = sCode.trim().toLowerCase();
+			sEnName = sEnName.trim().toLowerCase();
+			sCnName = sCnName.trim().toLowerCase();
 			JSONObject dObject = new JSONObject();
 			dObject.put("type", type);
 			dObject.put("title", sCnName);
@@ -239,10 +267,22 @@ public class SolrQueryTest {
 			synSet.add(sCode);
 			synSet.add(sCnName);
 			synSet.add(sEnName);
-			if (sCode.equals("US")) {
-				synSet.add("USA");
-			} else if (sCode.equals("CN")) {
+			if (sCode.equals("us")) {
+				synSet.add("usa");
+			} else if (sCode.equals("cn")) {
 				synSet.add("中国大陆");
+				synSet.add("大陆");
+			} else if (sCode.equals("ru")) {
+				synSet.add("俄罗斯");
+				synSet.add("苏联");
+				synSet.add("俄国");
+				synSet.add("russia");
+			} else if (sCode.equals("id")) {
+				synSet.add("印尼");
+			} else if (sCode.equals("au")) {
+				synSet.add("澳洲");
+			} else if (sCode.equals("hk")) {
+				synSet.add("中国香港");
 			}
 			dObject.put("synonym_ss", synSet);
 			dObject.put("id", type + ";" + sCode);

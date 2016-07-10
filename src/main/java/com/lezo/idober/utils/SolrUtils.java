@@ -110,13 +110,25 @@ public class SolrUtils {
 
 	public static SolrDocument overwriteWithEditVal(SolrDocument doc) {
 		Set<String> delSet = Sets.newHashSet();
-		for (String fieldName : doc.getFieldNames()) {
+		Set<String> fieldSet = Sets.newHashSet(doc.getFieldNames());
+		for (String fieldName : fieldSet) {
 			if (fieldName.startsWith(KEY_EDIT_PREFIX)) {
-				Object valObj = doc.getFieldValue(fieldName);
-				if (valObj != null && StringUtils.isNotBlank(valObj.toString())) {
-					String originField = fieldName.substring(KEY_EDIT_PREFIX.length());
-					doc.put(originField, valObj);
-					delSet.add(fieldName);
+				String originField = fieldName.replace(KEY_EDIT_PREFIX, "");
+				int index = originField.lastIndexOf("_");
+				originField = originField.substring(0, index);
+				boolean isOrigin = false;
+				if (fieldSet.contains(originField)) {
+					isOrigin = true;
+				} else {
+					originField += "s";
+					isOrigin = fieldSet.contains(originField);
+				}
+				if (isOrigin) {
+					Object valObj = doc.getFieldValue(fieldName);
+					if (valObj != null && StringUtils.isNotBlank(valObj.toString())) {
+						doc.put(originField, valObj);
+						delSet.add(fieldName);
+					}
 				}
 			}
 		}

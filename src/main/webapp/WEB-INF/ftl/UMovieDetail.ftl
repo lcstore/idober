@@ -4,8 +4,15 @@
 <#if (oDoc.id)?exists>
 <link rel="canonical" href="http://www.lezomao.com/movie/detail/${oDoc.id}"/>
 </#if> 
-<meta name="description" content="狸猫资讯(LezoMao.com)，${oDoc.name}(${oDoc.year})，导演：${(oDoc.directors)?replace(';', '、')}，主演：${(oDoc.actors)?replace(';', '、')}"/>
-<meta name="keywords" content="狸猫资讯、lezomao,${(oDoc.directors)?replace(';', '、')},${(oDoc.actors)?replace(';', '、')},${oDoc.name}(${oDoc.year}),${oDoc.enname},种子下载,迅雷下载,高清下载" />
+<#assign oDirectors = (oDoc.directors![])>
+<#assign oActors = (oDoc.actors![])>
+<#assign oRegions = (oDoc.regions![])>
+<#assign oGenres = (oDoc.genres![])>
+<#assign oTorrents = (oDoc.torrents![])>
+<#assign oShares = (oDoc.shares![])>
+<#assign oCrumbs = (oDoc.crumbs![])>
+<meta name="description" content="狸猫资讯(LezoMao.com)，${oDoc.name}(${oDoc.year})，导演：${oDirectors?join('、')}，主演：${oActors?join('、')}"/>
+<meta name="keywords" content="狸猫资讯、lezomao,导演：${oDirectors?join('、')}，主演：${oActors?join('、')},${oDoc.name}(${oDoc.year}),${oDoc.enname},种子下载,迅雷下载,高清下载" />
 <meta name="title" content="${oDoc.name}${oDoc.enname}(${oDoc.year}),种子下载,迅雷下载,高清下载 - 狸猫资讯(LezoMao.com)" />
 <title>${oDoc.name}${oDoc.enname}(${oDoc.year}),种子下载,迅雷下载,高清下载 - 狸猫资讯(LezoMao.com)</title>
 </head>
@@ -13,29 +20,61 @@
 	<div class="main data-box">
 		<div class="act">
 			<div class="container">
+			   <div class="breadcrumb">
+             <#list oCrumbs as oCrumb>
+                  <#assign oLinks = oCrumb />
+                  <#if (oCrumb_index==0) >
+                     <span>
+			           <#list oLinks as oLink>
+		                    <#if (oLink_index==0) >
+		                      <a href="${oLink.link}">${oLink.name}</a>
+		                     <#else>
+		                     、<a href="${oLink.link}">${oLink.name}</a>
+		                     </#if>	
+				        </#list>
+			        </span>
+                  <#elseif (!oCrumb_has_next)>
+                    <span>&nbsp;&gt;&nbsp;<strong>${oDoc.name}</strong></span>
+                  <#else>
+                    <span>&nbsp;&gt;&nbsp;
+			           <#list oLinks as oLink>
+		                    <#if (oLink_index==0) >
+		                      <a href="${oLink.link}">${oLink.name}</a>
+		                     <#else>
+		                     、<a href="${oLink.link}">${oLink.name}</a>
+		                     </#if>	
+				        </#list>
+			        </span>
+			     </#if>	
+	        </#list>
+        </div>
 				<div class="container-fluid">
 					<div class="row top-margin">
 						  <div class="col-md-3 movie-left">
-						       <img src="${oDoc.imgUrl}" class="img-thumbnail movie-img" alt="${oDoc.name}"/>
+						       <img src="${oDoc.image}" class="img-thumbnail movie-img" alt="${oDoc.name}"/>
 					      </div>
 					      <div class="col-md-9 movie-right">
 							      <ul class="list-group">
 								    <li class="list-group-item">
 										    <h1 class="movie-title-margin">
-											    <a href="${oDoc.id}" target="_blank">
-												  ${oDoc.name}
-											    </a>
+											  ${oDoc.name}
 										      <#if ((oDoc.name?length+oDoc.enname?length)<=40) > 
 										       <small>${oDoc.enname}</small>
 										      </#if>
 										      <span class="badge movie-badge">${oDoc.year}</span>
 										    </h1>
-								    <li class="list-group-item"><strong>导演：</strong>${oDoc.directors}</li>
-								    <li class="list-group-item"><strong>主演：</strong>${oDoc.actors}</li>
-								    <li class="list-group-item"><strong>地区：</strong>${oDoc.region}</li>
-								    <li class="list-group-item"><strong>类型：</strong>${oDoc.genres}</li>
-								    <li class="list-group-item"><strong>上映：</strong>${(oDoc.date?string("yyyy-MM-dd"))!''}</li>
-								    <#assign oShares = ((oDoc.shares)!"[]")?eval>
+								    <li class="list-group-item"><strong>导演：</strong>${oDirectors?join(' ')}</li>
+								    <li class="list-group-item"><strong>主演：</strong>${oActors?join(' ')}</li>
+								    <li class="list-group-item"><strong>类型：</strong>${oGenres?join(' ')}</li>
+								    <li class="list-group-item"><strong>上映：</strong>
+								        <#list oRegions as region>
+								          <#if (region_index==0) >
+								            ${region}(${oDoc.release?string("yyyy-MM-dd")})
+								         <#else>
+								            &nbsp${region}
+					 					  </#if>	
+								        </#list>
+								    </li>
 								    <#if (oShares?size>0) > 
 								        <li class="list-group-item"><strong>分享：</strong>
 								          <#list oShares as oShare>
@@ -70,7 +109,6 @@
 		
 		<div class="container downlist top-margin">
 		  <li class="list-group-item">
-		    <#assign oTorrents = ((oDoc.torrents)!"[]")?eval>
 		    <#if oTorrents?size gt 0 >
 		      	<strong>下载地址：</strong>
 		    <#else>

@@ -30,13 +30,12 @@ import com.google.common.collect.Maps;
 import com.lezo.idober.error.NotFoundException;
 import com.lezo.idober.utils.SolrUtils;
 
-@RequestMapping("movie/detail")
+@RequestMapping("umovie/detail")
 @Controller
 @Log4j
 public class UnifyMovieDetailController extends BaseController {
 	private static final Pattern NUM_REG = Pattern.compile("^[0-9]+$");
 	private static final String CORE_MOVIE = "cmovie";
-	private static final String CORE_META = "cmeta";
 
 	@RequestMapping(value = "{itemCode}",
 			method = RequestMethod.GET)
@@ -68,18 +67,19 @@ public class UnifyMovieDetailController extends BaseController {
 		}
 		JSONObject dObject = convert2JSON(doc);
 		model.addAttribute("oDoc", dObject);
-		return new ModelAndView("MovieDetail");
+		return new ModelAndView("UMovieDetail");
 	}
 
 	private JSONObject convert2JSON(SolrDocument doc) {
 		doc = SolrUtils.overwriteWithEditVal(doc);
 		JSONObject srcObject = new JSONObject(doc);
-		createCrumbs(srcObject);
+		JSONArray crumbArr = createCrumbs(srcObject);
+		srcObject.put("crumbs", crumbArr);
 		assortTorrents(srcObject);
 		return srcObject;
 	}
 
-	private void createCrumbs(JSONObject srcObject) {
+	private JSONArray createCrumbs(JSONObject srcObject) {
 		JSONArray crumbArr = new JSONArray();
 		String type = srcObject.getString("type");
 		type = type == null ? "movie" : type;
@@ -88,13 +88,45 @@ public class UnifyMovieDetailController extends BaseController {
 		JSONArray cArray = new JSONArray();
 		JSONObject cObj = new JSONObject();
 		cObj.put("name", typeNameMap.get(type));
-		cObj.put("link", "http://www.lezomao.com/movie/type/" + type);
+		cObj.put("link", "/" + type + "/list");
 		cArray.add(cObj);
 		crumbArr.add(cArray);
+		addCrumbByGenres(srcObject, crumbArr, type);
+		addCrumbByRegion(srcObject, crumbArr, type);
+		return crumbArr;
+	}
+
+	private void addCrumbByRegion(JSONObject srcObject, JSONArray crumbArr, String type) {
+		JSONArray regionArr = srcObject.getJSONArray("regions");
+		if (regionArr != null) {
+			JSONArray groupArray = new JSONArray();
+			groupArray.add(regionArr.get(regionArr.size() - 1));
+			JSONArray rArray = new JSONArray();
+			Map<String, String> regionMap = queryKeyValMapByRegions(groupArray);
+			String regionLink = "/" + type + "/region/";
+			for (int i = groupArray.size() - 1; i >= 0; i--) {
+				String sRegion = groupArray.getString(i);
+				if (StringUtils.isBlank(sRegion)) {
+					continue;
+				}
+				sRegion = sRegion.trim();
+				String sPyRegion = regionMap.get(sRegion);
+				JSONObject gObj = new JSONObject();
+				gObj.put("name", sRegion);
+				gObj.put("link", regionLink + sPyRegion);
+				rArray.add(gObj);
+			}
+			crumbArr.add(rArray);
+		}
+
+	}
+
+	private void addCrumbByGenres(JSONObject srcObject, JSONArray crumbArr, String type) {
 		JSONArray genreArr = srcObject.getJSONArray("genres");
 		if (genreArr != null) {
 			JSONArray gArray = new JSONArray();
 			Map<String, String> kvMap = queryKeyValMapByGeners(genreArr);
+			String genreLink = "/" + type + "/genre/";
 			for (int i = 0, size = genreArr.size(); i < size; i++) {
 				String sGenre = genreArr.getString(i);
 				if (StringUtils.isBlank(sGenre)) {
@@ -107,37 +139,49 @@ public class UnifyMovieDetailController extends BaseController {
 				}
 				JSONObject gObj = new JSONObject();
 				gObj.put("name", sGenre);
-				gObj.put("link", "http://www.lezomao.com/movie/genre/" + sPyGenre);
+				gObj.put("link", genreLink + sPyGenre);
 				gArray.add(gObj);
 			}
 			crumbArr.add(gArray);
-		}
-		JSONArray regionArr = srcObject.getJSONArray("regions");
-		if (regionArr != null) {
-			JSONArray rArray = new JSONArray();
-			Map<String, String> kvMap = queryKeyValMapByRegions(regionArr);
-			for (int i = 0, size = regionArr.size(); i < size; i++) {
-				String sRegion = regionArr.getString(i);
-				if (StringUtils.isBlank(sRegion)) {
-					continue;
-				}
-				sRegion = sRegion.trim();
-				String sPyRegion = kvMap.get(sRegion);
-				if (sPyRegion == null) {
-					continue;
-				}
-				JSONObject gObj = new JSONObject();
-				gObj.put("name", sRegion);
-				gObj.put("link", "http://www.lezomao.com/movie/region/" + sPyRegion);
-				rArray.add(gObj);
-			}
-			crumbArr.add(rArray);
 		}
 
 	}
 
 	private Map<String, String> queryKeyValMapByRegions(JSONArray regionArr) {
-		return queryKeyValMap("idober-kv-regions", regionArr);
+		String sHead = "(type:idober-group-region AND (";
+		StringBuilder sb = new StringBuilder();
+		sb.append(sHead);
+		for (int i = 0, size = regionArr.size(); i < size; i++) {
+			String sKeyWord = regionArr.getString(i);
+			if (StringUtils.isBlank(sKeyWord)) {
+				continue;
+			}
+			sKeyWord = sKeyWord.trim();
+			if (sb.length() > sHead.length()) {
+				sb.append(" OR ");
+			}
+			sb.append("title:");
+			sb.append(sKeyWord);
+		}
+		sb.append("))");
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(100);
+		solrQuery.set("q", sb.toString());
+		solrQuery.addField("title,short_s");
+		Map<String, String> kvMap = Maps.newHashMap();
+		try {
+			QueryResponse resp = SolrUtils.getSolrWithMeta().query(solrQuery);
+			SolrDocumentList docList = resp.getResults();
+			for (SolrDocument doc : docList) {
+				String cnVal = doc.getFieldValue("title").toString();
+				String pyVal = doc.getFieldValue("short_s").toString();
+				kvMap.put(cnVal, pyVal);
+			}
+		} catch (Exception e) {
+			log.warn("query region:" + regionArr.toJSONString() + ",cause:", e);
+		}
+		return kvMap;
 	}
 
 	private Map<String, String> queryKeyValMapByGeners(JSONArray genreArr) {
