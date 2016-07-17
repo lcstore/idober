@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
 import com.lezo.idober.error.NotFoundException;
 import com.lezo.idober.utils.SolrUtils;
 
-@RequestMapping("umovie/detail")
+@RequestMapping("movie/detail")
 @Controller
 @Log4j
 public class UnifyMovieDetailController extends BaseController {
@@ -91,8 +91,8 @@ public class UnifyMovieDetailController extends BaseController {
 		cObj.put("link", "/" + type + "/list");
 		cArray.add(cObj);
 		crumbArr.add(cArray);
-		addCrumbByGenres(srcObject, crumbArr, type);
 		addCrumbByRegion(srcObject, crumbArr, type);
+		addCrumbByGenres(srcObject, crumbArr, type);
 		return crumbArr;
 	}
 
@@ -113,6 +113,7 @@ public class UnifyMovieDetailController extends BaseController {
 				String sPyRegion = regionMap.get(sRegion);
 				JSONObject gObj = new JSONObject();
 				gObj.put("name", sRegion);
+				gObj.put("pyVal", sPyRegion);
 				gObj.put("link", regionLink + sPyRegion);
 				rArray.add(gObj);
 			}
@@ -122,6 +123,12 @@ public class UnifyMovieDetailController extends BaseController {
 	}
 
 	private void addCrumbByGenres(JSONObject srcObject, JSONArray crumbArr, String type) {
+		JSONArray regionArr = crumbArr.getJSONArray(crumbArr.size() - 1);
+		String sRegionPy = null;
+		if (!regionArr.isEmpty()) {
+			JSONObject oRegion = regionArr.getJSONObject(0);
+			sRegionPy = oRegion.getString("pyVal");
+		}
 		JSONArray genreArr = srcObject.getJSONArray("genres");
 		if (genreArr != null) {
 			JSONArray gArray = new JSONArray();
@@ -136,6 +143,9 @@ public class UnifyMovieDetailController extends BaseController {
 				String sPyGenre = kvMap.get(sGenre);
 				if (sPyGenre == null) {
 					continue;
+				}
+				if (StringUtils.isNotBlank(sRegionPy)) {
+					sPyGenre += "-" + sRegionPy;
 				}
 				JSONObject gObj = new JSONObject();
 				gObj.put("name", sGenre);
@@ -238,7 +248,13 @@ public class UnifyMovieDetailController extends BaseController {
 			JSONObject tObject = JSONObject.parseObject(tArray.getString(i));
 			String type = tObject.getString("type");
 			String source = tObject.getString("source");
-			if (StringUtils.isBlank(type) && source.equals("bttiantang-torrent")) {
+			if (StringUtils.isBlank(source)) {
+				String sUrl = tObject.getString("url");
+				if (sUrl != null && sUrl.contains(".bttiantang.com")) {
+					source = "bttiantang-torrent";
+				}
+			}
+			if (StringUtils.isNotBlank(source) && source.equals("bttiantang-torrent")) {
 				tObject.remove("source");
 				tObject.put("type", source);
 				JSONObject pObject = tObject.getJSONObject("param");

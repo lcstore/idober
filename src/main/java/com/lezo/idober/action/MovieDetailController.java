@@ -10,7 +10,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +23,8 @@ import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.movie.MovieVo;
 
-@RequestMapping("movie/detail")
-@Controller
+//@RequestMapping("movie/detail")
+//@Controller
 public class MovieDetailController extends BaseController {
 
 	@RequestMapping(value = "{itemCode}",

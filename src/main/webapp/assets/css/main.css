@@ -588,3 +588,146 @@ a:hover {
 	margin-bottom: 0px;
 	font-size: 18px;
 }
+
+/* movie-list */
+.tag-list label {
+	display: inline-block;
+	zoom: 1;
+	cursor: pointer;
+	padding: 1px 10px;
+	margin: 0 3px 5px 0;
+	color: #666;
+	font-size: 14px;
+	border-radius: 2px;
+	background: 0;
+}
+
+.tag-list label input {
+	display: none;
+	margin-right: 3px;
+	vertical-align: middle;
+}
+
+.tag-list label.activate {
+	background: #4b8ccb;
+	color: #fff;
+}
+
+.row-wp {
+	padding-bottom: 20px;
+	margin-bottom: 40px;
+}
+
+.col-wp {
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 30px;
+}
+
+.item-wp {
+	color: #37a;
+	font-size: 13px;
+	text-align: center;
+	margin-bottom: 10px;
+	width: 140px;
+}
+
+.cover-wp {
+	height: 200px;
+}
+
+strong.rate {
+	color: #e09015;
+}
+
+.bottom-line {
+	border-bottom: 1px solid #E4E2E2;
+}
+
+.hot-wp {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.star-main.star-loc {
+	float: right;
+	margin-top: 45px;
+}
+
+.star-main {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	background: url(../img/star-main.png) no-repeat;
+	width: 75px;
+	height: 15px;
+	margin: 1px 0 0 0;
+	overflow: hidden
+}
+
+.bigstar50 {
+	background-position: 0 0
+}
+
+.bigstar45 {
+	background-position: 0 -15px
+}
+
+.bigstar40 {
+	background-position: 0 -30px
+}
+
+.bigstar35 {
+	background-position: 0 -45px
+}
+
+.bigstar30 {
+	background-position: 0 -60px
+}
+
+.bigstar25 {
+	background-position: 0 -75px
+}
+
+.bigstar20 {
+	background-position: 0 -90px
+}
+
+.bigstar15 {
+	background-position: 0 -105px
+}
+
+.bigstar10 {
+	background-position: 0 -120px
+}
+
+.bigstar05 {
+	background-position: 0 -135px
+}
+
+.bigstar00 {
+	background-position: 0 -150px
+}
+
+
+.cta-btn{
+	margin:0 5px;
+	line-height: 1;
+	display: inline-block;
+	font-size: 10px;
+	color:#2c3540;
+	background-color: #ccc;
+	text-transform: uppercase;
+	padding:8px 15px;
+	border-radius: 20px;
+	text-align: center;
+
+}
+.cta-btn:last-child{
+	margin:10px;
+}
+.cta-btn:hover{
+	color:inherit;
+	text-decoration: none;
+	background-color:#3fa772;
+}

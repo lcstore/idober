@@ -26,7 +26,7 @@
 		      $(this).html(event.strftime(format));
 		    })
 		    .on('finish.countdown', function(event) {
-		      window.location.href="http://www.lezomao.com";
+		      window.location.href="/";
 		    });
 		    var val = 5*1000;
 		    var endDate = new Date().valueOf() + val;

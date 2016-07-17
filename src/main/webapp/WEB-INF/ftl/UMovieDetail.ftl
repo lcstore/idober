@@ -33,8 +33,6 @@
 		                     </#if>	
 				        </#list>
 			        </span>
-                  <#elseif (!oCrumb_has_next)>
-                    <span>&nbsp;&gt;&nbsp;<strong>${oDoc.name}</strong></span>
                   <#else>
                     <span>&nbsp;&gt;&nbsp;
 			           <#list oLinks as oLink>
@@ -47,6 +45,7 @@
 			        </span>
 			     </#if>	
 	        </#list>
+	        <span>&nbsp;&gt;&nbsp;<strong>${oDoc.name}</strong></span>
         </div>
 				<div class="container-fluid">
 					<div class="row top-margin">
