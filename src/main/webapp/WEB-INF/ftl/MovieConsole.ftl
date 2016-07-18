@@ -66,7 +66,7 @@
 		    </div>
 		    <div class="col-md-3">
 		        <article class="hot-movie">
-                    <h3> 正在热播 </h3>
+                    <h3> 最新发布 </h3>
                     <div class="hot-list">
                        <a  href="">
                          <div class="bottom-line hot-wp">

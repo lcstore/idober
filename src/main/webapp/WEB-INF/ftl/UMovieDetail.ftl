@@ -20,11 +20,11 @@
 	<div class="main data-box">
 		<div class="act">
 			<div class="container">
-			   <div class="breadcrumb">
+			<ol class="breadcrumb">
              <#list oCrumbs as oCrumb>
                   <#assign oLinks = oCrumb />
                   <#if (oCrumb_index==0) >
-                     <span>
+                     <li>
 			           <#list oLinks as oLink>
 		                    <#if (oLink_index==0) >
 		                      <a href="${oLink.link}">${oLink.name}</a>
@@ -32,9 +32,9 @@
 		                     、<a href="${oLink.link}">${oLink.name}</a>
 		                     </#if>	
 				        </#list>
-			        </span>
+			        </li>
                   <#else>
-                    <span>&nbsp;&gt;&nbsp;
+                    <li>
 			           <#list oLinks as oLink>
 		                    <#if (oLink_index==0) >
 		                      <a href="${oLink.link}">${oLink.name}</a>
@@ -42,11 +42,11 @@
 		                     、<a href="${oLink.link}">${oLink.name}</a>
 		                     </#if>	
 				        </#list>
-			        </span>
+			        </li>
 			     </#if>	
 	        </#list>
-	        <span>&nbsp;&gt;&nbsp;<strong>${oDoc.name}</strong></span>
-        </div>
+	        <li class="active"><strong>${oDoc.name}</strong></li>
+          </ol>
 				<div class="container-fluid">
 					<div class="row top-margin">
 						  <div class="col-md-3 movie-left">

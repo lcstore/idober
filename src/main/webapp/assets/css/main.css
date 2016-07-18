@@ -150,12 +150,6 @@ label {
 	color: #888;
 }
 
-.breadcrumb {
-	background: none;
-	padding: 0;
-	margin: 30px 0 0px 0;
-}
-
 ul.list-spaces li {
 	margin-bottom: 10px;
 }
@@ -590,29 +584,6 @@ a:hover {
 }
 
 /* movie-list */
-.tag-list label {
-	display: inline-block;
-	zoom: 1;
-	cursor: pointer;
-	padding: 1px 10px;
-	margin: 0 3px 5px 0;
-	color: #666;
-	font-size: 14px;
-	border-radius: 2px;
-	background: 0;
-}
-
-.tag-list label input {
-	display: none;
-	margin-right: 3px;
-	vertical-align: middle;
-}
-
-.tag-list label.activate {
-	background: #4b8ccb;
-	color: #fff;
-}
-
 .row-wp {
 	padding-bottom: 20px;
 	margin-bottom: 40px;
@@ -709,25 +680,108 @@ strong.rate {
 	background-position: 0 -150px
 }
 
+.bottom-border {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #eaeaea;
+	margin-bottom: 18px;
+}
+/* tags---start */
+.tags {
+	padding: 10px 5px;
+}
 
-.cta-btn{
-	margin:0 5px;
+.tag-list .activate {
+	background-color: #5cb85c;
+	color: white;
+}
+
+.tag-btn {
+	margin: 0 5px;
 	line-height: 1;
 	display: inline-block;
 	font-size: 10px;
-	color:#2c3540;
+	color: #2c3540;
 	background-color: #ccc;
 	text-transform: uppercase;
-	padding:8px 15px;
+	padding: 8px 15px;
 	border-radius: 20px;
 	text-align: center;
+}
 
+.tag-btn:last-child {
+	margin: 5px;
 }
-.cta-btn:last-child{
-	margin:10px;
-}
-.cta-btn:hover{
-	color:inherit;
+
+.tag-btn:hover {
 	text-decoration: none;
-	background-color:#3fa772;
+	background-color: #5cb85c;
+	color: white;
+}
+
+.pageContainer {
+	padding-top: 20px;
+}
+
+.pagination {
+	display: block;
+	position: relative;
+	text-align: center;
+	color: #666;
+	font-size: 13px
+}
+
+.pagination>a {
+	border: 1px solid #39414a;
+	position: absolute;
+	top: -10px;
+	padding: 10px;
+	color: #39414a;
+	white-space: nowrap;
+	border-radius: 3px;
+	text-decoration: none
+}
+
+.pagination>a:hover {
+	border-color: #666;
+	color: #fff;
+	background: #4a4849
+}
+
+.pagination>a.older-posts {
+	right: 10px
+}
+
+.pagination>a.newer-posts {
+	left: 10px
+}
+
+.pagination .page-number {
+	color: #39414a
+}
+
+/* back to top start---*/
+.back-to-top {
+    text-align: center;
+    position: fixed;
+    bottom: 15px;
+    right: 10px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #e91e63;
+    display: none;
+    border-radius: 100%;
+    width: 56px;
+    height: 56px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24)
+}
+
+.back-to-top .fa {
+    font-size: 36px;
+    line-height: 56px
+}
+
+.back-to-top:hover {
+    background: #e91e63;
+    color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .2), 0 3px 6px rgba(0, 0, 0, .28)
 }

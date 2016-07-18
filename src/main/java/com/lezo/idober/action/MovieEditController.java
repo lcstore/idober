@@ -1,8 +1,5 @@
 package com.lezo.idober.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
@@ -13,21 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 @Controller
-@RequestMapping("movie")
-public class MovieListController extends BaseController {
-
-	private static final List<JSONObject> CRUMB_LIST = new ArrayList<JSONObject>(1);
-	static {
-		JSONObject oCrumbObj = new JSONObject();
-		oCrumbObj.put("title", "电影");
-		oCrumbObj.put("link", "/movie/page/");
-		CRUMB_LIST.add(oCrumbObj);
-	}
+@RequestMapping("movie/edit")
+public class MovieEditController extends BaseController {
 
 	@RequestMapping(value = { "page/{pageNum}", "page" },
 			method = RequestMethod.GET)
@@ -47,7 +35,6 @@ public class MovieListController extends BaseController {
 		long totalPage = total / ParamUtils.PAGE_SIZE;
 		totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);
 		model.addAttribute("oDocList", docList);
-		model.addAttribute("oCrumbList", CRUMB_LIST);
 		model.addAttribute("curPage", curPage);
 		model.addAttribute("totalPage", totalPage);
 		return new ModelAndView("MovieList");
