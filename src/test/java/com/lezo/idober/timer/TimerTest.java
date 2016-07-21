@@ -14,6 +14,8 @@ public class TimerTest extends BaseTest {
 	private FillOldId2MovieTimer fillOldId2MovieTimer;
 	@Autowired
 	private UnifyRegionTimer unifyRegionTimer;
+	@Autowired
+	private OnlineTorrentMovieTimer onlineTorrentMovieTimer;
 
 	@Test
 	public void testTimer() {
@@ -21,7 +23,8 @@ public class TimerTest extends BaseTest {
 		appConfig.setEnvName("dev");
 		// fillTorrent2MovieTimer.run();
 		// fillOldId2MovieTimer.run();
-		unifyRegionTimer.run();
+		// unifyRegionTimer.run();
+		onlineTorrentMovieTimer.run();
 	}
 
 }

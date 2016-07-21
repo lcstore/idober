@@ -23,9 +23,10 @@ public class SolrUtils {
 	private static final ConcurrentHashMap<String, SolrServer> SERVER_MAP = new ConcurrentHashMap<String, SolrServer>();
 	private static final String CORE_DATA = "core0";
 	private static final String CORE_SKU = "core1";
-	private static final String CORE_MOVIE = "core2";
-	private static final String SOLR_CORE_MOVIE = "cmovie";
-	private static final String SOLR_CORE_META = "cmeta";
+	public static final String CORE_MOVIE = "core2";
+	public static final String CORE_SOURCE_MOVIE = "cmovie";
+	public static final String CORE_SOURCE_META = "cmeta";
+	public static final String CORE_ONLINE_MOVIE = "omovie";
 
 	public static final String KEY_EDIT_PREFIX = "_ex_";
 
@@ -46,11 +47,11 @@ public class SolrUtils {
 	}
 
 	public static SolrServer getSolrWithMovie() {
-		return getSolrServer(SOLR_CORE_MOVIE);
+		return getSolrServer(CORE_SOURCE_MOVIE);
 	}
 
 	public static SolrServer getSolrWithMeta() {
-		return getSolrServer(SOLR_CORE_META);
+		return getSolrServer(CORE_SOURCE_META);
 	}
 
 	public static void setCoreContainer(CoreContainer coreContainer) {

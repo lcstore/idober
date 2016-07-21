@@ -7,5 +7,6 @@
 	<bean id="FillTorrent2MovieTimer" class="com.lezo.idober.timer.FillTorrent2MovieTimer" />
 	<bean id="FillOldId2MovieTimer" class="com.lezo.idober.timer.FillOldId2MovieTimer" />
 	<bean id="UnifyRegionTimer" class="com.lezo.idober.timer.UnifyRegionTimer" />
+	<bean id="OnlineTorrentMovieTimer" class="com.lezo.idober.timer.OnlineTorrentMovieTimer" />
 
 </beans>
