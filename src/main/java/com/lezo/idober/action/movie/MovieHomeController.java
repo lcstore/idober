@@ -1,4 +1,4 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.movie;
 
 import java.util.Collections;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.movie;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lezo.idober.action.BaseController;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.AESCodecUtils;
 import com.lezo.idober.utils.ParamUtils;

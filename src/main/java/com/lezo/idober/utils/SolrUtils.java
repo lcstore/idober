@@ -23,7 +23,7 @@ public class SolrUtils {
 	private static final ConcurrentHashMap<String, SolrServer> SERVER_MAP = new ConcurrentHashMap<String, SolrServer>();
 	private static final String CORE_DATA = "core0";
 	private static final String CORE_SKU = "core1";
-	public static final String CORE_MOVIE = "core2";
+	public static final String CORE_OLD_MOVIE = "core2";
 	public static final String CORE_SOURCE_MOVIE = "cmovie";
 	public static final String CORE_SOURCE_META = "cmeta";
 	public static final String CORE_ONLINE_MOVIE = "omovie";
@@ -39,7 +39,7 @@ public class SolrUtils {
 	}
 
 	public static SolrServer getMovieServer() {
-		return getSolrServer(CORE_MOVIE);
+		return getSolrServer(CORE_OLD_MOVIE);
 	}
 
 	public static SolrServer getEmbeddedSolrServer() {

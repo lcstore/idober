@@ -76,13 +76,14 @@
 								    </li>
 								    <#if (oShares?size>0) > 
 								        <li class="list-group-item"><strong>分享：</strong>
-								          <#list oShares as oShare>
+								          <#list oShares as sShare>
+								                <#assign oShare = ((sShare)!"{}")?eval>
 									        	<a href="${oShare.url}" rel="nofollow" target="_blank">${oShare.name}
 									        	</a>
 									        	  <#if oShare.secret?? > 
 									        	  <span>(${oShare.secret})</span>
 									        	  </#if>
-									        	  <#if  (oShare_has_next) > 
+									        	  <#if  (sShare_has_next) > 
 									        	   <span>,&nbsp; </span>
 									        	  </#if>
 								          </#list>
@@ -117,10 +118,11 @@
 			   </button>
 			   <span id='searchmsg' class="alert alert-info  btn-xs hidden"></span>
 		    </#if>
-	        <#list oTorrents as oTor>
-	            <div id="tor${oTor_index}" class="torblock" >
+	        <#list oTorrents as sTor>
+	            <#assign oTor = ((sTor)!"{}")?eval>
+	            <div id="tor${sTor_index}" class="torblock" >
 	              <#if (oTor.type == 'bttiantang-torrent') >
-				    <form id="form${oTor_index}" action="/movie/download">
+				    <form id="form${sTor_index}" action="/movie/download">
 					    <span >
 				        	 <strong>${((oTor.name)?length>0)?string((oTor.name),(oDoc.name))}</strong>
 						</span>

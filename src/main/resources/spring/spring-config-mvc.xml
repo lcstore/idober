@@ -9,6 +9,9 @@
 	<!-- 启用spring mvc 注解 -->
 	<context:annotation-config />
 	<mvc:annotation-driven />
+	<bean class="org.springframework.web.servlet.DispatcherServlet">
+		<property name="detectAllHandlerExceptionResolvers" value="false" />
+	</bean>
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
@@ -44,7 +47,7 @@
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 	<bean
 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
-	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
+	<bean id="handlerAdapter" class="com.lezo.idober.spring.CustomHttpRequestHandlerAdapter" />
 
 
 	<mvc:interceptors>
@@ -112,23 +115,6 @@
 		</property>
 	</bean>
 
-	<bean class="com.lezo.idober.error.CustomExceptionHandlerExceptionResolver" />
-
-<!-- 	<bean
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="exceptionMappings">
-			<props>
-				<prop key="java.lang.Exception">errors/error</prop>
-			</props>
-		</property>
-		<property name="statusCodes">
-			<props>
-				<prop key="errors/error">500</prop>
-			</props>
-		</property>
-		设置日志输出级别，不定义则默认不输出警告等错误日志信息
-		<property name="warnLogCategory" value="WARN"></property>
-		默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置
-		<property name="defaultErrorView" value="errors/error"></property>
-	</bean> -->
+	<bean id="handlerExceptionResolver"
+		class="com.lezo.idober.error.CustomExceptionHandlerExceptionResolver" />
 </beans>  

@@ -1,4 +1,4 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.movie;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.lezo.idober.action.BaseController;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.SolrConstant;
 import com.lezo.idober.utils.SolrUtils;

@@ -1,6 +1,7 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.movie;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lezo.idober.action.BaseController;
 import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 
@@ -27,9 +29,10 @@ public class MovieConsoleController extends BaseController {
 		solrQuery.setStart(start);
 		solrQuery.setRows(ParamUtils.PAGE_SIZE);
 		solrQuery.addField("image,id,name,rate");
-		solrQuery.set("q", "*:*");
+		solrQuery.set("q", "editor:0");
 		// solrQuery.addFilterQuery("");
-		QueryResponse resp = SolrUtils.getSolrWithMovie().query(solrQuery);
+		SolrServer server = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE);
+		QueryResponse resp = server.query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
 		long total = docList.getNumFound();
 		long totalPage = total / ParamUtils.PAGE_SIZE;

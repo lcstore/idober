@@ -1,4 +1,4 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.movie;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -27,6 +27,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.lezo.idober.action.BaseController;
 import com.lezo.idober.error.NotFoundException;
 import com.lezo.idober.utils.SolrUtils;
 
@@ -35,7 +36,7 @@ import com.lezo.idober.utils.SolrUtils;
 @Log4j
 public class UnifyMovieDetailController extends BaseController {
 	private static final Pattern NUM_REG = Pattern.compile("^[0-9]+$");
-	private static final String CORE_MOVIE = "cmovie";
+	private static final String CORE_MOVIE = SolrUtils.CORE_ONLINE_MOVIE;
 
 	@RequestMapping(value = "{itemCode}",
 			method = RequestMethod.GET)
@@ -75,7 +76,7 @@ public class UnifyMovieDetailController extends BaseController {
 		JSONObject srcObject = new JSONObject(doc);
 		JSONArray crumbArr = createCrumbs(srcObject);
 		srcObject.put("crumbs", crumbArr);
-		assortTorrents(srcObject);
+		// assortTorrents(srcObject);
 		return srcObject;
 	}
 
@@ -88,7 +89,7 @@ public class UnifyMovieDetailController extends BaseController {
 		JSONArray cArray = new JSONArray();
 		JSONObject cObj = new JSONObject();
 		cObj.put("name", typeNameMap.get(type));
-		cObj.put("link", "/" + type + "/list");
+		cObj.put("link", "/" + type + "/page");
 		cArray.add(cObj);
 		crumbArr.add(cArray);
 		addCrumbByRegion(srcObject, crumbArr, type);
@@ -100,7 +101,7 @@ public class UnifyMovieDetailController extends BaseController {
 		JSONArray regionArr = srcObject.getJSONArray("regions");
 		if (regionArr != null) {
 			JSONArray groupArray = new JSONArray();
-			groupArray.add(regionArr.get(regionArr.size() - 1));
+			groupArray.add(regionArr.get(0));
 			JSONArray rArray = new JSONArray();
 			Map<String, String> regionMap = queryKeyValMapByRegions(groupArray);
 			String regionLink = "/" + type + "/region/";
@@ -118,6 +119,11 @@ public class UnifyMovieDetailController extends BaseController {
 				rArray.add(gObj);
 			}
 			crumbArr.add(rArray);
+
+			if (regionArr.size() > 1) {
+				regionArr.remove(0);
+				srcObject.put("regions", regionArr);
+			}
 		}
 
 	}

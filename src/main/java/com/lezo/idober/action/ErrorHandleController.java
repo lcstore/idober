@@ -7,14 +7,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.lezo.idober.error.CustomExceptionHandlerExceptionResolver;
 import com.lezo.idober.error.NotFoundException;
 
 @ControllerAdvice
 public class ErrorHandleController {
 
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFoundException(HttpServletRequest request) {
-        return "/errors/404";
-    }
+	@ExceptionHandler(NotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String handleNotFoundException(HttpServletRequest request) {
+		return CustomExceptionHandlerExceptionResolver.VIEW_404;
+	}
 }

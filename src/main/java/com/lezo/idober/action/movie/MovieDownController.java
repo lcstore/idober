@@ -1,4 +1,4 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.movie;
 
 import java.io.IOException;
 
@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lezo.idober.action.BaseController;
 
 @Controller
 @RequestMapping("movie")
