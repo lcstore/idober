@@ -611,18 +611,23 @@ strong.rate {
 	color: #e09015;
 }
 
-.bottom-line {
+/* star---start */
+.star-wp {
+	height: 60px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-bottom: 1px solid #E4E2E2;
 }
 
-.hot-wp {
-	margin-top: 10px;
-	margin-bottom: 10px;
+.star-img {
+	float: left;
 }
 
-.star-main.star-loc {
-	float: right;
-	margin-top: 45px;
+.star-txt {
+	height: 55%;
+	line-height: 50px;
+	overflow: hidden;
+	padding-left: 6px;
 }
 
 .star-main {
@@ -634,6 +639,11 @@ strong.rate {
 	height: 15px;
 	margin: 1px 0 0 0;
 	overflow: hidden
+}
+
+.star-main.star-loc {
+	float: right;
+	margin-top: 10px;
 }
 
 .bigstar50 {
@@ -761,27 +771,27 @@ strong.rate {
 
 /* back to top start---*/
 .back-to-top {
-    text-align: center;
-    position: fixed;
-    bottom: 15px;
-    right: 10px;
-    text-decoration: none;
-    color: #fff;
-    background-color: #e91e63;
-    display: none;
-    border-radius: 100%;
-    width: 56px;
-    height: 56px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24)
+	text-align: center;
+	position: fixed;
+	bottom: 15px;
+	right: 10px;
+	text-decoration: none;
+	color: #fff;
+	background-color: #e91e63;
+	display: none;
+	border-radius: 100%;
+	width: 56px;
+	height: 56px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24)
 }
 
 .back-to-top .fa {
-    font-size: 36px;
-    line-height: 56px
+	font-size: 36px;
+	line-height: 56px
 }
 
 .back-to-top:hover {
-    background: #e91e63;
-    color: #fff;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .2), 0 3px 6px rgba(0, 0, 0, .28)
+	background: #e91e63;
+	color: #fff;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, .2), 0 3px 6px rgba(0, 0, 0, .28)
 }

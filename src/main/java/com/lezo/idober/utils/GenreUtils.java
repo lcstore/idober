@@ -13,15 +13,16 @@ import com.google.common.collect.Maps;
 
 @Log4j
 public class GenreUtils {
-	private static final Map<String, String> REGION_MAP = Maps.newHashMap();
-	private static final String DEFAULT_REGION = "科幻";
+	private static final Map<String, String> GENRE_MAP = Maps.newHashMap();
+	public static final String DEFAULT_GENRE = "kehuan";
+	public static final String DEFAULT_GENRE_CN = "科幻";
 
-	public static String toCNRegionGroup(String pingyinRegion) {
-		if (REGION_MAP.isEmpty()) {
+	public static String toCNGenre(String pingyinVal) {
+		if (GENRE_MAP.isEmpty()) {
 			loadRegionGroup();
 		}
-		String sGroup = REGION_MAP.get(pingyinRegion);
-		return sGroup == null ? DEFAULT_REGION : sGroup;
+		String sGroup = GENRE_MAP.get(pingyinVal);
+		return sGroup == null ? DEFAULT_GENRE : sGroup;
 	}
 
 	private synchronized static void loadRegionGroup() {
@@ -36,7 +37,7 @@ public class GenreUtils {
 			for (SolrDocument doc : docList) {
 				String key = doc.getFieldValue("py_s").toString().trim();
 				String value = doc.getFieldValue("cn_s").toString().trim();
-				REGION_MAP.put(key, value);
+				GENRE_MAP.put(key, value);
 			}
 		} catch (Exception e) {
 			log.warn("loadRegionGroup.cause:", e);

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.jsoup.Jsoup;
@@ -29,6 +30,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.lezo.idober.action.BaseController;
 import com.lezo.idober.error.NotFoundException;
+import com.lezo.idober.utils.AESCodecUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 @RequestMapping("movie/detail")
@@ -38,30 +40,30 @@ public class UnifyMovieDetailController extends BaseController {
 	private static final Pattern NUM_REG = Pattern.compile("^[0-9]+$");
 	private static final String CORE_MOVIE = SolrUtils.CORE_ONLINE_MOVIE;
 
-	@RequestMapping(value = "{itemCode}",
-			method = RequestMethod.GET)
-	public ModelAndView loadDetail(@PathVariable String itemCode, ModelMap model) throws Exception {
-		// String idString = AESCodecUtils.decrypt(itemCode);
+	@RequestMapping(value = "{itemCode}", method = RequestMethod.GET)
+	public ModelAndView loadDetail(@PathVariable("itemCode") String itemCode, ModelMap model) throws Exception {
 		itemCode = Jsoup.clean(itemCode, Whitelist.basic());
 		Matcher matcher = NUM_REG.matcher(itemCode);
+		SolrDocument doc = null;
 		if (!matcher.find()) {
+			doc = getDocumentByDecrypt(itemCode);
+		} else {
+			SolrQuery solrQuery = new SolrQuery();
+			solrQuery.setStart(0);
+			solrQuery.setRows(1);
+			solrQuery.set("q", "(id:" + itemCode + " OR old_id_s:" + itemCode + ")");
+			QueryResponse resp = SolrUtils.getSolrServer(CORE_MOVIE).query(solrQuery);
+			SolrDocumentList docList = resp.getResults();
+			if (CollectionUtils.isNotEmpty(docList)) {
+				doc = docList.get(0);
+			}
+		}
+		if (doc == null) {
 			throw new NotFoundException();
 		}
-		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setStart(0);
-		solrQuery.setRows(1);
-		solrQuery.set("q", "(id:" + itemCode + " OR old_id_s:" + itemCode + ")");
-		// String fields = SolrUtils.getSolrFields(UnifyMovieSolr.class);
-		// solrQuery.addField(fields);
-		QueryResponse resp = SolrUtils.getSolrServer(CORE_MOVIE).query(solrQuery);
-		SolrDocumentList docList = resp.getResults();
-		if (CollectionUtils.isEmpty(docList)) {
-			throw new NotFoundException();
-		}
-		SolrDocument doc = docList.get(0);
 		String oldCode = ObjectUtils.toString(doc.getFieldValue("old_id_s"), null);
 		String idString = ObjectUtils.toString(doc.getFieldValue("id"), StringUtils.EMPTY);
-		if (!idString.equals(itemCode) && StringUtils.isNotBlank(oldCode)) {
+		if (itemCode.equals(oldCode)) {
 			RedirectView red = new RedirectView("/movie/detail/" + idString, true);
 			red.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
 			return new ModelAndView(red);
@@ -241,48 +243,38 @@ public class UnifyMovieDetailController extends BaseController {
 		return kvMap;
 	}
 
-	private void assortTorrents(JSONObject dObject) {
-		String assortKey = "torrents";
-		JSONArray tArray = dObject.getJSONArray(assortKey);
-		if (tArray == null) {
-			dObject.put(assortKey, new JSONArray());
-			return;
-		}
-		JSONArray sArray = new JSONArray();
-		JSONArray newArray = new JSONArray();
-		for (int i = 0; i < tArray.size(); i++) {
-			JSONObject tObject = JSONObject.parseObject(tArray.getString(i));
-			String type = tObject.getString("type");
-			String source = tObject.getString("source");
-			if (StringUtils.isBlank(source)) {
-				String sUrl = tObject.getString("url");
-				if (sUrl != null && sUrl.contains(".bttiantang.com")) {
-					source = "bttiantang-torrent";
-				}
-			}
-			if (StringUtils.isNotBlank(source) && source.equals("bttiantang-torrent")) {
-				tObject.remove("source");
-				tObject.put("type", source);
-				JSONObject pObject = tObject.getJSONObject("param");
+	public SolrDocument getDocumentByDecrypt(String itemCode) {
+		SolrDocument document = null;
+		try {
+			String idString = AESCodecUtils.decrypt(itemCode);
+			String[] unitArr = idString.split(";");
+			if (unitArr.length >= 3) {
+				int index = -1;
+				String sYear = unitArr[++index];
 				StringBuilder sb = new StringBuilder();
-				for (String key : pObject.keySet()) {
+				for (int i = 1; i < unitArr.length - 1; i++) {
 					if (sb.length() > 0) {
-						sb.append("&");
+						sb.append(";");
 					}
-					sb.append(key);
-					sb.append("=");
-					sb.append(pObject.getString(key));
+					sb.append(unitArr[i]);
 				}
-				tObject.put("param", sb.toString());
-				tObject.put("url", "");
-				newArray.add(tObject);
-			} else if (type != null && type.endsWith("-share")) {
-				sArray.add(tObject);
-			} else if (type != null) {
-				newArray.add(tObject);
+				String sDirector = sb.toString();
+				String sName = unitArr[unitArr.length - 1];
+				sDirector = ClientUtils.escapeQueryChars(sDirector);
+				sName = ClientUtils.escapeQueryChars(sName);
+				SolrQuery solrQuery = new SolrQuery();
+				solrQuery.setStart(0);
+				solrQuery.setRows(1);
+				solrQuery.set("q", "(year:" + sYear + " AND directors:" + sDirector + " AND names:" + sName + ")");
+				QueryResponse resp = SolrUtils.getMovieServer().query(solrQuery);
+				SolrDocumentList docList = resp.getResults();
+				if (CollectionUtils.isNotEmpty(docList)) {
+					return docList.get(0);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		dObject.put(assortKey, newArray);
-		dObject.put("shares", sArray);
+		return document;
 	}
 }

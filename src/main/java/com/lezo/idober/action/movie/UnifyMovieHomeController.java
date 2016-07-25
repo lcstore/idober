@@ -18,6 +18,7 @@ import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.util.DateUtil;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,10 +35,10 @@ import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.vo.movie.MovieElementVo;
 import com.lezo.iscript.utils.BatchIterator;
 
-//@RequestMapping("movie")
-//@Controller
+@RequestMapping("movie")
+@Controller
 @Log4j
-public class MovieHomeController {
+public class UnifyMovieHomeController {
 
 	@RequestMapping(value = { "/", "movie/" }, method = RequestMethod.GET)
 	public String getHotMovie(@ModelAttribute("model") ModelMap model) throws Exception {

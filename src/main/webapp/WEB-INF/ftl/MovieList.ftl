@@ -5,6 +5,8 @@
 <title>狸猫资讯,识低价、辨真假,比价购物更放心！双11折扣，货比三家知实惠，对比验证辨真假。</title>
 </head>
 <#assign oDocList = (oDocList![])>
+<#assign oCrumbList = (oCrumbList![])>
+<#assign oStarList = (oStarList![])>
 <body>
 	<div class="container">
 		<div class="row">
@@ -18,6 +20,7 @@
 					</#if>
 		          </#list>
 				</ol>
+				<#--
 		        <div class="tags bottom-border">
 			        <div class="tag-list">
 			        <a class="tag-btn activate" href="/register/step1a">悬疑</a>
@@ -25,6 +28,7 @@
 		            <a class="tag-btn" href="/register/step1">经典</a>
 			        </div>
 		        </div>
+		        -->
 		        <div class="items">
 				<div class="item-list">
 				<#list oDocList as oDoc>
@@ -53,12 +57,12 @@
 				   <nav class="pagination">
 				     <#if (curPage>1)>
 				       <#assign prevNum=curPage -1>
-			           <a href="/movie/page/${prevNum}/" class="newer-posts"><span aria-hidden="true">&larr;</span>上一页</a>
+			           <a href="${curPath}/${prevNum}/" class="newer-posts"><span aria-hidden="true">&larr;</span>上一页</a>
 					 </#if>
 					 <span class="page-number">第 ${curPage} 页/共 ${totalPage} 页</span>
 					 <#if (curPage<totalPage)>
 					    <#assign nextNum=curPage +1>
-					    <a href="/movie/page/${nextNum}/" class="older-posts">下一页<span aria-hidden="true">&rarr;</span></a>
+					    <a href="${curPath}/${nextNum}/" class="older-posts">下一页<span aria-hidden="true">&rarr;</span></a>
 					</#if>
 					</nav>
 				</div>
@@ -66,15 +70,17 @@
 		    </div>
 		    <div class="col-md-3">
 		        <article class="hot-movie">
-                    <h3> 正在热播 </h3>
+                    <h3 class="text-center"> 正在热播 </h3>
                     <div class="hot-list">
-                       <a  href="">
-                         <div class="bottom-line hot-wp">
-                         <img src="https://img1.doubanio.com/view/movie_poster_cover/lpst/public/p2359593888.jpg" alt="..." class="img-circle" width="60" height="60">
-                           3r3242342
-                           <div class="star-main bigstar40 star-loc"></div>
+                       <#list oStarList as oStar>
+                       <a target="_blank" href="/movie/detail/${oStar.id}">
+                         <div class="star-wp">
+                         <img src="${oStar.cover}" alt="${oStar.name}" class="img-circle star-img" width="60" height="60">
+                         <div class="star-txt">${oStar.name}</div>
+                         <div class="star-main bigstar${oStar.star} star-loc"></div>
                          </div>
                        </a>
+                       </#list>
                     </div>
                 </article>
 		    </div>

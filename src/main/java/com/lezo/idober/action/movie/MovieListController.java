@@ -3,7 +3,10 @@ package com.lezo.idober.action.movie;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.stereotype.Controller;
@@ -30,13 +33,14 @@ public class MovieListController extends BaseController {
 		CRUMB_LIST.add(oCrumbObj);
 	}
 
-	@RequestMapping(value = { "page" }, method = RequestMethod.GET)
-	public ModelAndView listFirstMovie(ModelMap model) throws Exception {
-		return listMovie(1, model);
+	@RequestMapping(value = { "page", "/" }, method = RequestMethod.GET)
+	public ModelAndView listFirstMovie(ModelMap model, HttpServletRequest request) throws Exception {
+		return listMovie(1, model, request);
 	}
 
 	@RequestMapping(value = { "page/{pageNum}" }, method = RequestMethod.GET)
-	public ModelAndView listMovie(@PathVariable("pageNum") Integer curPage, ModelMap model) throws Exception {
+	public ModelAndView listMovie(@PathVariable("pageNum") Integer curPage, ModelMap model, HttpServletRequest request)
+			throws Exception {
 		curPage = (curPage == null || curPage < 1) ? 1 : curPage;
 		curPage = ParamUtils.inRange(curPage);
 		int start = (curPage - 1) * ParamUtils.PAGE_SIZE;
@@ -45,17 +49,42 @@ public class MovieListController extends BaseController {
 		solrQuery.setRows(ParamUtils.PAGE_SIZE);
 		solrQuery.addField("image,id,name,rate");
 		solrQuery.set("q", "*:*");
-		// solrQuery.addFilterQuery("");
+		solrQuery.addFilterQuery("type:movie");
+		solrQuery.addSort("release", ORDER.desc);
+
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
 		long total = docList.getNumFound();
 		long totalPage = total / ParamUtils.PAGE_SIZE;
 		totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);
+
+		String sPath = request.getPathInfo();
+		sPath = sPath.replaceAll("/[0-9/]*$", "");
+
 		model.addAttribute("oDocList", docList);
 		model.addAttribute("oCrumbList", CRUMB_LIST);
 		model.addAttribute("curPage", curPage);
 		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("curPath", sPath);
+
+		addHighStarDoc(model, 10);
 		return new ModelAndView("MovieList");
+	}
+
+	private void addHighStarDoc(ModelMap model, int limit) throws Exception {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(limit);
+		solrQuery.addField("cover,id,name,rate");
+		solrQuery.set("q", "*:*");
+		solrQuery.addFilterQuery("type:movie");
+		solrQuery.addSort("release", ORDER.desc);
+		solrQuery.addSort("comment", ORDER.desc);
+
+		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
+		SolrDocumentList docList = resp.getResults();
+
+		model.addAttribute("oStarList", docList);
 	}
 
 }

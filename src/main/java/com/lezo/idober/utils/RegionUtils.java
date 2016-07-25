@@ -14,14 +14,20 @@ import com.google.common.collect.Maps;
 @Log4j
 public class RegionUtils {
 	private static final Map<String, String> REGION_MAP = Maps.newHashMap();
-	private static final String DEFAULT_REGION = "中国";
+	public static final String DEFAULT_REGION = "zhongguo";
+	public static final String DEFAULT_REGION_CN = "中国";
 
-	public static String toCNRegionGroup(String pingyinRegion) {
+	public static String toCNRegion(String pingyinRegion, String defaultVal) {
+		String sGroup = toCNRegion(pingyinRegion);
+		return sGroup == null ? defaultVal : sGroup;
+	}
+
+	public static String toCNRegion(String pingyinRegion) {
 		if (REGION_MAP.isEmpty()) {
 			loadRegionGroup();
 		}
 		String sGroup = REGION_MAP.get(pingyinRegion);
-		return sGroup == null ? DEFAULT_REGION : sGroup;
+		return sGroup;
 	}
 
 	private synchronized static void loadRegionGroup() {
