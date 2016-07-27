@@ -29,6 +29,7 @@ public class SolrUtils {
 	public static final String CORE_ONLINE_MOVIE = "omovie";
 
 	public static final String KEY_EDIT_PREFIX = "_ex_";
+	public static final String VALUE_SPLITOR = ";";
 
 	public static SolrServer getDataServer() {
 		return getSolrServer(CORE_DATA);
