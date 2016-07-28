@@ -10,17 +10,17 @@
 					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9 left-box">	
 					    <div class="title"><h4>经典电影</h4></div>
 					    <#assign colCount="6"?number >
-					    <#list classicVos as oMovie>
+					    <#list classicObj.dataList as oMovie>
 					       <#if ((oMovie_index%colCount)==0) >
 					      	<div class="row content movie-bk">
 						   </#if>
 								<div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
-								   <a href="/movie/detail/${oMovie.code}" target="_blank">
-									  <img src="${oMovie.imgUrl}" alt="${oMovie.title}" class="img-rounded">
+								   <a href="/movie/detail/${oMovie.id}.html" target="_blank">
+									  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded" width="116" height="166">
 									</a>
 									<div class="name-box">
-									  <a href="/movie/detail/${oMovie.code}" title="${oMovie.title}" target="_blank">
-									    ${unifyOf(oMovie.title,8,".")}
+									  <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
+									    ${unifyOf(oMovie.name,8,".")}
 									  </a>
 									</div>
 								</div>
@@ -34,45 +34,33 @@
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3  right-box movie-bk" id="movieRank">
 				      <div class="tabbable">
 					      <ul class="nav nav-tabs tab-box">
-					        <span class="rank-title"><h4>票房榜</h4></span>
-					        <li class="active"><a href="#tab1" data-toggle="tab">综合</a></li>
-					        <li><a href="#tab2" data-toggle="tab">全国</a></li>
-					        <li><a href="#tab3" data-toggle="tab">北美</a></li>
+					        <#list rankList as oRank>
+					        <#if (oRank_index==0) >
+					      	<li class="active"><a href="#tab${oRank_index}" data-toggle="tab">${oRank.name}</a></li>
+						    <#else>
+					      	<li><a href="#tab${oRank_index}" data-toggle="tab">${oRank.name}</a></li>
+						    </#if>
+					        </#list>
 					      </ul>
 					      <div class="tab-content rank-content txtsize">
-					        <div class="tab-pane active" id="tab1">
-					           <#list allRankVos as oRank>
+					        <#list rankList as oRank>
+					        <#if (oRank_index==0) >
+					      	<div class="tab-pane active" id="tab${oRank_index}">
+						    <#else>
+					      	 <div class="tab-pane" id="tab${oRank_index}">
+						    </#if>
+						         <#list oRank.dataList as oMovie>
 						           <div class="hot-bottom">
 								    <span class="badge"> 
-								     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
+								     ${(oMovie_index<9)?string('0'+(oMovie_index+1),(oMovie_index+1))}
 								    </span>
-								    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,12,".")}</a>
-								    <span class="time-right">${oRank.updateTime?string["MM-dd"]}</span>
+								    <a href="/movie/detail/${oMovie.id}.html" target="_blank">${unifyOf(oMovie.name,12,".")}</a>
+								    <span class="time-right">${oMovie.rate?string("0.0")}</span>
 								   </div>
 							   </#list>
 					        </div>
-					        <div class="tab-pane" id="tab2">
-					           <#list cnRankVos as oRank>
-						           <div class="hot-bottom">
-								    <span class="badge"> 
-								     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
-								    </span>
-								    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,12,".")}</a>
-								    <span class="time-right">${oRank.updateTime?string["MM-dd"]}</span>
-								   </div>
-							   </#list>
-					        </div>
-					        <div class="tab-pane" id="tab3">
-						      <#list enRankVos as oRank>
-						           <div class="hot-bottom">
-								    <span class="badge"> 
-								     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
-								    </span>
-								    <a href="/movie/detail/${oRank.code}" target="_blank">${unifyOf(oRank.title,12,".")}</a>
-								    <span class="time-right">${oRank.updateTime?string["MM-dd"]}</span>
-								   </div>
-							   </#list>
-					        </div>
+					        </#list>
+					       
 					      </div>
 					   </div>	
 				</div>

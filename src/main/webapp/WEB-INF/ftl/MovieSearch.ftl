@@ -20,7 +20,7 @@
 							      <ul class="list-group">
 								    <li class="list-group-item">
 									    <h1 class="movie-title-margin">
-									     <a href="/movie/detail/${oDoc.id}" target="_blank">
+									     <a href="/movie/detail/${oDoc.id}.html" target="_blank">
 									      ${oDoc.name}
 									      </a>
 									      <#if ((oDoc.name?length+oDoc.enname?length)<=40) > 

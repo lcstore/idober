@@ -36,13 +36,13 @@
 					<div class="row row-wp">
 					</#if>
 					    <div class="col-md-3 col-wp">
-					    <a class="item-wp" target="_blank" href="/movie/detail/${oDoc.id}">
+					    <a class="item-wp" target="_blank" href="/movie/detail/${oDoc.id}.html">
 					      <div class="cover-wp" >
 					      <div class="img-thumbnail">
 					        <img alt="${oDoc.name}" src="${oDoc.image}" width="162" height="225" >
 					      </div>
 					      <p>${oDoc.name}
-					        <strong class="rate">${oDoc.rate}</strong>
+					        <strong class="rate">${oDoc.rate?string("0.0")}</strong>
 					      </p>
 					      </div>
 					 
@@ -53,19 +53,23 @@
 					</#if>
 				</#list>
 				</div>
-				<div class="pageContainer">
+				   <div class="pageContainer">
 				   <nav class="pagination">
 				     <#if (curPage>1)>
 				       <#assign prevNum=curPage -1>
-			           <a href="${curPath}/${prevNum}/" class="newer-posts"><span aria-hidden="true">&larr;</span>上一页</a>
+				       <#if (prevNum=1)>
+			           <a href="${curPath}.html" class="newer-posts"><span aria-hidden="true">&larr;</span>上一页</a>
+				       <#else>
+			           <a href="${curPath}/${prevNum}.html" class="newer-posts"><span aria-hidden="true">&larr;</span>上一页</a>
+				       </#if>
 					 </#if>
 					 <span class="page-number">第 ${curPage} 页/共 ${totalPage} 页</span>
 					 <#if (curPage<totalPage)>
 					    <#assign nextNum=curPage +1>
-					    <a href="${curPath}/${nextNum}/" class="older-posts">下一页<span aria-hidden="true">&rarr;</span></a>
+					    <a href="${curPath}/${nextNum}.html" class="older-posts">下一页<span aria-hidden="true">&rarr;</span></a>
 					</#if>
 					</nav>
-				</div>
+				    </div>
 				</div>
 		    </div>
 		    <div class="col-md-3">
@@ -73,7 +77,7 @@
                     <h3 class="text-center"> 高分电影 </h3>
                     <div class="hot-list">
                        <#list oStarList as oStar>
-                       <a target="_blank" href="/movie/detail/${oStar.id}">
+                       <a target="_blank" href="/movie/detail/${oStar.id}.html">
                          <div class="star-wp">
                          <img src="${oStar.cover}" alt="${oStar.name}" class="img-circle star-img" width="60" height="60">
                          <div class="star-txt">${oStar.name}</div>

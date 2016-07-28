@@ -26,18 +26,13 @@ import com.lezo.idober.utils.SolrUtils;
 @RequestMapping("movie")
 public class MovieRegionController extends BaseController {
 
-	@RequestMapping(value = { "region" }, method = RequestMethod.GET)
-	public ModelAndView listRegions(ModelMap model, HttpServletRequest request) throws Exception {
-		return listRegions("zhongguo", 1, model, request);
-	}
-
-	@RequestMapping(value = { "region/{name}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "region/{name}.html" }, method = RequestMethod.GET)
 	public ModelAndView listRegions(@PathVariable("name") String sRegion, ModelMap model, HttpServletRequest request)
 			throws Exception {
 		return listRegions(sRegion, 1, model, request);
 	}
 
-	@RequestMapping(value = { "region/{name}/{curPage}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "region/{name}/{curPage}.html" }, method = RequestMethod.GET)
 	public ModelAndView listRegions(@PathVariable("name") String sRegion,
 			@PathVariable("curPage") Integer curPage, ModelMap model, HttpServletRequest request)
 			throws Exception {
@@ -55,6 +50,7 @@ public class MovieRegionController extends BaseController {
 		solrQuery.addField("image,id,name,rate");
 		solrQuery.set("q", "regions:" + sCNRegion);
 		solrQuery.addFilterQuery("type:movie");
+		solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
 		solrQuery.addSort("release", ORDER.desc);
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
@@ -64,7 +60,7 @@ public class MovieRegionController extends BaseController {
 		totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);
 
 		String sPath = request.getPathInfo();
-		sPath = sPath.replaceAll("/[0-9/]*$", "");
+		sPath = sPath.replaceAll("[0-9/]*\\.html$", "");
 
 		model.addAttribute("oDocList", docList);
 		model.addAttribute("curPage", curPage);
@@ -94,9 +90,10 @@ public class MovieRegionController extends BaseController {
 		solrQuery.setRows(limit);
 		solrQuery.addField("cover,id,name,rate");
 		solrQuery.set("q", "regions:" + sRegion);
-		solrQuery.addFilterQuery("type:movie");
 		solrQuery.addSort("year", ORDER.desc);
 		solrQuery.addSort("star", ORDER.desc);
+		solrQuery.addFilterQuery("type:movie");
+		solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
 		SolrDocumentList docList = resp.getResults();

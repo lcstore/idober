@@ -32,7 +32,7 @@
 					<div class="row row-wp">
 					</#if>
 					    <div class="col-md-3 col-wp">
-					    <a class="item-wp" target="_blank" href="/movie/detail/${oDoc.id}">
+					    <a class="item-wp" target="_blank" href="/movie/detail/${oDoc.id}.html">
 					      <div class="cover-wp" >
 					      <div class="img-thumbnail">
 					        <img alt="${oDoc.name}" src="${oDoc.image}" width="162" height="225" >

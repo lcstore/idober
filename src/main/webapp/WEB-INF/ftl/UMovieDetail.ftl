@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
 <#if (oDoc.id)?exists>
-<link rel="canonical" href="http://www.lezomao.com/movie/detail/${oDoc.id}"/>
+<link rel="canonical" href="http://www.lezomao.com/movie/detail/${oDoc.id}.html"/>
 </#if> 
 <#assign oDirectors = (oDoc.directors![])>
 <#assign oActors = (oDoc.actors![])>

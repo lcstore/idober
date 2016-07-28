@@ -8,27 +8,18 @@
 		<div class="container movie-box box-mtop"  id="coming">
 				<div class="title"><h4>即将上映</h4></div>	
 				   <#assign colCount="6"?number >
-				   <#list newMovieVos as oMovie>
+				   <#list upcomingObj.dataList as oMovie>
 			       <#if ((oMovie_index%colCount)==0) >
 				   <div class="row content movie-bk">
 				   </#if>
 						<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">	
-							   <a href="/movie/detail/${oMovie.code}"  target="_blank">
-								  <img src="${oMovie.imgUrl}" alt="${oMovie.title}" class="img-rounded">
+							   <a href="/movie/detail/${oMovie.id}.html"  target="_blank">
+								  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded" width="190" height="270">
 								</a>
 								<div class="name-box">
-								  
-								  <#if (oMovie.tcount>0)>
-									<h1 class="new-movie">
-									  <a href="/movie/detail/${oMovie.code}" title="${oMovie.title}" target="_blank">
-								          ${unifyOf(oMovie.title,12,".")}
-								      </a>
-								    </h1>
-								  <#else>
-								    <a href="/movie/detail/${oMovie.code}" title="${oMovie.title}" target="_blank">
-								          ${unifyOf(oMovie.title,12,".")}
+								    <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
+								          ${unifyOf(oMovie.name,12,".")}
 								     </a>
-								  </#if>
 								</div>
 						</div>
 					<#if (((oMovie_index+1)%colCount)==0) || (!oMovie_has_next)>

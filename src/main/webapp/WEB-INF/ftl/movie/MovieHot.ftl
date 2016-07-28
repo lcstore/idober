@@ -15,8 +15,8 @@
 						               <span class="badge"> 
 									     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
 									    </span>
-									    <a href="/movie/detail/${oRank.id}.html" target="_blank">${oRank.name}</a>
-									    <span class="time-right">${oRank.release?string["MM-dd"]}</span>
+									    <a href="/movie/detail/${oRank.id}.html" target="_blank">${unifyOf(oRank.name,20,"")}</a>
+									    <span class="time-right">${oRank.timestamp?string["MM-dd"]}</span>
 								   </div>
 							   </#list>
 						  </div>
@@ -31,11 +31,11 @@
 						  </#if>
 								<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
 								   <a href="/movie/detail/${oMovie.id}.html" target="_blank">
-									  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded">
+									  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded" width="190" height="270">
 									</a>
 									<div class="name-box">
 									  <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
-									    ${oMovie.name}
+									    ${unifyOf(oMovie.name,20,"")}
 									  </a>
 									</div>
 								</div>

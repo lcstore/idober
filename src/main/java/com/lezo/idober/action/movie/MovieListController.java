@@ -22,7 +22,6 @@ import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 @Controller
-@RequestMapping("movie")
 public class MovieListController extends BaseController {
 
 	private static final List<JSONObject> CRUMB_LIST = new ArrayList<JSONObject>(1);
@@ -33,12 +32,12 @@ public class MovieListController extends BaseController {
 		CRUMB_LIST.add(oCrumbObj);
 	}
 
-	@RequestMapping(value = { "page", "/" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "movie.html" }, method = RequestMethod.GET)
 	public ModelAndView listFirstMovie(ModelMap model, HttpServletRequest request) throws Exception {
 		return listMovie(1, model, request);
 	}
 
-	@RequestMapping(value = { "page/{pageNum}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "movie/{pageNum}.html" }, method = RequestMethod.GET)
 	public ModelAndView listMovie(@PathVariable("pageNum") Integer curPage, ModelMap model, HttpServletRequest request)
 			throws Exception {
 		curPage = (curPage == null || curPage < 1) ? 1 : curPage;
@@ -50,6 +49,7 @@ public class MovieListController extends BaseController {
 		solrQuery.addField("image,id,name,rate");
 		solrQuery.set("q", "*:*");
 		solrQuery.addFilterQuery("type:movie");
+		solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
 		solrQuery.addSort("release", ORDER.desc);
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
@@ -59,7 +59,7 @@ public class MovieListController extends BaseController {
 		totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);
 
 		String sPath = request.getPathInfo();
-		sPath = sPath.replaceAll("/[0-9/]*$", "");
+		sPath = sPath.replaceAll("[0-9/]*\\.html$", "");
 
 		model.addAttribute("oDocList", docList);
 		model.addAttribute("oCrumbList", CRUMB_LIST);
@@ -80,6 +80,7 @@ public class MovieListController extends BaseController {
 		solrQuery.addFilterQuery("type:movie");
 		solrQuery.addSort("release", ORDER.desc);
 		solrQuery.addSort("comment", ORDER.desc);
+		solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
 		SolrDocumentList docList = resp.getResults();

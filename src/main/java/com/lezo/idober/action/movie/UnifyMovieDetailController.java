@@ -91,7 +91,7 @@ public class UnifyMovieDetailController extends BaseController {
 		JSONArray cArray = new JSONArray();
 		JSONObject cObj = new JSONObject();
 		cObj.put("name", typeNameMap.get(type));
-		cObj.put("link", "/" + type + "/page");
+		cObj.put("link", "/" + type + ".html");
 		cArray.add(cObj);
 		crumbArr.add(cArray);
 		addCrumbByRegion(srcObject, crumbArr, type);
@@ -117,7 +117,7 @@ public class UnifyMovieDetailController extends BaseController {
 				JSONObject gObj = new JSONObject();
 				gObj.put("name", sRegion);
 				gObj.put("pyVal", sPyRegion);
-				gObj.put("link", regionLink + sPyRegion);
+				gObj.put("link", regionLink + sPyRegion + ".html");
 				rArray.add(gObj);
 			}
 			crumbArr.add(rArray);
@@ -157,7 +157,7 @@ public class UnifyMovieDetailController extends BaseController {
 				}
 				JSONObject gObj = new JSONObject();
 				gObj.put("name", sGenre);
-				gObj.put("link", genreLink + sPyGenre);
+				gObj.put("link", genreLink + sPyGenre + ".html");
 				gArray.add(gObj);
 			}
 			crumbArr.add(gArray);

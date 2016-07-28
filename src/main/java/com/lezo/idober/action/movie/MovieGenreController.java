@@ -26,18 +26,14 @@ import com.lezo.idober.utils.SolrUtils;
 @Controller
 @RequestMapping("movie")
 public class MovieGenreController extends BaseController {
-	@RequestMapping(value = { "genre" }, method = RequestMethod.GET)
-	public ModelAndView listGenres(ModelMap model, HttpServletRequest request) throws Exception {
-		return listGenres("kehuan-zhongguo", 1, model, request);
-	}
 
-	@RequestMapping(value = { "genre/{name}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "genre/{name}.html" }, method = RequestMethod.GET)
 	public ModelAndView listGenres(@PathVariable("name") String sGenre, ModelMap model, HttpServletRequest request)
 			throws Exception {
 		return listGenres(sGenre, 1, model, request);
 	}
 
-	@RequestMapping(value = { "genre/{name}/{curPage}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "genre/{name}/{curPage}.html" }, method = RequestMethod.GET)
 	public ModelAndView listGenres(@PathVariable("name") String sGenre, @PathVariable("curPage") Integer curPage,
 			ModelMap model, HttpServletRequest request) throws Exception {
 		sGenre = ParamUtils.xssClean(sGenre);
@@ -68,6 +64,7 @@ public class MovieGenreController extends BaseController {
 		solrQuery.set("q", "genres:" + sCNGenre);
 		solrQuery.addFilterQuery("regions:" + sCNRegion);
 		solrQuery.addFilterQuery("type:movie");
+		solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
 		solrQuery.addSort("release", ORDER.desc);
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
@@ -77,7 +74,7 @@ public class MovieGenreController extends BaseController {
 		totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);
 
 		String sPath = request.getPathInfo();
-		sPath = sPath.replaceAll("/[0-9/]*$", "");
+		sPath = sPath.replaceAll("[0-9/]*\\.html$", "");
 
 		model.addAttribute("oDocList", docList);
 		model.addAttribute("curPage", curPage);
@@ -117,6 +114,7 @@ public class MovieGenreController extends BaseController {
 		solrQuery.addFilterQuery("type:movie");
 		solrQuery.addSort("year", ORDER.desc);
 		solrQuery.addSort("star", ORDER.desc);
+		solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
