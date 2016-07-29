@@ -15,7 +15,7 @@
 						               <span class="badge"> 
 									     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
 									    </span>
-									    <a href="/movie/detail/${oRank.id}.html" target="_blank">${unifyOf(oRank.name,20,"")}</a>
+									    <a href="/movie/detail/${oRank.id}.html" target="_blank">${unifyOf(oRank.name,14,"")}</a>
 									    <span class="time-right">${oRank.timestamp?string["MM-dd"]}</span>
 								   </div>
 							   </#list>
@@ -35,7 +35,7 @@
 									</a>
 									<div class="name-box">
 									  <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
-									    ${unifyOf(oMovie.name,20,"")}
+									    ${unifyOf(oMovie.name,14,"")}
 									  </a>
 									</div>
 								</div>

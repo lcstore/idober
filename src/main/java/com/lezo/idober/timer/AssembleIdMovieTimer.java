@@ -70,33 +70,33 @@ public class AssembleIdMovieTimer implements Runnable {
         regionMap.put("hot-riben", "日本");
         Integer limit = 100;
         for (Entry<String, String> entry : regionMap.entrySet()) {
-            String type = "idober-movie-id-" + entry.getKey();
+            String group = "" + entry.getKey();
             String title = entry.getValue() + "热度榜";
             String sSortName = entry.getValue();
             try {
-                buildByDoubanSort(type, title, limit, sSortName);
+                buildByDoubanSort(group, title, limit, sSortName);
             } catch (Exception e) {
-                log.warn("build,type:" + type + ",cause:", e);
+                log.warn("build,type:" + group + ",cause:", e);
             }
         }
 
     }
 
     private void buildClassic() {
-        String type = "idober-movie-id-classic";
+        String group = "classic";
         String title = "经典电影";
         String sSortName = "经典";
         Integer limit = 100;
         try {
-            buildByDoubanSort(type, title, limit, sSortName);
+            buildByDoubanSort(group, title, limit, sSortName);
         } catch (Exception e) {
-            log.warn("build,type:" + type + ",cause:", e);
+            log.warn("build,type:" + group + ",cause:", e);
         }
     }
 
-    private void buildByDoubanSort(String type, String title, Integer limit, String sSortName) throws Exception {
+    private void buildByDoubanSort(String group, String title, Integer limit, String sSortName) throws Exception {
         SolrServer sourceServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
-        SolrInputDocument inDoc = newDocument(type, title);
+        SolrInputDocument inDoc = newDocument(group, title);
         String sortField = sSortName + "_rank_ti";
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setStart(0);
@@ -134,7 +134,7 @@ public class AssembleIdMovieTimer implements Runnable {
     }
 
     private void buildNewly() {
-        String type = "idober-movie-id-newly";
+        String group = "newly";
         String title = "最新电影";
         Integer limit = 36;
         try {
@@ -146,7 +146,7 @@ public class AssembleIdMovieTimer implements Runnable {
             solrQuery.addSort("release", ORDER.desc);
             SolrDocumentList docList = getMovieIdByQuery(solrQuery);
             if (!docList.isEmpty()) {
-                SolrInputDocument inDoc = newDocument(type, title);
+                SolrInputDocument inDoc = newDocument(group, title);
                 JSONArray idArray = toIdJSONArray(docList);
                 inDoc.addField("content", idArray.toJSONString());
                 SolrServer sourceServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
@@ -154,37 +154,37 @@ public class AssembleIdMovieTimer implements Runnable {
                 sourceServer.commit();
             }
         } catch (Exception e) {
-            log.warn("build,type:" + type + ",cause:", e);
+            log.warn("build,type:" + group + ",cause:", e);
         }
     }
 
     private void buildUpcoming() {
-        String type = "idober-movie-id-upcoming";
+        String group = "upcoming";
         String title = "即将上映";
         String sCategory = "upcoming";
         Integer limit = 100;
         try {
-            buildByDoubanPlaying(type, title, limit, sCategory);
+            buildByDoubanPlaying(group, title, limit, sCategory);
         } catch (Exception e) {
-            log.warn("build,type:" + type + ",cause:", e);
+            log.warn("build,type:" + group + ",cause:", e);
         }
     }
 
     private void buildPlaying() throws Exception {
-        String type = "idober-movie-id-playing";
+        String group = "playing";
         String title = "正在热播";
         String sCategory = "nowplaying";
         Integer limit = 100;
         try {
-            buildByDoubanPlaying(type, title, limit, sCategory);
+            buildByDoubanPlaying(group, title, limit, sCategory);
         } catch (Exception e) {
-            log.warn("build,type:" + type + ",cause:", e);
+            log.warn("build,type:" + group + ",cause:", e);
         }
     }
 
-    private void buildByDoubanPlaying(String type, String title, Integer limit, String sCategory) throws Exception {
+    private void buildByDoubanPlaying(String group, String title, Integer limit, String sCategory) throws Exception {
         SolrServer sourceServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
-        SolrInputDocument inDoc = newDocument(type, title);
+        SolrInputDocument inDoc = newDocument(group, title);
 
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setStart(0);
@@ -277,15 +277,17 @@ public class AssembleIdMovieTimer implements Runnable {
         return cycleDate;
     }
 
-    private SolrInputDocument newDocument(String type, String title) {
+    private SolrInputDocument newDocument(String group, String title) {
+        String type = "idober-movie-ids";
         Date cycleDate = getCycleDate(Calendar.FRIDAY);
         String sDate = DateFormatUtils.format(cycleDate, "yyyyMMdd");
         SolrInputDocument inDoc = new SolrInputDocument();
-        String sIdVal = type + SolrUtils.VALUE_SPLITOR + sDate;
+        String sIdVal = type + SolrUtils.VALUE_SPLITOR + group + SolrUtils.VALUE_SPLITOR + sDate;
         inDoc.addField("id", sIdVal);
-        inDoc.addField("title", title + " " + sDate);
+        inDoc.addField("title", group + " " + sDate);
         inDoc.addField("type", type);
         inDoc.addField("date_s", sDate);
+        inDoc.addField("group_s", group);
         return inDoc;
     }
 

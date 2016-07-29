@@ -20,7 +20,7 @@
 									</a>
 									<div class="name-box">
 									  <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
-									    ${unifyOf(oMovie.name,8,".")}
+									    ${unifyOf(oMovie.name,12,".")}
 									  </a>
 									</div>
 								</div>
