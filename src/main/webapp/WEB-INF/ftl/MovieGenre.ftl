@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-
-<title>狸猫资讯,识低价、辨真假,比价购物更放心！双11折扣，货比三家知实惠，对比验证辨真假。</title>
+<meta name="description" content="狸猫资讯采集归类的，${cnRegion}地区${cnGenre}类高清电影迅雷下载地址列表，为你推荐！"/>
+<meta name="keywords" content="狸猫资讯、lezomao,${cnRegion},${cnGenre},种子下载,迅雷下载,高清下载" />
+<meta name="title" content="${cnRegion}地区${cnGenre}类高分电影，高清种子下载地址列表 - 狸猫资讯(LezoMao.com)" />
+<title>${cnRegion}地区${cnGenre}类高分电影，高清种子下载地址列表 - 狸猫资讯(LezoMao.com)</title>
 </head>
 <#assign oDocList = (oDocList![])>
 <#assign oCrumbList = (oCrumbList![])>
@@ -57,7 +59,7 @@
 				   <nav class="pagination">
 				     <#if (curPage>1)>
 				       <#assign prevNum=curPage -1>
-				       <#if(prevNum=1)>
+				       <#if (prevNum=1)>
 			           <a href="${curPath}.html" class="newer-posts"><span aria-hidden="true">&larr;</span>上一页</a>
 				       <#else>
 			           <a href="${curPath}/${prevNum}.html" class="newer-posts"><span aria-hidden="true">&larr;</span>上一页</a>

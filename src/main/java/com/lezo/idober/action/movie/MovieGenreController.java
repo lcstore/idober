@@ -80,6 +80,8 @@ public class MovieGenreController extends BaseController {
 		model.addAttribute("curPage", curPage);
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("curPath", sPath);
+		model.addAttribute("cnGenre", sCNGenre);
+		model.addAttribute("cnRegion", sCNRegion);
 
 		addCrumbs(model, sGenre, sRegion, sCNGenre, sCNRegion);
 		addHighStarDoc(model, sCNGenre, sCNRegion, 10);
@@ -91,15 +93,15 @@ public class MovieGenreController extends BaseController {
 		List<JSONObject> crumbList = Lists.newArrayList();
 		JSONObject oCrumbObj = new JSONObject();
 		oCrumbObj.put("title", "电影");
-		oCrumbObj.put("link", "/movie/page/");
+		oCrumbObj.put("link", "/movie.html");
 		crumbList.add(oCrumbObj);
 		oCrumbObj = new JSONObject();
 		oCrumbObj.put("title", sCNRegion);
-		oCrumbObj.put("link", "/movie/region/" + sRegion);
+		oCrumbObj.put("link", "/movie/region/" + sRegion + ".html");
 		crumbList.add(oCrumbObj);
 		oCrumbObj = new JSONObject();
 		oCrumbObj.put("title", sCNGenre);
-		oCrumbObj.put("link", "/movie/genre/" + sGenre + "-" + sRegion);
+		oCrumbObj.put("link", "/movie/genre/" + sGenre + "-" + sRegion + ".html");
 		crumbList.add(oCrumbObj);
 		model.addAttribute("oCrumbList", crumbList);
 	}

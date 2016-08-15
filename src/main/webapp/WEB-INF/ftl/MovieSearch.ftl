@@ -39,10 +39,8 @@
 								    <li class="list-group-item"><strong>类型：</strong>${oGenres?join(' ')}</li>
 								    <li class="list-group-item"><strong>上映：</strong>
 								        <#list oRegions as region>
-								          <#if (region_index==0) >
+								          <#if (!region_has_next) >
 								            ${region}(${oDoc.release?string("yyyy-MM-dd")})
-								         <#else>
-								            &nbsp${region}
 					 					  </#if>	
 								        </#list>
 								    </li>

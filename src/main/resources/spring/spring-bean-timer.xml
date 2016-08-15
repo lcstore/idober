@@ -9,6 +9,7 @@
 	<bean id="UnifyRegionTimer" class="com.lezo.idober.timer.UnifyRegionTimer" />
 	<bean id="OnlineTorrentMovieTimer" class="com.lezo.idober.timer.OnlineTorrentMovieTimer" />
 	<bean id="AssembleIdMovieTimer" class="com.lezo.idober.timer.AssembleIdMovieTimer" />
+	<bean id="QueryTorrent4NewMovieTimer" class="com.lezo.idober.timer.QueryTorrent4NewMovieTimer" />
 	
 	<!-- Enables the Spring Task @Scheduled programming model -->
 	<task:executor id="executor" pool-size="3" />
@@ -26,6 +27,10 @@
 	<task:scheduled-tasks scheduler="scheduler">
 		<task:scheduled ref="AssembleIdMovieTimer" method="run"
 			cron="${idober.timer.AssembleIdMovieTimer.cron}" />
+	</task:scheduled-tasks>
+	<task:scheduled-tasks scheduler="scheduler">
+		<task:scheduled ref="QueryTorrent4NewMovieTimer" method="run"
+			cron="${idober.timer.QueryTorrent4NewMovieTimer.cron}" />
 	</task:scheduled-tasks>
 
 </beans>

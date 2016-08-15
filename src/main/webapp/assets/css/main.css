@@ -371,6 +371,10 @@ input.search-query {
 	display: inline-flex;
 }
 
+ul.channel-nav li>a.active {
+	color: #fff;
+}
+
 li.login-nav {
 	display: inline-flex;
 }
@@ -409,17 +413,19 @@ a:hover {
 	text-decoration: underline;
 }
 
-/* #logo-2015 .logo {
-	background: rgba(0, 0, 0, 0) url("../img/logo.jpg") no-repeat scroll 0 0;
-	display: block;
-	height: 60px;
-	margin-top: 0px;
-	text-indent: -200px;
-	width: 120px;
-} */
-.center-header {
-	margin-left: 20%;
+#logo-2015 .logo {
+	margin-top: -6px;
 }
+
+.center-header {
+	margin-left: 2%;
+}
+
+.logo span.site {
+	margin-top: 20%;
+	float: right;
+}
+
 /**----navbar--end----**/
 .top-margin {
 	margin-top: 20px;

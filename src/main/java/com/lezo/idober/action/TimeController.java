@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lezo.idober.timer.FillTorrent2MovieTimer;
 import com.lezo.idober.timer.OnlineTorrentMovieTimer;
+import com.lezo.idober.timer.QueryTorrent4NewMovieTimer;
 import com.lezo.idober.timer.UnifyRegionTimer;
 
 @Log4j
@@ -22,6 +23,8 @@ public class TimeController extends BaseController {
 	private UnifyRegionTimer unifyRegionTimer;
 	@Autowired
 	private OnlineTorrentMovieTimer onlineTorrentMovieTimer;
+	@Autowired
+	private QueryTorrent4NewMovieTimer queryTorrent4NewMovieTimer;
 
 	@ResponseBody
 	@RequestMapping(value = { "torrent" },
@@ -35,13 +38,13 @@ public class TimeController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = { "region" },
+	@RequestMapping(value = { "query" },
 			method = RequestMethod.GET)
 	public String unifyRegionTimer() throws Exception {
 		long startMills = System.currentTimeMillis();
-		unifyRegionTimer.run();
+		queryTorrent4NewMovieTimer.run();
 		long costMills = System.currentTimeMillis() - startMills;
-		log.info("done,unifyRegionTimer,cost:" + costMills);
+		log.info("done,queryTorrent4NewMovieTimer,cost:" + costMills);
 		return "OK";
 	}
 

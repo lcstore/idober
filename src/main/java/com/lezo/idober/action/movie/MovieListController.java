@@ -28,7 +28,7 @@ public class MovieListController extends BaseController {
 	static {
 		JSONObject oCrumbObj = new JSONObject();
 		oCrumbObj.put("title", "电影");
-		oCrumbObj.put("link", "/movie/page/");
+		oCrumbObj.put("link", "/movie.html");
 		CRUMB_LIST.add(oCrumbObj);
 	}
 

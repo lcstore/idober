@@ -66,6 +66,7 @@ public class MovieRegionController extends BaseController {
 		model.addAttribute("curPage", curPage);
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("curPath", sPath);
+		model.addAttribute("cnRegion", sCNRegion);
 		addHighStarDoc(model, sCNRegion, 10);
 		addCrumbs(model, sRegion, sCNRegion);
 		return new ModelAndView("MovieRegion");
@@ -75,11 +76,11 @@ public class MovieRegionController extends BaseController {
 		List<JSONObject> crumbList = Lists.newArrayList();
 		JSONObject oCrumbObj = new JSONObject();
 		oCrumbObj.put("title", "电影");
-		oCrumbObj.put("link", "/movie/page/");
+		oCrumbObj.put("link", "/movie.html");
 		crumbList.add(oCrumbObj);
 		oCrumbObj = new JSONObject();
 		oCrumbObj.put("title", sCNRegion);
-		oCrumbObj.put("link", "/movie/region/" + sRegion);
+		oCrumbObj.put("link", "/movie/region/" + sRegion + ".html");
 		crumbList.add(oCrumbObj);
 		model.addAttribute("oCrumbList", crumbList);
 	}

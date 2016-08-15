@@ -9,5 +9,6 @@
 	<bean id="UnifyRegionTimer" class="com.lezo.idober.timer.UnifyRegionTimer" />
 	<bean id="OnlineTorrentMovieTimer" class="com.lezo.idober.timer.OnlineTorrentMovieTimer" />
 	<bean id="AssembleIdMovieTimer" class="com.lezo.idober.timer.AssembleIdMovieTimer" />
+	<bean id="QueryTorrent4NewMovieTimer" class="com.lezo.idober.timer.QueryTorrent4NewMovieTimer" />
 
 </beans>

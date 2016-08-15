@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
@@ -34,6 +36,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.lezo.idober.utils.SolrUtils;
 
 @Log4j
@@ -42,8 +45,8 @@ public class FillTorrent2MovieTimer implements Runnable {
 	private static final String CORE_NAME_META = "cmeta";
 	private static String torrentFilterQuery;
 	private static AtomicBoolean running = new AtomicBoolean(false);
-	private static final Pattern CN_NAME_REG = Pattern.compile("([\u4e00-\u9fa5\\s0-9]+)");
-	private static final Pattern SYMBOL_REG = Pattern.compile("([:-_()（）：/]+)");
+	private static final Pattern CN_NAME_REG = Pattern.compile("([\u4e00-\u9fa5\\s0-9]{2,})");
+	private static final Pattern SYMBOL_REG = Pattern.compile("([-_（）：\\s:]+)");
 	private static final Pattern IGNORE_REG = Pattern.compile("(第[一二三四五六七八九0-9][部季集])");
 
 	static {
@@ -78,12 +81,12 @@ public class FillTorrent2MovieTimer implements Runnable {
 			SolrServer movieServer = SolrUtils.getSolrServer(coreName);
 			coreName = CORE_NAME_META;
 			SolrServer metaServer = SolrUtils.getSolrServer(coreName);
-			int offset = 0;
+			String fromId = "0";
 			int limit = 100;
 			while (true) {
 				SolrDocumentList selectDocs = null;
 				try {
-					selectDocs = getMovieEmptyTorrentWithLimit(movieServer, offset, limit);
+					selectDocs = getMovieEmptyTorrentWithLimit(movieServer, fromId, limit);
 				} catch (Exception e) {
 					log.warn("", e);
 				}
@@ -98,7 +101,12 @@ public class FillTorrent2MovieTimer implements Runnable {
 				if (selectDocs.size() < limit) {
 					break;
 				}
-				offset += limit;
+				for (SolrDocument doc : selectDocs) {
+					String idString = doc.getFieldValue("id").toString();
+					if (idString.compareToIgnoreCase(fromId) > 0) {
+						fromId = idString;
+					}
+				}
 				total += limit;
 			}
 		} catch (Exception e) {
@@ -116,25 +124,25 @@ public class FillTorrent2MovieTimer implements Runnable {
 		if (CollectionUtils.isEmpty(selectDocs)) {
 			return;
 		}
-		JSONArray taskList = new JSONArray();
+		// JSONArray taskList = new JSONArray();
 		JSONArray docArray = new JSONArray();
 		for (SolrDocument doc : selectDocs) {
 			SolrQuery solrQuery = createMetaQuery(doc, false);
 			List<SolrDocument> metaDocs = getMetaDocuments(metaServer, solrQuery);
 			JSONObject tObject = createTorrentDoc(doc, metaDocs);
 			if (tObject == null || tObject.getJSONArray("torrents").isEmpty()) {
-				String sId = doc.getFieldValue("id").toString();
-				String sName = doc.getFieldValue("name").toString();
-				JSONObject taskObj = new JSONObject();
-				taskObj.put("type", "query-movie");
-				taskObj.put("url", "");
-				taskObj.put("level", 1000);
-				JSONObject argsObj = new JSONObject();
-				argsObj.put("title", sName);
-				argsObj.put("mid", sId);
-				argsObj.put("retry", "0");
-				taskObj.put("args", argsObj);
-				taskList.add(taskObj);
+				// String sId = doc.getFieldValue("id").toString();
+				// String sName = doc.getFieldValue("name").toString();
+				// JSONObject taskObj = new JSONObject();
+				// taskObj.put("type", "query-movie");
+				// taskObj.put("url", "");
+				// taskObj.put("level", 1000);
+				// JSONObject argsObj = new JSONObject();
+				// argsObj.put("title", sName);
+				// argsObj.put("mid", sId);
+				// argsObj.put("retry", "0");
+				// taskObj.put("args", argsObj);
+				// taskList.add(taskObj);
 				log.warn("torrent.empty[" + doc.getFirstValue("id") + "],name:" + doc.getFirstValue("name"));
 			}
 			if (tObject != null) {
@@ -154,7 +162,7 @@ public class FillTorrent2MovieTimer implements Runnable {
 			NamedList<Object> resp = movieServer.request(request);
 			log.info("resp:" + resp.size() + ",update:" + docArray.size());
 		}
-		createTasks(taskList);
+		// createTasks(taskList);
 	}
 
 	private void createTasks(JSONArray taskArray) throws Exception {
@@ -327,26 +335,41 @@ public class FillTorrent2MovieTimer implements Runnable {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setStart(offset);
 		solrQuery.setRows(limit);
-		StringBuilder sb = new StringBuilder();
+
 		String sName = doc.getFieldValue("name").toString();
-		sName = SYMBOL_REG.matcher(sName).replaceAll(" ");
-		sName = IGNORE_REG.matcher(sName).replaceAll(" ");
-		Matcher matcher = CN_NAME_REG.matcher(sName);
-		if (matcher.find()) {
-			sName = matcher.group(1).trim();
-		}
-		sName = sName.trim();
-		sb.append(sName);
-		if (useDirector) {
-			List<String> directors = (List<String>) doc.getFieldValue("directors");
-			if (CollectionUtils.isNotEmpty(directors)) {
-				sb.append(" ");
-				sb.append(directors.get(0));
-			} else {
-				missFields.add("directors");
+		Set<String> nameSet = Sets.newLinkedHashSet();
+		sName = convertName(sName);
+		nameSet.add(sName);
+		Collection<Object> nameList = doc.getFieldValues("names");
+		if (CollectionUtils.isNotEmpty(nameList)) {
+			for (Object nameObj : nameList) {
+				String sCurName = convertName(nameObj.toString());
+				sCurName = convertName(sCurName);
+				nameSet.add(sCurName);
 			}
 		}
-		String sQuery = ClientUtils.escapeQueryChars(sb.toString());
+		String sHead = "(";
+		StringBuilder sb = new StringBuilder(sHead);
+		for (String name : nameSet) {
+			if (sb.length() > sHead.length()) {
+				sb.append(" OR ");
+			}
+			name = ClientUtils.escapeQueryChars(name);
+			sb.append("query:");
+			sb.append(name);
+		}
+		sb.append(")");
+		// if (useDirector) {
+		// List<String> directors = (List<String>)
+		// doc.getFieldValue("directors");
+		// if (CollectionUtils.isNotEmpty(directors)) {
+		// sb.append(" ");
+		// sb.append(directors.get(0));
+		// } else {
+		// missFields.add("directors");
+		// }
+		// }
+		String sQuery = sb.toString();
 		solrQuery.set("q", sQuery);
 		solrQuery.addFilterQuery(torrentFilterQuery);
 		Object yearObj = doc.getFieldValue("year");
@@ -362,13 +385,30 @@ public class FillTorrent2MovieTimer implements Runnable {
 		return solrQuery;
 	}
 
-	private SolrDocumentList getMovieEmptyTorrentWithLimit(SolrServer movieServer, int offset, int limit)
+	private String convertName(String sName) {
+		if (sName == null) {
+			return null;
+		}
+		Matcher matcher = CN_NAME_REG.matcher(sName);
+		if (matcher.find()) {
+			sName = matcher.group(1).trim();
+		} else {
+			sName = SYMBOL_REG.matcher(sName).replaceAll(" ");
+			sName = IGNORE_REG.matcher(sName).replaceAll(" ");
+		}
+		sName = sName.trim();
+		return sName;
+	}
+
+	private SolrDocumentList getMovieEmptyTorrentWithLimit(SolrServer movieServer, String fromId, int limit)
 			throws Exception {
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setStart(offset);
+		solrQuery.setStart(0);
 		solrQuery.setRows(limit);
 		solrQuery.set("q", "torrents_size:0");
-		// solrQuery.set("q", "id:1094876573");
+		solrQuery.addFilterQuery("id:[" + fromId + " TO *]");
+		solrQuery.addSort("id", ORDER.asc);
+		// solrQuery.set("q", "id:02045492354");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();
 	}

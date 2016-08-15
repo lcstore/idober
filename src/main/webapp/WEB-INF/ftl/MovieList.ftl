@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-
-<title>狸猫资讯,识低价、辨真假,比价购物更放心！双11折扣，货比三家知实惠，对比验证辨真假。</title>
+<meta name="description" content="狸猫资讯精心收集整理的，正在热播高清电影下载地址列表，为你准备！"/>
+<meta name="keywords" content="狸猫资讯、lezomao,正在热播,高清电影,种子下载,迅雷下载,高清下载" />
+<meta name="title" content="最新正在热播高清电影下载地址列表 - 狸猫资讯(LezoMao.com)" />
+<title>最新正在热播高清电影下载地址列表 - 狸猫资讯(LezoMao.com)</title>
 </head>
 <#assign oDocList = (oDocList![])>
 <#assign oCrumbList = (oCrumbList![])>
