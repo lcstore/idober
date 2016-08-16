@@ -46,7 +46,9 @@ public class MovieSearchController extends BaseController {
         solrQuery.setRows(limit);
         solrQuery.set("qq", keyWord);
         solrQuery.addFilterQuery("type:movie");
-        solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
+        // solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
+        // 发布时间在2个月之后，且无下载地址的电影不显示
+        solrQuery.addFilterQuery("!(release:[NOW+60DAY/DAY TO *] AND torrents_size:0 AND shares_size:0)");
         solrQuery.addSort("release", ORDER.desc);
         QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
         return resp.getResults();
