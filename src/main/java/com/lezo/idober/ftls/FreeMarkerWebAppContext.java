@@ -27,7 +27,6 @@ import freemarker.template.TemplateException;
 
 public class FreeMarkerWebAppContext extends WebAppContext {
     private static final String KEY_MODEL = "model";
-    private HttpServletResponse response;
     private HttpServletRequest request;
     private boolean includeErrorPages;
 
@@ -35,7 +34,6 @@ public class FreeMarkerWebAppContext extends WebAppContext {
             ServletContext servletContext, ContentProcessor contentProcessor, ResponseMetaData metaData,
             boolean includeErrorPages) {
         super(contentType, request, response, servletContext, contentProcessor, metaData, includeErrorPages);
-        this.response = response;
         this.request = request;
         this.includeErrorPages = includeErrorPages;
     }

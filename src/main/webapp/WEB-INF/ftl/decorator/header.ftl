@@ -17,13 +17,16 @@
     <link rel="stylesheet" href="${static_host}/assets/css/main.css?v=${version}">
 
 	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+	<script src="${static_host}/assets/js/jquery.cookie.js?v=${version}"></script>
 	<script src="${static_host}/assets/js/custom/common-tools.js?v=${version}"></script>
+	
 </head>
 
 <body class="home">
     <!-- for next decorator.header -->
     <sitemesh:write property='body'/>
-    
+    <input type="hidden" id="qqAppId" value="${qq_connect_appid}"/>
+	<input type="hidden" id="qqRedirectUrl" value="${qq_redirect_url}"/>
 	<script src="//cdn.bootcss.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </body>
 </html>

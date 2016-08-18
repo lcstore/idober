@@ -1,8 +1,11 @@
 package com.lezo.idober.solr;
 
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 
 public class RegExpTest {
@@ -31,5 +34,9 @@ public class RegExpTest {
         } else {
             System.err.println(itemCode + " is not a number");
         }
+        Date date = new Date();
+        String format = DateFormatUtils.format(date, "EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
+        System.err.println(date.toGMTString());
+        System.err.println(format);
     }
 }

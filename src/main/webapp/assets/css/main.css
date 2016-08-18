@@ -801,3 +801,11 @@ strong.rate {
 	color: #fff;
 	box-shadow: 0 3px 6px rgba(0, 0, 0, .2), 0 3px 6px rgba(0, 0, 0, .28)
 }
+
+#login-user {
+	color: #B57821;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 120px;
+}

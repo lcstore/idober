@@ -3,6 +3,7 @@
 <head>
     <title><sitemesh:write property='title' /></title>
     <sitemesh:write property='head'/>
+    
 </head>
 <body>
 	<!-- Fixed navbar -->
@@ -33,9 +34,10 @@
 					<li><a href="#">影视</a></li>
 					<li><a href="#">科技</a></li>
 					<li class="login-nav">
-					<a href="#" rel="nofollow" class="btn btn-xs login-btn" role="button">登陆</a>
+					
+					<a id="login"  href="javascript:void(0)" rel="nofollow" class="btn btn-xs login-btn" role="button" onclick="toLogin()">登陆</a>
 					/
-					<a href="#" rel="nofollow" class="btn btn-xs login-btn" role="button">注册</a>
+					<a id="signup" href="javascript:void(0)" rel="nofollow" class="btn btn-xs login-btn" role="button">注册</a>
 					</li>
 				</ul>
 			</div>
@@ -47,5 +49,22 @@
 	
 	<!-- for next decorator.navbar -->
     <sitemesh:write property='body'/>
+    <script>
+      function toLogin(){
+        window.location.href='/login?retTo='+encodeURIComponent(window.location.href);
+      }
+      function toLogout(){
+        console.log('do logout...');
+        QC.Login.signOut();
+        var $Login = $('#login-user');
+		$Login.attr('id','login');
+		$Login.text('登陆');
+		var $Signup = $('#logout');
+		$Signup.attr('id','signup');
+		$Signup.attr('onclick','toLogin()');
+		$Signup.text('注册');
+      }
+    </script>
+
 </body>
 </html>
