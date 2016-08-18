@@ -125,7 +125,7 @@ text-decoration:none;
       var retTo = RegExp.$1;
       console.log('retTo:'+retTo);
       if(retTo){
-        $.cookie('retTo', retTo, {path: '/' });
+        $.cookie('retTo', retTo, {path: '/oauth2.0' });
       }
    }
  } 

@@ -15,7 +15,7 @@
      <link rel="stylesheet" href="${static_host}/assets/css/bootstrap-theme.css?v=${version}" media="screen">
 	
     <link rel="stylesheet" href="${static_host}/assets/css/main.css?v=${version}">
-
+    
 	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 	<script src="${static_host}/assets/js/jquery.cookie.js?v=${version}"></script>
 	<script src="${static_host}/assets/js/custom/common-tools.js?v=${version}"></script>

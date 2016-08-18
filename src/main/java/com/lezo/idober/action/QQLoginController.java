@@ -35,67 +35,67 @@ import com.lezo.idober.config.AppConfig;
 @RequestMapping("oauth2.0")
 @Log4j
 public class QQLoginController {
-    private static final String KEY_ACCESS_TOKEN = "access_token";
-    private static final String KEY_EXPIRES_IN = "expires_in";
-    private static final String VAL_TOKEN_URL =
-            "https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=[YOUR_APP_ID]&client_secret=[YOUR_APP_Key]&code=[The_AUTHORIZATION_CODE]&state=[The_CLIENT_STATE]&redirect_uri=[YOUR_REDIRECT_URI]";
-    @Autowired
-    private AppConfig config;
+	private static final String KEY_ACCESS_TOKEN = "access_token";
+	private static final String KEY_EXPIRES_IN = "expires_in";
+	private static final String VAL_TOKEN_URL =
+			"https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=[YOUR_APP_ID]&client_secret=[YOUR_APP_Key]&code=[The_AUTHORIZATION_CODE]&state=[The_CLIENT_STATE]&redirect_uri=[YOUR_REDIRECT_URI]";
+	@Autowired
+	private AppConfig config;
 
-    @RequestMapping(value = { "qqLogin" }, method = RequestMethod.GET)
-    public ModelAndView doLogin(@RequestParam("code") String code, @RequestParam("state") String state,
-            @CookieValue(name = "retTo", required = false) String retTo,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
-        String sTokenUrl = VAL_TOKEN_URL;
-        sTokenUrl = sTokenUrl.replace("[YOUR_APP_ID]", config.getQqConnectAppid());
-        sTokenUrl = sTokenUrl.replace("[YOUR_APP_Key]", config.getQqConnectAppkey());
-        sTokenUrl = sTokenUrl.replace("[YOUR_REDIRECT_URI]", config.getQqRedirectUrl());
-        sTokenUrl = sTokenUrl.replace("[The_AUTHORIZATION_CODE]", code);
-        sTokenUrl = sTokenUrl.replace("[The_CLIENT_STATE]", state);
-        String userAgent = request.getHeader("User-Agent");
-        if (userAgent == null) {
-            userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:47.0) Gecko/20100101 Firefox/47.0";
-        }
-        Response resp =
-                Jsoup.connect(sTokenUrl).ignoreContentType(true).userAgent(userAgent).method(Method.GET).execute();
-        String sPath = resp.body();
-        int index = sPath.lastIndexOf(KEY_ACCESS_TOKEN);
+	@RequestMapping(value = { "qqLogin" }, method = RequestMethod.GET)
+	public ModelAndView doLogin(@RequestParam("code") String code, @RequestParam("state") String state,
+			@CookieValue(name = "retTo", required = false) String retTo,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String sTokenUrl = VAL_TOKEN_URL;
+		sTokenUrl = sTokenUrl.replace("[YOUR_APP_ID]", config.getQqConnectAppid());
+		sTokenUrl = sTokenUrl.replace("[YOUR_APP_Key]", config.getQqConnectAppkey());
+		sTokenUrl = sTokenUrl.replace("[YOUR_REDIRECT_URI]", config.getQqRedirectUrl());
+		sTokenUrl = sTokenUrl.replace("[The_AUTHORIZATION_CODE]", code);
+		sTokenUrl = sTokenUrl.replace("[The_CLIENT_STATE]", state);
+		String userAgent = request.getHeader("User-Agent");
+		if (userAgent == null) {
+			userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:47.0) Gecko/20100101 Firefox/47.0";
+		}
+		Response resp =
+				Jsoup.connect(sTokenUrl).ignoreContentType(true).userAgent(userAgent).method(Method.GET).execute();
+		String sPath = resp.body();
+		int index = sPath.lastIndexOf(KEY_ACCESS_TOKEN);
 
-        if (index >= 0) {
-            String sParam = sPath.substring(index);
-            String[] paramArr = sParam.split("&");
-            Map<String, String> paramMap = Maps.newHashMap();
-            for (String param : paramArr) {
-                String[] kvArr = param.split("=");
-                if (kvArr.length == 2) {
-                    String key = kvArr[0].trim();
-                    String value = kvArr[1].trim();
-                    paramMap.put(key, value);
-                }
-            }
-            String token = paramMap.get(KEY_ACCESS_TOKEN);
-            String expires = paramMap.get(KEY_EXPIRES_IN);
-            String sVal = "TC_MK=" + token;
-            int expireNum = NumberUtils.toInt(expires, 86400);
-            log.info("code:" + code + ",source:" + sPath + ",userAgent:" + userAgent);
-            Date destDate = DateUtils.addSeconds(new Date(), expireNum);
-            String format = DateFormatUtils.format(destDate, "EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
-            Cookie cookie = new Cookie("retTo", "");
-            cookie.setPath("/oauth2.0");
-            response.addCookie(cookie);
-            // response.addCookie(cookie);//=作为特殊字符,会添加双引号__qc__k="TC_MK=03DC873FB5948E1373C392B9FFB8C928";
-            response.addHeader("Set-Cookie", "__qc__k=" + sVal + ";Path=/;Expires=" + format);
-        } else {
-            log.warn("code:" + code + ",source:" + sPath + ",userAgent:" + userAgent);
-        }
-        if (StringUtils.isBlank(retTo)) {
-            retTo = "/";
-        } else {
-            retTo = URLDecoder.decode(retTo, "UTF-8");
-        }
-        RedirectView red = new RedirectView(retTo, true);
-        red.setStatusCode(HttpStatus.FOUND);
-        return new ModelAndView(red);
-    }
+		if (index >= 0) {
+			String sParam = sPath.substring(index);
+			String[] paramArr = sParam.split("&");
+			Map<String, String> paramMap = Maps.newHashMap();
+			for (String param : paramArr) {
+				String[] kvArr = param.split("=");
+				if (kvArr.length == 2) {
+					String key = kvArr[0].trim();
+					String value = kvArr[1].trim();
+					paramMap.put(key, value);
+				}
+			}
+			String token = paramMap.get(KEY_ACCESS_TOKEN);
+			String expires = paramMap.get(KEY_EXPIRES_IN);
+			String sVal = "TC_MK=" + token;
+			int expireNum = NumberUtils.toInt(expires, 86400);
+			log.info("code:" + code + ",source:" + sPath + ",userAgent:" + userAgent);
+			Date destDate = DateUtils.addSeconds(new Date(), expireNum);
+			String format = DateFormatUtils.format(destDate, "EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
+			Cookie cookie = new Cookie("retTo", "");
+			cookie.setPath("/oauth2.0");
+			response.addCookie(cookie);
+			// response.addCookie(cookie);//=作为特殊字符,会添加双引号__qc__k="TC_MK=03DC873FB5948E1373C392B9FFB8C928";
+			response.addHeader("Set-Cookie", "__qc__k=" + sVal + ";Path=/;Expires=" + format);
+		} else {
+			log.warn("code:" + code + ",source:" + sPath + ",userAgent:" + userAgent);
+		}
+		if (StringUtils.isBlank(retTo)) {
+			retTo = "/";
+		} else {
+			retTo = URLDecoder.decode(retTo, "UTF-8");
+		}
+		RedirectView red = new RedirectView(retTo, true);
+		red.setStatusCode(HttpStatus.FOUND);
+		return new ModelAndView(red);
+	}
 }
