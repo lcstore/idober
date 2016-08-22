@@ -1,4 +1,4 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.user;
 
 import java.net.URLDecoder;
 import java.util.Date;
@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.google.common.collect.Maps;
+import com.lezo.idober.cacher.ExpireCacher;
 import com.lezo.idober.config.AppConfig;
 
 @Controller
@@ -75,6 +76,9 @@ public class QQLoginController {
 				}
 			}
 			String token = paramMap.get(KEY_ACCESS_TOKEN);
+			String sKey = "loginQQ:" + token;
+			long expireMills = System.currentTimeMillis() + 60000;
+			ExpireCacher.getInstance().putValue(sKey, 1, expireMills);
 			String expires = paramMap.get(KEY_EXPIRES_IN);
 			String sVal = "TC_MK=" + token;
 			int expireNum = NumberUtils.toInt(expires, 86400);
@@ -82,7 +86,7 @@ public class QQLoginController {
 			Date destDate = DateUtils.addSeconds(new Date(), expireNum);
 			String format = DateFormatUtils.format(destDate, "EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
 			Cookie cookie = new Cookie("retTo", "");
-			cookie.setPath("/oauth2.0");
+			cookie.setPath("/");
 			response.addCookie(cookie);
 			// response.addCookie(cookie);//=作为特殊字符,会添加双引号__qc__k="TC_MK=03DC873FB5948E1373C392B9FFB8C928";
 			response.addHeader("Set-Cookie", "__qc__k=" + sVal + ";Path=/;Expires=" + format);
@@ -98,4 +102,5 @@ public class QQLoginController {
 		red.setStatusCode(HttpStatus.FOUND);
 		return new ModelAndView(red);
 	}
+
 }

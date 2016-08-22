@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:wb="http://open.weibo.com/wb" lang="en">
 
 <head>
 <meta charset="utf-8">
@@ -7,6 +7,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta property="qc:admins" content="42471075676452751763757" />
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
 <title><sitemesh:write property='title' /></title>
 <sitemesh:write property='head'/>
 
@@ -27,6 +30,8 @@
     <sitemesh:write property='body'/>
     <input type="hidden" id="qqAppId" value="${qq_connect_appid}"/>
 	<input type="hidden" id="qqRedirectUrl" value="${qq_redirect_url}"/>
+    <input type="hidden" id="wbAppId" value="${wb_app_key}"/>
+    <input type="hidden" id="wbRedirectUrl" value="${wb_redirect_url}"/>
 	<script src="//cdn.bootcss.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -37,8 +37,10 @@
 					
 					<a id="login"  href="javascript:void(0)" rel="nofollow" class="btn btn-xs login-btn" role="button" onclick="toLogin()">登陆</a>
 					/
-					<a id="signup" href="javascript:void(0)" rel="nofollow" class="btn btn-xs login-btn" role="button">注册</a>
+					<a id="signup" href="javascript:void(0)" rel="nofollow" class="btn btn-xs login-btn" role="button" onclick="toSignup()">注册</a>
+					<div id="wb_connect_btn" ></div>
 					</li>
+					
 				</ul>
 			</div>
 		  </div><!--/div.row -->
@@ -53,16 +55,27 @@
       function toLogin(){
         window.location.href='/login?retTo='+encodeURIComponent(window.location.href);
       }
+      function toSignup(){
+      }
       function toLogout(){
         console.log('do logout...');
-        QC.Login.signOut();
+        if(typeof(QC)!='undefined'){
+          QC.Login.signOut();
+        }else {
+          $.removeCookie('__wb__k');
+        }
+        $.removeCookie('user_nick');
+        
         var $Login = $('#login-user');
 		$Login.attr('id','login');
+		$Login.attr('onclick','toLogin()');
 		$Login.text('登陆');
 		var $Signup = $('#logout');
 		$Signup.attr('id','signup');
-		$Signup.attr('onclick','toLogin()');
+		$Signup.attr('onclick','toSignup()');
 		$Signup.text('注册');
+		
+		
       }
     </script>
 

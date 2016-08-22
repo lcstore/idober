@@ -102,6 +102,8 @@
 				<entry key="tb_appkey" value="23250128" />
 				<entry key="qq_connect_appid" value="${qq_connect_appid}" />
 				<entry key="qq_redirect_url" value="${qq_redirect_url}" />
+				<entry key="wb_app_key" value="${wb_app_key}" />
+				<entry key="wb_redirect_url" value="${wb_redirect_url}" />
 			</map>
 		</property>
 	</bean>

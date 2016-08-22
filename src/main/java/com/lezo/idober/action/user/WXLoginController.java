@@ -1,4 +1,4 @@
-package com.lezo.idober.action;
+package com.lezo.idober.action.user;
 
 import java.net.URLDecoder;
 import java.util.Date;

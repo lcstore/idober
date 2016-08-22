@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
+
 <title>欢迎登陆，精彩无价资讯等你来用！</title>
 <style> 
 body.home{
@@ -81,7 +82,13 @@ text-decoration:none;
 a.login-title:active{
 text-decoration:none;
 }
-
+div.WB_loginButton a.login_a{
+    color: #cacfd3;
+    font-size: 18px;
+}
+div.WB_loginButton a.login_a:hover{
+text-decoration:none;
+}
 .flex-se1 {
     flex: 1;
     -ms-flex: 1;
@@ -125,7 +132,7 @@ text-decoration:none;
       var retTo = RegExp.$1;
       console.log('retTo:'+retTo);
       if(retTo){
-        $.cookie('retTo', retTo, {path: '/oauth2.0' });
+        $.cookie('retTo', retTo, {path: '/' });
       }
    }
  } 
@@ -133,9 +140,22 @@ text-decoration:none;
    saveRetTo();
    var qqAppId= $('#qqAppId').val();
    var qqRedirectUrl= $('#qqRedirectUrl').val();
-   var loginUrl='https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id='+qqAppId+'&redirect_uri='+qqRedirectUrl+'&state=lezomao&scope=all';
+   var state = new Date().getTime();
+   var loginUrl='https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id='+qqAppId+'&redirect_uri='+qqRedirectUrl+'&state='+state+'&scope=all';
    window.location.href = loginUrl;
  } 
+ function toLoginWB() {
+   saveRetTo();
+   var wbAppId= $('#wbAppId').val();
+   var wbRedirectUrl= $('#wbRedirectUrl').val();
+   var loginUrl='https://api.weibo.com/oauth2/authorize?client_id='+wbAppId+'&redirect_uri='+wbRedirectUrl+'&response_type=code&state='+new Date().getTime();
+   console.log('loginUrl:'+loginUrl);
+   window.location.href = loginUrl;    
+ }
+ 
+function logout() {
+    alert('logout WB');
+}
 </script>
 </head>
 <body>
@@ -154,12 +174,14 @@ text-decoration:none;
             <li class="flex-se1 text-right current login-title">帐号登录</li>
             <li class="line">|</li>
             <li class="flex-se1">
-              <i class="fa fa-weixin"></i>
-              <span class="login-title">微信登录</span>
+               <a class="login-title" href="javascript:void(0)" onclick='toLoginWB()'>
+                <img alt="微博登录" src="/assets/img/sina-weibo.png">
+                <span class="login-title">微博登录</span>
+              </a>
             </li>
             <li class="line">|</li>
             <li class="flex-se1">
-              <a class="login-title" href="#" onclick='toLoginQQ()'>
+              <a class="login-title" href="javascript:void(0)" onclick='toLoginQQ()'>
                 <img alt="QQ登录" src="/assets/img/qqlogin.png">
                 <span class="login-title">QQ登录</span>
               </a>
@@ -169,7 +191,7 @@ text-decoration:none;
             <form class="form-horizontal wt-form" name="login_form">
               <div class="form-group">
                 <div class="input-group-">
-                  <input type="text" tabindex="1" name="login_name" placeholder="邮箱/用户名/手机" class="form-control"></div>
+                  <input type="text" tabindex="1" name="login_name" placeholder="邮箱/手机" class="form-control"></div>
               </div>
               <div class="form-group">
                 <div class="input-group-">
