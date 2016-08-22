@@ -21,11 +21,11 @@ $(document).ready(function() {
 		$(this).attr('src', '/assets/img/noimg220x220.jpg');
 		$(this).error = null;
 	});
-	console.log('checkLoadLogin():' + checkLoadLogin())
-	if (checkLoadLogin()) {
-		loadLoginQQ();
-		loadLoginWB();
-	}
+	changeLogin();
+	// if (checkLoadLogin()) {
+	// loadLoginQQ();
+	// loadLoginWB();
+	// }
 });
 function checkLoadLogin() {
 	if (!document.cookie) {
@@ -67,7 +67,13 @@ function loadLoginWB() {
 
 }
 function changeLogin(userId, nick) {
-	$.cookie('user_nick', userId + ':' + nick);
+	var userNick = $.cookie('user_nick');
+	if (!userNick) {
+		return false;
+	}
+	var index = userNick.indexOf(':');
+	var nick = userNick.substring(index + 1);
+	console.log('userNick:' + userNick)
 	var $Login = $('#login');
 	$Login.attr('id', 'login-user');
 	$Login.removeAttr('onclick');
