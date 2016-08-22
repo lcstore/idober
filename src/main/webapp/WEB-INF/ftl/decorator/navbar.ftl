@@ -59,7 +59,7 @@
       }
       function toLogout(){
         console.log('do logout...');
-        if(typeof(QC)!='undefined'){
+        if (typeof(QC) != "undefined"){
           QC.Login.signOut();
         }else {
           $.removeCookie('__wb__k');
@@ -74,8 +74,6 @@
 		$Signup.attr('id','signup');
 		$Signup.attr('onclick','toSignup()');
 		$Signup.text('注册');
-		
-		
       }
     </script>
 

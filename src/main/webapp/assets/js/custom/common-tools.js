@@ -60,7 +60,6 @@ function loadLoginWB() {
 		} else {
 			$.removeCookie('user_nick');
 			$.removeCookie('__wb__k');
-			window.location.reload();
 		}
 	}).fail(function(data) {
 		// window.location.reload();
@@ -122,7 +121,6 @@ function loadLoginQQ() {
 					} else {
 						$.removeCookie('user_nick');
 						$.removeCookie('__qc__k');
-						window.location.reload();
 					}
 				}).fail(function(data) {
 					// window.location.reload();
