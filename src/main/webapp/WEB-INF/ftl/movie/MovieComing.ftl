@@ -13,6 +13,9 @@
 				   <div class="row content movie-bk">
 				   </#if>
 						<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">	
+						       <#if (oMovie.torrents_size>0 || oMovie.shares_size>0)>
+							     <span class="download-newly"></span>
+						       </#if>
 							   <a href="/movie/detail/${oMovie.id}.html"  target="_blank">
 								  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded" width="190" height="270">
 								</a>

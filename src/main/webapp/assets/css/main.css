@@ -809,3 +809,14 @@ strong.rate {
 	white-space: nowrap;
 	width: 120px;
 }
+
+.download-newly {
+	background: url('../img/newly.png');
+    background-size: 100%;
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    top: -8px;
+}
