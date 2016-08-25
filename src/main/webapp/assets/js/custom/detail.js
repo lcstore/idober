@@ -18,4 +18,53 @@ $(document).ready(function() {
 				}
 			});
 		});
+		(function() {
+		    var oImgEle = $('img.movie-img[alt]').first();
+		    var pic = oImgEle.attr('src').trim();
+		    var title = oImgEle.attr('alt').trim();
+		    title += '('+$('span.movie-badge').first().text().trim()+')';
+		    var desc = '';
+			$('ul.list-group li.list-group-item:has(strong:contains("主演"))').contents().each(function(){
+			  if(this.nodeType === 3){
+			    desc += this.wholeText;
+			  }
+			});
+		    var sGener = '';
+			$('ul.list-group li.list-group-item:has(strong:contains("类型"))').contents().each(function(){
+			  if(this.nodeType === 3){
+			    sGener += this.wholeText;
+			  }
+			});
+			var site = $('a.logo span.site').first().text().trim();
+		    var sShare = '免费';
+		    if($('ul.list-group li.list-group-item:has(strong:contains("分享"))').length>0){
+		      sShare+='云盘等'
+		    }
+		    if($('[id^=tor]:contains("高清"),[id^=tor]:contains("超清"),[id^=tor]:contains("720p"),[id^=tor]:contains("1080p")').length>0){
+		      sShare+='高清'
+		    }
+		    sShare+='资源等你来领取😍火速收藏观赏🔥';
+		    var descArr = desc.split(/\s+/);
+		    var maxLen = 2;
+		    maxLen = descArr.length>maxLen?maxLen:descArr.length;
+		    desc = descArr.slice(0,maxLen).join(' ')+'等主演的'+sGener.split(/\s+/)[0]+'电影,'+sShare;
+		    var p = {
+		        url: location.href+"?r=shareqq",
+		        desc: '',
+		        title: title,
+		        summary: desc,
+		        pics: pic,
+		        flash: '',
+		        site: site,
+		        style: '201',
+		        width: 32,
+		        height: 32
+		    };
+		    var s = [];
+		    for (var i in p) {
+		        s.push(i + '=' + encodeURIComponent(p[i] || ''));
+		    }
+			var href="http://connect.qq.com/widget/shareqq/index.html?"+s.join('&');
+			$('#shareQQ').attr('href',href);
+		})();
 });

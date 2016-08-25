@@ -29,8 +29,8 @@ public class TimerTest extends BaseTest {
 		// fillOldId2MovieTimer.run();
 		// unifyRegionTimer.run();
 		// onlineTorrentMovieTimer.run();
-		// assembleIdMovieTimer.run();
-		queryTorrent4NewMovieTimer.run();
+		assembleIdMovieTimer.run();
+		// queryTorrent4NewMovieTimer.run();
 	}
 
 }
