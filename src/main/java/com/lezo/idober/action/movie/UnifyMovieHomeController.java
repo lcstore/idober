@@ -87,7 +87,8 @@ public class UnifyMovieHomeController {
 			fields = "id,name,timestamp";
 			List<DataSolr> enRanks = queryIdMetaByGroup(group, offset, 1);
 			List<String> idList = toIdListByMovieHome(enRanks);
-			docList = queryMovieSolrByIds(fields, idList, offset, limit, "timestamp");
+			List<String> fieldList = Lists.newArrayList("timestamp");
+			docList = queryMovieSolrByIds(fields, idList, offset, limit, fieldList);
 			// docList = queryMovieIdByGroup(fields, group, offset, limit);
 			dataObject = new JSONObject();
 			dataObject.put("name", "最新电影");
@@ -97,7 +98,10 @@ public class UnifyMovieHomeController {
 			group = "playing";
 			limit = 12;
 			fields = "id,name,release,image,torrents_size,shares_size";
-			docList = queryMovieIdByGroup(fields, group, offset, limit);
+			fieldList = Lists.newArrayList("torrents_size", "shares_size");
+			enRanks = queryIdMetaByGroup(group, offset, 1);
+			idList = toIdListByMovieHome(enRanks);
+			docList = queryMovieSolrByIds(fields, idList, offset, limit, fieldList);
 			dataObject = new JSONObject();
 			dataObject.put("name", "正在热播");
 			dataObject.put("dataList", docList);
@@ -106,7 +110,9 @@ public class UnifyMovieHomeController {
 			group = "upcoming";
 			limit = 6;
 			fields = "id,name,release,image,torrents_size,shares_size";
-			docList = queryMovieIdByGroup(fields, group, offset, limit);
+			enRanks = queryIdMetaByGroup(group, offset, 1);
+			idList = toIdListByMovieHome(enRanks);
+			docList = queryMovieSolrByIds(fields, idList, offset, limit, fieldList);
 			dataObject = new JSONObject();
 			dataObject.put("name", "即将上映");
 			dataObject.put("dataList", docList);
@@ -184,7 +190,7 @@ public class UnifyMovieHomeController {
 	}
 
 	private SolrDocumentList queryMovieSolrByIds(String fields, List<String> idList,
-			Integer offset, Integer limit, String descFeild) throws Exception {
+			Integer offset, Integer limit, List<String> descFeilds) throws Exception {
 		if (CollectionUtils.isEmpty(idList)) {
 			return new SolrDocumentList();
 		}
@@ -204,8 +210,10 @@ public class UnifyMovieHomeController {
 		if (StringUtils.isNotBlank(fields)) {
 			solrQuery.addField(fields);
 		}
-		if (StringUtils.isNotBlank(descFeild)) {
-			solrQuery.addSort(descFeild, ORDER.desc);
+		if (CollectionUtils.isNotEmpty(descFeilds)) {
+			for (String field : descFeilds) {
+				solrQuery.addSort(field, ORDER.desc);
+			}
 		}
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
 		return resp.getResults();
