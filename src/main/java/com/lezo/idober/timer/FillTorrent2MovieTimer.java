@@ -242,8 +242,9 @@ public class FillTorrent2MovieTimer implements Runnable {
         }
         bSame = false;
         int sameCount = 0;
+        actors = actors.toLowerCase();
         for (Object aObj : actorList) {
-            if (actors.contains(aObj.toString())) {
+            if (actors.contains(aObj.toString().toLowerCase())) {
                 sameCount++;
             }
         }
@@ -304,10 +305,11 @@ public class FillTorrent2MovieTimer implements Runnable {
         if (referObject == null) {
             return null;
         }
+        srcDirector = srcDirector.toLowerCase();
         boolean hasSame = false;
         List<String> directors = (List<String>) referObject;
         for (String director : directors) {
-            if (srcDirector.contains(director)) {
+            if (srcDirector.contains(director.toLowerCase())) {
                 hasSame = true;
                 break;
             }

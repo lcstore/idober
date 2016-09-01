@@ -81,7 +81,7 @@
 									        	<a href="${oShare.url}" rel="nofollow" target="_blank">${oShare.name}
 									        	</a>
 									        	  <#if oShare.secret?? > 
-									        	  <span>(${oShare.secret})</span>
+									        	  <span>(密码:${oShare.secret})</span>
 									        	  </#if>
 									        	  <#if  (sShare_has_next) > 
 									        	   <span>,&nbsp; </span>

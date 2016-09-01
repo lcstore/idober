@@ -42,7 +42,7 @@
 									        	<a href="${oShare.url}" rel="nofollow" target="_blank">${oShare.name}
 									        	</a>
 									        	  <#if oShare.secret?? > 
-									        	  <span>(${oShare.secret})</span>
+									        	  <span>(密码:${oShare.secret})</span>
 									        	  </#if>
 									        	  <#if  (oShare_has_next) > 
 									        	   <span>,&nbsp; </span>
@@ -74,7 +74,7 @@
 		    <#if oTorrents?size gt 0 >
 		      	<strong>下载地址：</strong>
 		    <#else>
-		        <strong>暂无地址：</strong>
+		        <strong>暂无地址:</strong>
 	           <button id="searchMovie" type="button" class="btn btn-warning btn-xs downbtn" title="${oDoc.name}">
 	             去找找
 			   </button>
