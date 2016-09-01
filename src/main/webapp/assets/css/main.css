@@ -812,11 +812,31 @@ strong.rate {
 
 .download-newly {
 	background: url('../img/newly.png');
-    background-size: 100%;
-    width: 35px;
-    height: 35px;
-    display: inline-block;
-    position: absolute;
-    right: 8px;
-    top: -8px;
+	background-size: 100%;
+	width: 35px;
+	height: 35px;
+	display: inline-block;
+	position: absolute;
+	right: 8px;
+	top: -8px;
+}
+
+.share-box {
+	float: right;
+	position: relative;
+	right: 100px;
+	font-size: 14px;
+	font-weight: normal;
+	color: #6eb6d2;
+}
+
+#shareQQ {
+	background: url('../img/qq-intro.png');
+	background-position: 0 0;
+	width: 32px;
+	height: 32px;
+	float: right;
+	position: relative;
+	top: -8px;
+	margin-left: 10px;
 }

@@ -99,7 +99,11 @@
 		<div class="container top-margin">
 		   <div class="story">
 				<div class="story-header">
-					  <h4>剧情介绍</h4>
+					  <h4 class="head-title">剧情介绍
+					    <span class="share-box">分享到 <a id="shareQQ" rel="nofollow" target="_blank" href="javascript:void(0)" ></a></span>
+					  </h4>
+					  
+					 
 				</div>
 				<div class="story-body">
 				  <p>${oDoc.story}</p>
@@ -150,5 +154,7 @@
 	
 	<script src="${static_host}/assets/js/custom/urlcodesc.js?v=${version}"></script>
 	<script src="${static_host}/assets/js/custom/detail.js?v=${version}"></script>
+
+
 </body>
 </html>
