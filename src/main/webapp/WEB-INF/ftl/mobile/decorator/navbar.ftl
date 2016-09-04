@@ -12,7 +12,7 @@
 	  <div class="form-group">
         <div class="input-group input-group-bk">
 		  <span class="search-logo-box">
-		    <img src="${static_host}/assets/img/cat-logo.png" alt="狸猫资讯" width="36px" height="30px">
+		    <img src="${static_host}/assets/img/cat-logo.png" alt="狸猫资讯" class="login-img" >
 		    <span class="site">狸猫资讯</span>
 		  </span>
 		  <input type="text" name="q" value="${qWord!'头脑特工队'}" class="form-control search-word" id="qWord" style="border-top-left-radius: 6px;border-bottom-left-radius: 6px;">

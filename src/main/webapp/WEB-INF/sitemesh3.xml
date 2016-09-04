@@ -48,6 +48,15 @@
 		<decorator>/decorator/header.ftl</decorator>
 	</mapping>
 	<mapping>
+		<path>/m/</path>
+		<decorator>/decorator/footer.ftl</decorator>
+		<decorator>/movie/MovieClassic.ftl</decorator>
+		<decorator>/movie/MovieComing.ftl</decorator>
+		<decorator>/movie/MovieHot.ftl</decorator>
+		<decorator>/decorator/navbar.ftl</decorator>
+		<decorator>/decorator/header.ftl</decorator>
+	</mapping>
+	<mapping>
 		<path>/search/movie</path>
 		<decorator>/decorator/footer.ftl</decorator>
 		<decorator>/decorator/blankbar.ftl</decorator>

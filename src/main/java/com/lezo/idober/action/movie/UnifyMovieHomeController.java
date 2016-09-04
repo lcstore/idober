@@ -23,6 +23,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -54,7 +55,7 @@ public class UnifyMovieHomeController {
 	};
 
 	@RequestMapping(value = { "/", "movie/" }, method = RequestMethod.GET)
-	public String getHotMovie(@ModelAttribute("model") ModelMap model) throws Exception {
+	public ModelAndView loadHome(@ModelAttribute("model") ModelMap model) throws Exception {
 		try {
 			Integer offset = 0;
 			Integer limit = 100;
@@ -136,12 +137,11 @@ public class UnifyMovieHomeController {
 				JSONObject docObject = dArray.getJSONObject(index);
 				model.addAttribute("qWord", docObject.getString("name"));
 			}
-
-			return "MovieHome";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "MovieHome";
+		ModelAndView modelAndView = new ModelAndView("MovieHome", model);
+		return modelAndView;
 	}
 
 	private SolrDocumentList queryMovieIdByGroup(String fields, String group,

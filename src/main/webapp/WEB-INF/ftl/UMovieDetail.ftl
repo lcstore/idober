@@ -49,10 +49,10 @@
           </ol>
 				<div class="container-fluid">
 					<div class="row top-margin">
-						  <div class="col-md-3 movie-left">
+						  <div class="col-xs-12 col-sm-4 col-md-3 movie-left">
 						       <img src="${oDoc.image}" class="img-thumbnail movie-img" alt="${oDoc.name}"/>
 					      </div>
-					      <div class="col-md-9 movie-right">
+					      <div class="col-xs-12 col-sm-8 col-md-9 movie-right">
 							      <ul class="list-group">
 								    <li class="list-group-item">
 										    <h1 class="movie-title-margin">
@@ -62,10 +62,10 @@
 										      </#if>
 										      <span class="badge movie-badge">${oDoc.year}</span>
 										    </h1>
-								    <li class="list-group-item"><strong>导演：</strong>${oDirectors?join(' ')}</li>
-								    <li class="list-group-item"><strong>主演：</strong>${oActors?join(' ')}</li>
-								    <li class="list-group-item"><strong>类型：</strong>${oGenres?join(' ')}</li>
-								    <li class="list-group-item"><strong>上映：</strong>
+								    <li class="list-group-item tag-info"><strong>导演：</strong>${oDirectors?join(' ')}</li>
+								    <li class="list-group-item tag-info"><strong>主演：</strong>${oActors?join(' ')}</li>
+								    <li class="list-group-item tag-info"><strong>类型：</strong>${oGenres?join(' ')}</li>
+								    <li class="list-group-item tag-info"><strong>上映：</strong>
 								        <#list oRegions as region>
 								          <#if (region_index==0) >
 								            ${region}(${oDoc.release?string("yyyy-MM-dd")})
@@ -75,16 +75,23 @@
 								        </#list>
 								    </li>
 								    <#if (oShares?size>0) > 
-								        <li class="list-group-item"><strong>分享：</strong>
+								        <li class="list-group-item"><strong>云盘：</strong>
 								          <#list oShares as sShare>
 								                <#assign oShare = ((sShare)!"{}")?eval>
-									        	<a href="${oShare.url}" rel="nofollow" target="_blank">${oShare.name}
-									        	</a>
-									        	  <#if oShare.secret?? > 
-									        	  <span>(密码:${oShare.secret})</span>
+									        	  <#if (oShare.level="uhd" || oShare.level="hd" || oShare.level="sd" || oShare.level="bd") > 
+									        	  <span class="cer-box cer-${oShare.level}">
+									        	  <#else>
+									        	  <span class="cer-box cer-normal">
 									        	  </#if>
+									        	    <a href="${oShare.url}" rel="nofollow" target="_blank" class="noline">${oShare.name}
+									        	    </a>
+									        	  	<#if oShare.secret?? > 
+									        	    <span>(密码: ${oShare.secret})</span>
+									        	    </#if>
+									        	  </span>
+									        
 									        	  <#if  (sShare_has_next) > 
-									        	   <span>,&nbsp; </span>
+									        	   <span>&nbsp; </span>
 									        	  </#if>
 								          </#list>
 								        </li>
