@@ -45,9 +45,7 @@ public class FreeMarkerWebAppContext extends WebAppContext {
             // String version = config.getConfiguration().getSharedVariable(CustomFreeMarkerConfigurer.KEY_VERSION)
             // .toString();
             Configuration configuration = config.getConfiguration();
-            File file = new File(decoratorPath);
-            String decoratorName = file.getParentFile().getName() + "/" + file.getName();
-            Template template = configuration.getTemplate(decoratorName);
+            Template template = configuration.getTemplate(decoratorPath);
             ModelMap dataModel = getModelMap();
             StringWriter srcOut = new StringWriter();
             try {

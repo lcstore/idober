@@ -840,3 +840,65 @@ strong.rate {
 	top: -8px;
 	margin-left: 10px;
 }
+
+.cer-box {
+	white-space: nowrap;
+	text-align: center;
+	background-color: #f1e0ac;
+	padding: 10px;
+	padding-left: 0px;
+	border-radius: 10px;
+	background-color: #f1e0ac;
+}
+
+.cer-normal {
+	padding-left: 10px;
+}
+
+a.noline {
+	text-decoration: none;
+}
+
+span.cer-uhd:before {
+	content: "超清";
+	background-color: #eb260f;
+	padding: 6px;
+	border-radius: 6px;
+	color: #fbf6c0;
+	margin-left: 4px;
+	margin-right: 4px;
+	font-size: 6px;
+}
+
+span.cer-hd:before {
+	content: "高清";
+	background-color: #e0741a;
+	padding: 6px;
+	border-radius: 6px;
+	color: #fbf6c0;
+	margin-left: 4px;
+	margin-right: 4px;
+	font-size: 6px;
+}
+
+span.cer-sd:before {
+	content: "标清";
+	background-color: #4caf50;
+	padding: 6px;
+	border-radius: 6px;
+	color: #fbf6c0;
+	margin-left: 4px;
+	margin-right: 4px;
+	font-size: 6px;
+}
+
+span.cer-bd:before {
+	content: "枪版";
+	background-color: #9E9E9E;
+	padding: 6px;
+	border-radius: 6px;
+	color: #fbf6c0;
+	margin-left: 4px;
+	margin-right: 4px;
+	font-size: 6px;
+}

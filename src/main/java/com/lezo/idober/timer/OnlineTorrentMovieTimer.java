@@ -497,6 +497,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 		solrQuery.setStart(offset);
 		solrQuery.setRows(limit);
 		solrQuery.set("q", "(!had_move_s:* AND torrents_size:[1 TO *])");
+		solrQuery.addFilterQuery("!editor:1");
 		QueryResponse resp = sourceServer.query(solrQuery);
 		return resp.getResults();
 	}

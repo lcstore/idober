@@ -148,7 +148,7 @@ text-decoration:none;
    saveRetTo();
    var wbAppId= $('#wbAppId').val();
    var wbRedirectUrl= $('#wbRedirectUrl').val();
-   var loginUrl='https://api.weibo.com/oauth2/authorize?client_id='+wbAppId+'&redirect_uri='+wbRedirectUrl+'&response_type=code&state='+new Date().getTime();
+   var loginUrl='https://api.weibo.com/oauth2/authorize?forcelogin=true&client_id='+wbAppId+'&redirect_uri='+wbRedirectUrl+'&response_type=code&state='+new Date().getTime();
    console.log('loginUrl:'+loginUrl);
    window.location.href = loginUrl;    
  }
