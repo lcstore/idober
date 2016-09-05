@@ -1,4 +1,10 @@
 $(document).ready(function() {
+		$("a[href]:has(>[id^=form])").on('click', function(e) {
+			var oForm = $(this).find('[id^=form]');
+			oForm.submit();
+			console.log('oForm')
+			return false;
+		});
 		$("#searchMovie").one('click', function(e) {
 			var self = $(this);
 			self.attr('disabled',"disabled");
@@ -67,4 +73,5 @@ $(document).ready(function() {
 			var href="http://connect.qq.com/widget/shareqq/index.html?"+s.join('&');
 			$('#shareQQ').attr('href',href);
 		})();
+
 });

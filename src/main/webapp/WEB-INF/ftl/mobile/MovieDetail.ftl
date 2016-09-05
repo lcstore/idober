@@ -48,13 +48,13 @@
 	        <li class="active"><strong>${oDoc.name}</strong></li>
           </ol>
 				<div class="container-fluid">
-					<div class="row top-margin">
-						  <div class="col-xs-12 col-md-3 movie-left">
+					<div class="row">
+						  <div class="detail-img-box col-xs-4 col-md-3">
 						       <img src="${oDoc.image}" class="img-thumbnail movie-img" alt="${oDoc.name}"/>
 					      </div>
-					      <div class="col-xs-12   col-md-9 movie-right">
+					      <div class="detail-tag-box col-xs-8  col-md-9">
 							      <ul class="list-group">
-								    <li class="list-group-item">
+								    <li class="list-group-item tag-info">
 										    <h1 class="movie-title-margin">
 											  ${oDoc.name}
 										      <#if ((oDoc.name?length+oDoc.enname?length)<=40) > 
@@ -74,28 +74,10 @@
 					 					  </#if>	
 								        </#list>
 								    </li>
-								    <#if (oShares?size>0) > 
-								        <li class="list-group-item"><strong>云盘：</strong>
-								          <#list oShares as sShare>
-								                <#assign oShare = ((sShare)!"{}")?eval>
-									        	  <#if (oShare.level="uhd" || oShare.level="hd" || oShare.level="sd" || oShare.level="bd") > 
-									        	  <span class="cer-box cer-${oShare.level}">
-									        	  <#else>
-									        	  <span class="cer-box cer-normal">
-									        	  </#if>
-									        	    <a href="${oShare.url}" rel="nofollow" target="_blank" class="noline">${oShare.name}
-									        	    </a>
-									        	  	<#if oShare.secret?? > 
-									        	    <span>(密码: ${oShare.secret})</span>
-									        	    </#if>
-									        	  </span>
-									        
-									        	  <#if  (sShare_has_next) > 
-									        	   <span>&nbsp; </span>
-									        	  </#if>
-								          </#list>
-								        </li>
-									</#if> 
+								    <li class="list-group-item tag-info"><strong>分享：</strong>
+								      <span class="share-box"><a id="shareQQ" rel="nofollow" target="_blank" href="javascript:void(0)" ></a></span>
+								    </li>
+								    
 								   
 								  </ul>
 					       </div>
@@ -106,34 +88,49 @@
 		<div class="container top-margin">
 		   <div class="story">
 				<div class="story-header">
-					  <h4 class="head-title">剧情介绍
-					    <span class="share-box">分享到 <a id="shareQQ" rel="nofollow" target="_blank" href="javascript:void(0)" ></a></span>
-					  </h4>
-					  
-					 
+					<h4 class="head-title">剧情介绍</h4>
 				</div>
 				<div class="story-body">
 				  <p>${oDoc.story}</p>
 				 </div>
 			</div>
 		</div>
+		<#if (oShares?size>0) > 
+	    <div class="container top-margin">
+			 <ul class="list-group">
+			  <li class="list-group-item">
+			    <h4 class="list-group-item-heading">云盘资源</h4>
+			  </li>
+			  <#list oShares as sShare>
+	                <#assign oShare = ((sShare)!"{}")?eval>
+	                 <li class="list-group-item">
+		        	  <#if (oShare.level="uhd" || oShare.level="hd" || oShare.level="sd" || oShare.level="bd") > 
+		        	  <span class="cer-${oShare.level}"></span>
+		        	  <#else>
+		        	   <span class=""></span>
+		        	  </#if>
+		        	    <a href="${oShare.url}" rel="nofollow" target="_blank" class="noline">${oShare.name}
+		        	    </a>
+		        	  	<#if oShare.secret?? > 
+		        	     <span>&nbsp;(密码: ${oShare.secret})</span>
+		        	    </#if>
+		        	  </span>
+		        	 </li>
+	          </#list>
+			</ul>
+		</div>
+		</#if> 
 		
-		<div class="container downlist top-margin">
-		  <li class="list-group-item">
+		<div class="container top-margin">
+		<div class="list-group">
+		    <span class="list-group-item"> <h4 class="list-group-item-heading">下载资源</h4> </span>
 		    <#if oTorrents?size gt 0 >
-		      	<strong>下载地址：</strong>
-		    <#else>
-		        <strong>暂无地址：</strong>
-	           <button id="searchMovie" type="button" class="btn btn-warning btn-xs downbtn" title="${oDoc.name}">
-	             去找找
-			   </button>
-			   <span id='searchmsg' class="alert alert-info  btn-xs hidden"></span>
-		    </#if>
-	        <#list oTorrents as sTor>
+		      	 <#list oTorrents as sTor>
 	            <#assign oTor = ((sTor)!"{}")?eval>
-	            <div id="tor${sTor_index}" class="torblock" >
 	              <#if (oTor.type == 'bttiantang-torrent') >
-				    <form id="form${sTor_index}" action="/movie/download">
+	              <a href="javascript:void(0)" rel="nofollow" class="list-group-item" >
+				     <span class="badge">种子</span>
+				     <form id="form${sTor_index}" action="/movie/download">
 					    <span >
 				        	 <strong>${((oTor.name)?length>0)?string((oTor.name),(oDoc.name))}</strong>
 						</span>
@@ -141,21 +138,24 @@
 					    <input class="btn btn-default" type="hidden" name="m" value="${oTor.method}">
 					    <input class="btn btn-default" type="hidden" name="p" value="${oTor.param}">
 					    <input class="btn btn-default" type="hidden" name="n" value="${oTor.name}">
-					    <button type="submit" class="btn btn-success btn-xs downbtn" >
-					       种子下载
-					    </button>
 					 </form>
+				  </a>
 				  <#else>
-				    <span>
-				       <strong>${unifyOf(((oTor.name)?length>0)?string((oTor.name),(oDoc.name)),70,'.')}</strong>
-				   </span>
-				   <button type="button" rel="nofollow" class="btn btn-success btn-xs downbtn" onclick='window.location.href=urlcodesc.encode("${oTor.url}","thunder");'>
-				     迅雷下载
-				   </button>
+				    <a href="javascript:void(0)" rel="nofollow" class="list-group-item" onclick='window.location.href=urlcodesc.encode("${oTor.url}","thunder");' >
+				      <strong>${unifyOf(((oTor.name)?length>0)?string((oTor.name),(oDoc.name)),70,'.')}</strong>
+				      <span class="badge">迅雷</span>
+				    </a>
 				  </#if>
-	            </div>
 	        </#list>
-	    </li>
+		    <#else>
+		    <span class="list-group-item">  
+		      <button id="searchMovie" type="button" class="btn btn-warning btn-xs find-btn" title="${oDoc.name}">
+	             去找找
+			   </button>
+			   <span id='searchmsg' class="alert alert-info  btn-xs hidden"></span>
+		    </span>
+		    </#if>
+	    </div>
 		</div>
 	</div>
 	
