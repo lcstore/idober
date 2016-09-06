@@ -49,12 +49,12 @@
 	</mapping>
 	<mapping>
 		<path>/m/</path>
-		<decorator>/decorator/footer.ftl</decorator>
-		<decorator>/movie/MovieClassic.ftl</decorator>
-		<decorator>/movie/MovieComing.ftl</decorator>
-		<decorator>/movie/MovieHot.ftl</decorator>
-		<decorator>/decorator/navbar.ftl</decorator>
-		<decorator>/decorator/header.ftl</decorator>
+		<decorator>/mobile/decorator/footer.ftl</decorator>
+		<decorator>/mobile/movie/MovieClassic.ftl</decorator>
+		<decorator>/mobile/movie/MovieComing.ftl</decorator>
+		<decorator>/mobile/movie/MovieHot.ftl</decorator>
+		<decorator>/mobile/decorator/navbar.ftl</decorator>
+		<decorator>/mobile/decorator/header.ftl</decorator>
 	</mapping>
 	<mapping>
 		<path>/search/movie</path>

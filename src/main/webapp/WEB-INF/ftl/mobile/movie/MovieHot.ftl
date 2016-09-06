@@ -8,18 +8,20 @@
 <div class="container"  id="moviehot">
 				<div class="row movie-box">
 					<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 left-box">	
-					      <div class="title"><h4>最新电影</h4></div>	
-					      <div class="txtsize">
-					           <#list newlyObj.dataList as oRank>
-						           <div class="hot-bottom">
+						  <div class="panel panel-default">
+							  <div class="panel-heading newly-title"><h4>最新电影</h4></div>
+							  <ul class="list-group newly-group">
+							   <#list newlyObj.dataList as oRank>
+								    <li class="list-group-item">
 						               <span class="badge"> 
-									     ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
+									      ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
 									    </span>
-									    <a href="/movie/detail/${oRank.id}.html" target="_blank">${unifyOf(oRank.name,14,"")}</a>
-									    <span class="time-right">${oRank.timestamp?string["MM-dd"]}</span>
-								   </div>
+									   <a href="/movie/detail/${oRank.id}.html" target="_blank">${unifyOf(oRank.name,14,"")}</a>
+									   <span class="time-right">${oRank.timestamp?string["MM-dd"]}</span>
+								    </li>
 							   </#list>
-						  </div>
+							  </ul>
+						 </div>
 					</div>
 					
 					<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 right-box">	
@@ -45,7 +47,47 @@
 						<#if (((oMovie_index+1)%colCount)==0) || (!oMovie_has_next)>
 						</div>
 						</#if>
-					  </#list>			
+					  </#list>		
+					  <div class="panel panel-default">
+						  <div class="panel-heading newly-title"><h4>正在热播</h4></div>
+						 <div class="container">
+						 <div class="row">
+						           <div class="playing-box">
+							       <span class="download-newly"></span>
+								   <a href="/movie/detail/537862229.html" target="_blank">
+									  <img src="https://img3.doubanio.com/view/movie_poster_cover/lpst/public/p2248204656.jpg" alt="铁拳" class="img-rounded playing-img">
+									</a>
+									<div class="name-box">
+									  <a href="/movie/detail/537862229.html" title="铁拳" target="_blank">
+									    铁拳
+									  </a>
+								   </div>
+								   </div>
+						           <div class="playing-box">
+							       <span class="download-newly"></span>
+								   <a href="/movie/detail/537862229.html" target="_blank">
+									  <img src="https://img3.doubanio.com/view/movie_poster_cover/lpst/public/p2248204656.jpg" alt="铁拳" class="img-rounded playing-img">
+									</a>
+									<div class="name-box">
+									  <a href="/movie/detail/537862229.html" title="铁拳" target="_blank">
+									    铁拳
+									  </a>
+								   </div>
+								   </div>
+						           <div class="playing-box">
+							       <span class="download-newly"></span>
+								   <a href="/movie/detail/537862229.html" target="_blank">
+									  <img src="https://img3.doubanio.com/view/movie_poster_cover/lpst/public/p2248204656.jpg" alt="铁拳" class="img-rounded playing-img">
+									</a>
+									<div class="name-box">
+									  <a href="/movie/detail/537862229.html" title="铁拳" target="_blank">
+									    铁拳
+									  </a>
+								   </div>
+								   </div>
+						 </div>
+						 </div>
+					 </div>	
 					</div>
 				</div>
 		</div>
