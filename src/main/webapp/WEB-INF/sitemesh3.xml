@@ -17,6 +17,12 @@
 		<decorator>/decorator/header.ftl</decorator>
 	</mapping>
 	<mapping>
+		<path>/mm/*</path>
+		<decorator>/mobile/decorator/footer.ftl</decorator>
+		<decorator>/mobile/decorator/navbar.ftl</decorator>
+		<decorator>/mobile/decorator/header.ftl</decorator>
+	</mapping>
+	<mapping>
 		<path>/item/*</path>
 		<decorator>/decorator/footer.ftl</decorator>
 		<decorator>/decorator/activity.ftl</decorator>
@@ -72,6 +78,7 @@
 	</mapping>
 	<mapping>
 		<path>/m/movie/detail/*</path>
+		<decorator>/mobile/decorator/footer.ftl</decorator>
 		<decorator>/mobile/decorator/navbar.ftl</decorator>
 		<decorator>/mobile/decorator/header.ftl</decorator>
 	</mapping>

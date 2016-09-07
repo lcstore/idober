@@ -8,27 +8,29 @@
 <div class="container box-mtop"  id="movieClassic">
 		<div class="row movie-box">
 					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9 left-box">	
-					    <div class="title"><h4>经典电影</h4></div>
-					    <#assign colCount="6"?number >
-					    <#list classicObj.dataList as oMovie>
-					       <#if ((oMovie_index%colCount)==0) >
-					      	<div class="row content movie-bk">
-						   </#if>
-								<div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
-								   <a href="/movie/detail/${oMovie.id}.html" target="_blank">
-									  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded" width="116" height="166">
-									</a>
-									<div class="name-box">
-									  <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
-									    ${unifyOf(oMovie.name,12,".")}
-									  </a>
+					     <div class="panel panel-default">
+							 <div class="panel-heading newly-title"><h4>经典电影</h4></div>
+							 <div class="container">
+							 <div class="row">
+								<#list classicObj.dataList as oMovie>
+									<div class="movie-list-box">	
+									       <#if (oMovie.torrents_size>0 || oMovie.shares_size>0)>
+										     <span class="download-newly"></span>
+									       </#if>
+										   <a href="/movie/detail/${oMovie.id}.html"  target="_blank">
+											  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded list-img">
+											</a>
+											<div class="name-box">
+											    <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
+											          ${unifyOf(oMovie.name,12,".")}
+											     </a>
+											</div>
 									</div>
-								</div>
-							<#if (((oMovie_index+1)%colCount)==0) || (!oMovie_has_next)>
-							  <!--end of row-->
-						      </div>
-							</#if>
-					    </#list>
+								</#list>
+									   
+							 </div>
+							 </div>
+						 </div>
 					
 					</div>
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3  right-box movie-bk" id="movieRank">
@@ -49,15 +51,17 @@
 						    <#else>
 					      	 <div class="tab-pane" id="tab${oRank_index}">
 						    </#if>
-						         <#list oRank.dataList as oMovie>
-						           <div class="hot-bottom">
-								    <span class="badge"> 
-								     ${(oMovie_index<9)?string('0'+(oMovie_index+1),(oMovie_index+1))}
-								    </span>
-								    <a href="/movie/detail/${oMovie.id}.html" target="_blank">${unifyOf(oMovie.name,12,".")}</a>
-								    <span class="time-right">${oMovie.rate?string("0.0")}</span>
-								   </div>
+							   <ul class="list-group newly-group">
+							   <#list oRank.dataList as oRank>
+								    <li class="list-group-item">
+						               <span class="badge"> 
+									      ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
+									    </span>
+									   <a href="/movie/detail/${oRank.id}.html" target="_blank">${unifyOf(oRank.name,14,"")}</a>
+									   <span class="time-right">${oRank.rate?string("0.0")}</span>
+								    </li>
 							   </#list>
+							  </ul>
 					        </div>
 					        </#list>
 					       
