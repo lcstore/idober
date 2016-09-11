@@ -9,12 +9,12 @@ body {
 span.search-logo-box {
 	padding-top: 1px;
 	padding-bottom: 1px;
-	padding-right: 1px;
+	padding-right: 4px;
 	padding-left: 1px;
 	height: 34px;
 	display: table-cell;
-	left: 3%;
-	position: relative;
+	left: 1%;
+	position: inherit;
 	width: 20%;
 }
 
@@ -38,6 +38,7 @@ a.search-btn {
 	border: 1px solid #4cae4c;
 	width: 1%;
 	display: table-cell;
+	position: inherit;
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
 }
@@ -58,21 +59,21 @@ a.login-btn {
 	height: 34px;
 	display: table-cell;
 	left: 2%;
-	position: relative;
+	position: inherit;
 	width: 10%;
 }
 
-@media ( max-width : 375px) {
+@media ( max-width : 400px) {
 	span.search-logo-box {
 		padding-top: 1px;
 		padding-bottom: 1px;
-		padding-right: 1px;
+		padding-right: 4px;
 		padding-left: 1px;
 		height: 34px;
 		display: table-cell;
-		left: 0.5%;
-		position: relative;
-		width: 25%;
+		left: 1%;
+		position: inherit;
+		width: 30%;
 	}
 	span.site {
 		font-size: 9px;
@@ -85,7 +86,7 @@ a.login-btn {
 		height: 34px;
 		display: table-cell;
 		left: 2%;
-		position: relative;
+		position: inherit;
 		width: 15%;
 	}
 }
@@ -296,14 +297,21 @@ span.cer-bd:before {
 }
 
 .list-img {
-	width: 148px;
-	height: 208px;
+	width: 128px;
+	height: 180px;
 }
 
-@media ( max-width : 375px) {
+@media ( max-width : 320px) {
 	.list-img {
-		width: 160px;
-		height: 222px;
+		width: 140px;
+		height: 200px;
+	}
+}
+
+@media ( min-width : 321px) and ( max-width : 400px) {
+	.list-img {
+		width: 165px;
+		height: 210px;
 	}
 }
 
@@ -338,9 +346,11 @@ span.cer-bd:before {
 div.list-img-box {
 	padding-right: 0px;
 }
+
 div.list-tag-box {
 	padding-right: 0px;
 }
+
 @media ( max-width : 375px) {
 	div.list-img-box {
 		padding-right: 15px;
@@ -348,7 +358,7 @@ div.list-tag-box {
 		width: 100%;
 		float: left;
 	}
-	div.list-tag-box  {
+	div.list-tag-box {
 		padding-right: 15px;
 		padding-left: 15px;
 		width: 100%;

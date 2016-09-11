@@ -53,6 +53,9 @@
 						    </#if>
 							   <ul class="list-group newly-group">
 							   <#list oRank.dataList as oRank>
+							       <#if (oRank_index>=10)>
+							            <#break>
+							        </#if>
 								    <li class="list-group-item">
 						               <span class="badge"> 
 									      ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
