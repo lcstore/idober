@@ -99,6 +99,9 @@
 				<entry key="unifyOf">
 					<bean class="com.lezo.idober.ftls.UnifyOfMethod" />
 				</entry>
+				<entry key="EncodeURL">
+					<bean class="com.lezo.idober.ftls.EncodeURLMethod" />
+				</entry>
 				<entry key="tb_appkey" value="23250128" />
 				<entry key="qq_connect_appid" value="${qq_connect_appid}" />
 				<entry key="qq_redirect_url" value="${qq_redirect_url}" />

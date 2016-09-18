@@ -132,14 +132,16 @@
 	        <#list oTorrents as sTor>
 	            <#assign oTor = ((sTor)!"{}")?eval>
 	            <div id="tor${sTor_index}" class="torblock" >
-	              <#if (oTor.type == 'bttiantang-torrent') >
+	              <#if (oTor.type?ends_with("-torrent")) >
 				    <form id="form${sTor_index}" action="/movie/download">
 					    <span >
 				        	 <strong>${((oTor.name)?length>0)?string((oTor.name),(oDoc.name))}</strong>
 						</span>
-					    <input class="btn btn-default" type="hidden" name="u" value="${oTor.url}">
-					    <input class="btn btn-default" type="hidden" name="m" value="${oTor.method}">
-					    <input class="btn btn-default" type="hidden" name="p" value="${oTor.param}">
+					    <input class="btn btn-default" type="hidden" name="u" value="${EncodeURL(oTor.url)}">
+					    <#if oTor.method?contains("POST")>
+					      <input class="btn btn-default" type="hidden" name="m" value="P">
+					    </#if> 
+					    <input class="btn btn-default" type="hidden" name="p" value="${EncodeURL(oTor.param)}">
 					    <input class="btn btn-default" type="hidden" name="n" value="${oTor.name}">
 					    <button type="submit" class="btn btn-success btn-xs downbtn" >
 					       种子下载

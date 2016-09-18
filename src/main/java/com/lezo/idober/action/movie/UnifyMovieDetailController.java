@@ -71,7 +71,7 @@ public class UnifyMovieDetailController extends BaseController {
 		}
 		JSONObject dObject = convert2JSON(doc);
 		model.addAttribute("oDoc", dObject);
-		return new ModelAndView("UMovieDetail");
+		return new ModelAndView("MovieDetail");
 	}
 
 	private JSONObject convert2JSON(SolrDocument doc) {

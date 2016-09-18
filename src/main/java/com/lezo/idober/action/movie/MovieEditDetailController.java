@@ -38,7 +38,7 @@ import com.lezo.idober.utils.SolrUtils;
 @Log4j
 public class MovieEditDetailController extends BaseController {
 	private static final Pattern NUM_REG = Pattern.compile("^[0-9]+$");
-	private static final String CORE_MOVIE = SolrUtils.CORE_ONLINE_MOVIE;
+	private static final String CORE_MOVIE = SolrUtils.CORE_SOURCE_MOVIE;
 
 	@RequestMapping(value = "{itemCode}", method = RequestMethod.GET)
 	public ModelAndView loadDetail(@PathVariable("itemCode") String itemCode, ModelMap model) throws Exception {
