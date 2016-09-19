@@ -364,8 +364,8 @@ public class FillTorrent2MovieTimer implements Runnable {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setStart(offset);
 		solrQuery.setRows(limit);
-		// solrQuery.set("q", "torrents_size:0");
-		solrQuery.set("q", "id:1132221301");
+		 solrQuery.set("q", "torrents_size:0");
+		// solrQuery.set("q", "id:1132221301");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();
 	}

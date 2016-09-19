@@ -55,10 +55,9 @@ public class TaskmgrTest {
 	}
 
 	@Test
-	public void testRarbtDown() throws Exception {
-		String params = "id=22128&zz=zz2&imageField.x=45&imageField.y=30";
-		String url =
-				"http://www.rarbt.com/index.php/dow/index.html?id=22128&zz=2";
+	public void testBttiantangDown() throws Exception {
+		String params = "id=14176&uhash=d0466b991fca3125cb0f9b1c&imageField.x=71&imageField.y=29&action=download";
+		String url = "http://www.bttiantang.com/download3.php";
 		// url+=params;
 		Connection conn = Jsoup.connect(url);
 		Connection.Method method = Method.POST;
@@ -71,10 +70,10 @@ public class TaskmgrTest {
 			int index = -1;
 			String key = kvArr[++index];
 			String value = kvArr[++index];
-			// conn.data(key, value);
+			conn.data(key, value);
 		}
 		Response resp =
-				Jsoup.connect(url).ignoreContentType(true).method(method).execute();
+				conn.ignoreContentType(true).method(method).execute();
 		System.err.println("headers" + JSONObject.toJSONString(resp.headers()));
 		byte[] dataBytes = resp.bodyAsBytes();
 		System.err.println("dataBytes" + dataBytes.length + ",body:" + new String(dataBytes));
