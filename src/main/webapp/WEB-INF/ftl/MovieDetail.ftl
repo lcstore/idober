@@ -133,7 +133,6 @@
 	            <#assign oTor = ((sTor)!"{}")?eval>
 	            <div id="tor${sTor_index}" class="torblock" >
 	              <#if (oTor.type?ends_with("-torrent")) >
-	                <#if !(oTor.type?contains("bttiantang")) >
 				     <form id="form${sTor_index}" action="/movie/download">
 					    <span >
 				        	 <strong>${((oTor.name)?length>0)?string((oTor.name),(oDoc.name))}</strong>
@@ -148,7 +147,6 @@
 					       种子下载
 					    </button>
 					 </form>
-					</#if>
 				  <#else>
 				    <span>
 				       <strong>${unifyOf(((oTor.name)?length>0)?string((oTor.name),(oDoc.name)),70,'.')}</strong>

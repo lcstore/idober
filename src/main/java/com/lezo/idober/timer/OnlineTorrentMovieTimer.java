@@ -485,7 +485,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 		solrQuery.setStart(offset);
 		solrQuery.setRows(limit);
 		// 从7天前开始，即将上映的电影
-		solrQuery.set("q", "(!had_move_s:* AND release:[NOW-60DAY/DAY TO *])");
+		solrQuery.set("q", "(!had_move_s:1 AND release:[NOW-60DAY/DAY TO *])");
 		solrQuery.addSort("release", ORDER.desc);
 		QueryResponse resp = sourceServer.query(solrQuery);
 		return resp.getResults();
@@ -496,7 +496,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setStart(offset);
 		solrQuery.setRows(limit);
-		solrQuery.set("q", "(!had_move_s:* AND torrents_size:[1 TO *])");
+		solrQuery.set("q", "(!had_move_s:1 AND torrents_size:[1 TO *])");
 		solrQuery.addFilterQuery("!editor:1");
 		QueryResponse resp = sourceServer.query(solrQuery);
 		return resp.getResults();
