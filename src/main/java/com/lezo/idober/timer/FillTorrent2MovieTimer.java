@@ -16,6 +16,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
@@ -26,9 +27,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.util.ContentStream;
 import org.apache.solr.common.util.NamedList;
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -48,7 +46,7 @@ public class FillTorrent2MovieTimer implements Runnable {
 
 	static {
 		ArrayList<String> typeList = Lists.newArrayList();
-		typeList.add("bttiantang-movie-torrent");
+		// typeList.add("bttiantang-movie-torrent");
 		typeList.add("xiamp4-movie-torrent");
 		typeList.add("dy2018-movie-torrent");
 		typeList.add("rarbt-movie-torrent");
@@ -81,10 +79,14 @@ public class FillTorrent2MovieTimer implements Runnable {
 			SolrServer metaServer = SolrUtils.getSolrServer(coreName);
 			int offset = 0;
 			int limit = 100;
+			Long fromId = 0L;
 			while (true) {
 				SolrDocumentList selectDocs = null;
 				try {
-					selectDocs = getMovieEmptyTorrentWithLimit(movieServer, offset, limit);
+					selectDocs = getMovieEmptyTorrentWithLimit(movieServer,
+							offset, limit);
+					// selectDocs = getMovieByIdWithLimit(movieServer, fromId,
+					// limit);
 				} catch (Exception e) {
 					log.warn("", e);
 				}
@@ -98,6 +100,13 @@ public class FillTorrent2MovieTimer implements Runnable {
 				}
 				if (selectDocs.size() < limit) {
 					break;
+				} else {
+					for (SolrDocument doc : selectDocs) {
+						Long curId = Long.valueOf(doc.getFieldValue("id").toString());
+						if (fromId < curId) {
+							fromId = curId;
+						}
+					}
 				}
 				offset += limit;
 				total += limit;
@@ -186,7 +195,10 @@ public class FillTorrent2MovieTimer implements Runnable {
 				// TODO: 2.匹配数据合并
 				for (int index = 0, len = srcArray.size(); index < len; index++) {
 					Object srcObj = srcArray.get(index);
-					tArray.add(srcObj.toString());
+					String srcTor = srcObj.toString();
+					JSONObject torObj = JSONObject.parseObject(srcTor);
+					torObj.remove("data");
+					tArray.add(torObj.toJSONString());
 				}
 			}
 
@@ -364,7 +376,19 @@ public class FillTorrent2MovieTimer implements Runnable {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setStart(offset);
 		solrQuery.setRows(limit);
-		 solrQuery.set("q", "torrents_size:0");
+		solrQuery.set("q", "torrents_size:0");
+		// solrQuery.set("q", "id:1132221301");
+		QueryResponse resp = movieServer.query(solrQuery);
+		return resp.getResults();
+	}
+
+	private SolrDocumentList getMovieByIdWithLimit(SolrServer movieServer, Long fromId, int limit)
+			throws Exception {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(limit);
+		solrQuery.set("q", "id:[" + fromId + " TO *]");
+		solrQuery.addSort("id", ORDER.asc);
 		// solrQuery.set("q", "id:1132221301");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();

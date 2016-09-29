@@ -38,6 +38,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 	private static final Pattern CN_NAME_REG = Pattern.compile("([\u4e00-\u9fa5\\s0-9]+)");
 	private static final Pattern SYMBOL_REG = Pattern.compile("([:-_()（）：/]+)");
 	private static final Pattern IGNORE_REG = Pattern.compile("(第[一二三四五六七八九0-9][部季集])");
+	private static final Integer MANUAL_EDITOR = 1;
 	static {
 		REMOVE_FIELDS.add("_version_");
 		REMOVE_FIELDS.add("creation");
@@ -66,8 +67,12 @@ public class OnlineTorrentMovieTimer implements Runnable {
 			int offset = 0;
 			int limit = 100;
 			int foundCount = 1;
+			Long fromId = 0L;
 			while (total < foundCount) {
-				SolrDocumentList foundDocList = getSourceMovieWithTorrents(sourceServer, offset, limit);
+				SolrDocumentList foundDocList =
+						getSourceMovieWithTorrents(sourceServer, offset, limit);
+				// SolrDocumentList foundDocList =
+				// getMovieByIdWithLimit(sourceServer, fromId, limit);
 				if (foundCount <= 1) {
 					foundCount = (int) foundDocList.getNumFound();
 				}
@@ -77,6 +82,13 @@ public class OnlineTorrentMovieTimer implements Runnable {
 				total += foundDocList.size();
 				if (foundDocList.size() < limit) {
 					break;
+				} else {
+					for (SolrDocument doc : foundDocList) {
+						Long curId = Long.valueOf(doc.getFieldValue("id").toString());
+						if (fromId < curId) {
+							fromId = curId;
+						}
+					}
 				}
 			}
 			foundCount = 1;
@@ -412,7 +424,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 
 	}
 
-	private void createIfHasShares(SolrDocument doc, SolrInputDocument inDoc) {
+	private void createIfHasShares(SolrDocument doc, SolrInputDocument inDoc) throws Exception {
 		String torrentField = "torrents";
 		String shareField = "shares";
 		Collection<Object> torrents = doc.getFieldValues(torrentField);
@@ -421,14 +433,33 @@ public class OnlineTorrentMovieTimer implements Runnable {
 			inDoc.setField(shareField, shares);
 			return;
 		}
+		List<Object> srcTorrents = Lists.newArrayList(torrents);
+		Object editorObj = doc.getFieldValue("editor");
+		if (CollectionUtils.isNotEmpty(shares) || MANUAL_EDITOR.equals(editorObj)) {
+			String id = doc.getFieldValue("id").toString();
+			SolrDocumentList docList = getOnlineMovieWithId(id);
+			if (CollectionUtils.isNotEmpty(docList)) {
+				SolrDocument srcDoc = docList.get(0);
+				Collection<Object> hasTors = srcDoc.getFieldValues(torrentField);
+				if (CollectionUtils.isNotEmpty(hasTors)) {
+					srcTorrents.addAll(hasTors);
+				}
+				hasTors = srcDoc.getFieldValues(shareField);
+				if (CollectionUtils.isNotEmpty(hasTors)) {
+					srcTorrents.addAll(hasTors);
+				}
+			}
+		}
 		Map<String, String> shareMap = Maps.newHashMap();
-		List<String> torrentList = Lists.newArrayList();
-		for (Object torrent : torrents) {
+		Map<String, String> torrentMap = Maps.newHashMap();
+		for (Object torrent : srcTorrents) {
 			JSONObject tObject = JSONObject.parseObject(torrent.toString());
+			tObject.remove("data");
 			String type = tObject.getString("type");
 			String source = tObject.getString("source");
+			String sUrl = tObject.getString("url");
+			sUrl = sUrl == null ? type : sUrl;
 			if (StringUtils.isBlank(source)) {
-				String sUrl = tObject.getString("url");
 				if (sUrl != null && sUrl.contains(".bttiantang.com")) {
 					source = "bttiantang-torrent";
 				}
@@ -446,16 +477,15 @@ public class OnlineTorrentMovieTimer implements Runnable {
 					sb.append("=");
 					sb.append(pObject.getString(key));
 				}
-				tObject.put("param", sb.toString());
-				tObject.put("url", "");
-				torrentList.add(tObject.toJSONString());
+				String sParam = sb.toString();
+				tObject.put("param", sParam);
+				torrentMap.put(sUrl + sParam, tObject.toJSONString());
 			} else if (type != null && type.endsWith("-share")) {
-				String sUrl = tObject.getString("url");
 				sUrl = sUrl == null ? tObject.getString("name") : sUrl;
 				sUrl = sUrl == null ? "" : sUrl;
 				shareMap.put(sUrl, tObject.toJSONString());
 			} else if (type != null) {
-				torrentList.add(tObject.toJSONString());
+				torrentMap.put(sUrl, tObject.toJSONString());
 			}
 		}
 		if (CollectionUtils.isNotEmpty(shares)) {
@@ -467,7 +497,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 				shareMap.put(sUrl, tObject.toJSONString());
 			}
 		}
-		inDoc.setField(torrentField, torrentList);
+		inDoc.setField(torrentField, torrentMap.values());
 		inDoc.setField(shareField, shareMap.values());
 	}
 
@@ -515,5 +545,27 @@ public class OnlineTorrentMovieTimer implements Runnable {
 			sourceServer.add(inDoc);
 		}
 		sourceServer.commit();
+	}
+
+	private SolrDocumentList getOnlineMovieWithId(String id) throws Exception {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(1);
+		solrQuery.set("q", "id:" + id);
+		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
+		return resp.getResults();
+	}
+
+	private SolrDocumentList getMovieByIdWithLimit(SolrServer movieServer, Long fromId, int limit)
+			throws Exception {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(limit);
+		solrQuery.set("q", "id:[" + fromId + " TO *]");
+		solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
+		solrQuery.addSort("id", ORDER.asc);
+		// solrQuery.set("q", "id:1132221301");
+		QueryResponse resp = movieServer.query(solrQuery);
+		return resp.getResults();
 	}
 }
