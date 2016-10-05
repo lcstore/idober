@@ -10,18 +10,21 @@
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-<title><sitemesh:write property='title' /></title>
-<sitemesh:write property='head'/>
+<title>
+     <sitemesh:write property='title' /></title>
 
      <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.0.3/css/bootstrap.min.css">
-     <!--<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.0.3/css/bootstrap-theme.min.css" media="screen> -->  
+     <!--<link rel="stylesheet" href="/assets/css/bootstrap.min.css" >-->
      <link rel="stylesheet" href="${static_host}/assets/css/bootstrap-theme.css?v=${version}" media="screen">
 	
     <link rel="stylesheet" href="${static_host}/assets/css/main.css?v=${version}">
     
 	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+	<!--<script src="/assets/js/jquery-1.11.3.min.js"></script>-->
 	<script src="${static_host}/assets/js/jquery.cookie.js?v=${version}"></script>
 	<script src="${static_host}/assets/js/custom/common-tools.js?v=${version}"></script>
+	
+	<sitemesh:write property='head'/>
 	
 </head>
 
@@ -33,5 +36,6 @@
     <input type="hidden" id="wbAppId" value="${wb_app_key}"/>
     <input type="hidden" id="wbRedirectUrl" value="${wb_redirect_url}"/>
 	<script src="//cdn.bootcss.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<!--<script src="/assets/js/bootstrap-3.2.0.min.js"></script>-->
 </body>
 </html>

@@ -83,10 +83,10 @@ public class FillTorrent2MovieTimer implements Runnable {
 			while (true) {
 				SolrDocumentList selectDocs = null;
 				try {
-					selectDocs = getMovieEmptyTorrentWithLimit(movieServer,
-							offset, limit);
-					// selectDocs = getMovieByIdWithLimit(movieServer, fromId,
-					// limit);
+//					selectDocs = getMovieEmptyTorrentWithLimit(movieServer,
+//							offset, limit);
+					 selectDocs = getMovieByIdWithLimit(movieServer, fromId,
+					 limit);
 				} catch (Exception e) {
 					log.warn("", e);
 				}
@@ -177,6 +177,7 @@ public class FillTorrent2MovieTimer implements Runnable {
 		Map<String, Object> fieldMap = Maps.newHashMap();
 		fieldMap.put("set", doc.getFieldValue("code_s"));
 		docObject.put("code_s", fieldMap);
+		docObject.put("had_move_s", 0);
 		JSONArray tArray = new JSONArray();
 
 		// String srcContent = doc.getFieldValue("content").toString();

@@ -51,7 +51,7 @@ public class SolrQueryTest {
 
 	@Before
 	public void setup() throws Exception {
-		server = new HttpSolrServer("http://www.lezomao.com/cmeta");
+//		server = new HttpSolrServer("http://www.lezomao.com/carticle");
 		// server = new HttpSolrServer("http://localhost:8081/core2");
 		System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
 		// CoreContainer.Initializer initializer = new

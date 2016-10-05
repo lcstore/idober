@@ -28,6 +28,7 @@ public class SolrUtils {
 	public static final String CORE_SOURCE_META = "cmeta";
 	public static final String CORE_ONLINE_MOVIE = "omovie";
 	public static final String CORE_USER = "cuser";
+	public static final String CORE_ARTICLE = "carticle";
 
 	public static final String KEY_EDIT_PREFIX = "_ex_";
 	public static final String VALUE_SPLITOR = ";";
