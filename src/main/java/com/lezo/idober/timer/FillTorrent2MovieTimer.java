@@ -77,16 +77,14 @@ public class FillTorrent2MovieTimer implements Runnable {
 			SolrServer movieServer = SolrUtils.getSolrServer(coreName);
 			coreName = CORE_NAME_META;
 			SolrServer metaServer = SolrUtils.getSolrServer(coreName);
-			int offset = 0;
 			int limit = 100;
 			Long fromId = 0L;
 			while (true) {
 				SolrDocumentList selectDocs = null;
 				try {
-//					selectDocs = getMovieEmptyTorrentWithLimit(movieServer,
-//							offset, limit);
-					 selectDocs = getMovieByIdWithLimit(movieServer, fromId,
-					 limit);
+					selectDocs = getEmptyTorrentMovieByIdWithLimit(movieServer, fromId, limit);
+					// selectDocs = getMovieByIdWithLimit(movieServer, fromId,
+					// limit);
 				} catch (Exception e) {
 					log.warn("", e);
 				}
@@ -108,8 +106,7 @@ public class FillTorrent2MovieTimer implements Runnable {
 						}
 					}
 				}
-				offset += limit;
-				total += limit;
+				total += selectDocs.size();
 			}
 		} catch (Exception e) {
 			log.warn("", e);
@@ -372,12 +369,14 @@ public class FillTorrent2MovieTimer implements Runnable {
 		return solrQuery;
 	}
 
-	private SolrDocumentList getMovieEmptyTorrentWithLimit(SolrServer movieServer, int offset, int limit)
+	private SolrDocumentList getEmptyTorrentMovieByIdWithLimit(SolrServer movieServer, Long fromId, int limit)
 			throws Exception {
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setStart(offset);
+		solrQuery.setStart(0);
 		solrQuery.setRows(limit);
-		solrQuery.set("q", "torrents_size:0");
+		solrQuery.set("q", "id:[" + fromId + " TO *]");
+		solrQuery.addSort("id", ORDER.asc);
+		solrQuery.addFilterQuery("torrents_size:0");
 		// solrQuery.set("q", "id:1132221301");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();

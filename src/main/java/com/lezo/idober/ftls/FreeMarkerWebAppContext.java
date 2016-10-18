@@ -76,6 +76,10 @@ public class FreeMarkerWebAppContext extends WebAppContext {
 				Object attVal = request.getAttribute(sAttKey);
 				if (attVal != null) {
 					dataModel.put(sAttKey, attVal);
+					if ("model".equals(sAttKey) && attVal instanceof ModelMap) {
+						ModelMap modelMap = (ModelMap) attVal;
+						dataModel.putAll(modelMap);
+					}
 				}
 			}
 		}

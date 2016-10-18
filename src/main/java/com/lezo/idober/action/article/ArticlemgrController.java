@@ -7,26 +7,34 @@ import java.util.Map.Entry;
 
 import lombok.extern.log4j.Log4j;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.lezo.idober.action.BaseController;
+import com.lezo.idober.error.NotFoundException;
 import com.lezo.idober.utils.SolrUtils;
 
 @Log4j
 @Controller
-@RequestMapping("console/article")
-public class ConsoleArticleController extends BaseController {
+@RequestMapping("article")
+public class ArticlemgrController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = { "save.action" }, method = RequestMethod.POST)
@@ -39,6 +47,7 @@ public class ConsoleArticleController extends BaseController {
 		}
 
 		addArticleId(paramObj, inDoc);
+		inDoc.setField("status", 0);
 		Map<String, Object> fieldModifier = Maps.newHashMap();
 		fieldModifier.put("add", new Date());
 		inDoc.setField("creation", fieldModifier);
@@ -71,6 +80,23 @@ public class ConsoleArticleController extends BaseController {
 	public ModelAndView newArticle(ModelMap model)
 			throws Exception {
 		ModelAndView andView = new ModelAndView("article/ArticleNew");
+		return andView;
+	}
+
+	@RequestMapping(value = { "edit/{articleId}.html" }, method = RequestMethod.GET)
+	public ModelAndView editArticle(@PathVariable("articleId") String articleId, ModelMap model) throws Exception {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(1);
+		solrQuery.set("q", "(id:" + articleId + ")");
+		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ARTICLE).query(solrQuery);
+		SolrDocumentList docList = resp.getResults();
+		if (CollectionUtils.isEmpty(docList)) {
+			throw new NotFoundException();
+		}
+		SolrDocument doc = docList.get(0);
+		model.addAttribute("doc", doc);
+		ModelAndView andView = new ModelAndView("article/ArticleEdit");
 		return andView;
 	}
 
