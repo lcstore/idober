@@ -92,6 +92,22 @@ public class AssembleIdMovieTimer implements Runnable {
 		} catch (Exception e) {
 			log.warn("build,type:" + group + ",cause:", e);
 		}
+		group = "hotly";
+		title = "热度排序";
+		sSortName = "热门";
+		try {
+			buildByDoubanSort(group, title, limit, sSortName);
+		} catch (Exception e) {
+			log.warn("build,type:" + group + ",cause:", e);
+		}
+		group = "latestly";
+		title = "时间排序";
+		sSortName = "最新";
+		try {
+			buildByDoubanSort(group, title, limit, sSortName);
+		} catch (Exception e) {
+			log.warn("build,type:" + group + ",cause:", e);
+		}
 	}
 
 	private void buildByDoubanSort(String group, String title, Integer limit, String sSortName) throws Exception {
@@ -104,6 +120,7 @@ public class AssembleIdMovieTimer implements Runnable {
 		solrQuery.set("q", sortField + ":*");
 		solrQuery.addFilterQuery("type:douban-movie-sort");
 		solrQuery.addSort("date_s", ORDER.desc);
+		solrQuery.addSort(sortField, ORDER.asc);
 		QueryResponse resp = sourceServer.query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
 		if (docList.isEmpty()) {

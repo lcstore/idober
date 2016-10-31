@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import lombok.extern.log4j.Log4j;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -78,11 +79,12 @@ public class FillTorrent2MovieTimer implements Runnable {
 			coreName = CORE_NAME_META;
 			SolrServer metaServer = SolrUtils.getSolrServer(coreName);
 			int limit = 100;
-			Long fromId = 0L;
+			String fromId = "0";
 			while (true) {
 				SolrDocumentList selectDocs = null;
 				try {
-					selectDocs = getEmptyTorrentMovieByIdWithLimit(movieServer, fromId, limit);
+					selectDocs = getEmptyTorrentMovieByIdWithLimit(movieServer, fromId,
+							limit);
 					// selectDocs = getMovieByIdWithLimit(movieServer, fromId,
 					// limit);
 				} catch (Exception e) {
@@ -100,8 +102,8 @@ public class FillTorrent2MovieTimer implements Runnable {
 					break;
 				} else {
 					for (SolrDocument doc : selectDocs) {
-						Long curId = Long.valueOf(doc.getFieldValue("id").toString());
-						if (fromId < curId) {
+						String curId = doc.getFieldValue("id").toString();
+						if (fromId.compareTo(curId) < 0) {
 							fromId = curId;
 						}
 					}
@@ -242,11 +244,13 @@ public class FillTorrent2MovieTimer implements Runnable {
 		int sameCount = 0;
 		actors = actors.toLowerCase();
 		for (Object aObj : actorList) {
-			if (actors.contains(aObj.toString().toLowerCase())) {
+			if (actors.contains(aObj.toString().toLowerCase().trim())) {
 				sameCount++;
 			}
 		}
-		Float countPer = sameCount * 1F / actorList.size();
+		int aCount = actors.split(";").length;
+		int minCount = (aCount > 1 && actorList.size() > 0) ? Math.min(aCount, actorList.size()) : actorList.size();
+		Float countPer = sameCount * 1F / minCount;
 		if (countPer >= 0.5F) {
 			bSame = true;
 		}
@@ -277,12 +281,18 @@ public class FillTorrent2MovieTimer implements Runnable {
 
 	private boolean hasSameRelease(SolrDocument doc, SolrDocument mDoc) {
 		Object referObject = doc.getFieldValue("release");
-		Object srcObject = mDoc.getFieldValue("release_tdt");
+		Object srcObject = mDoc.getFieldValue("year_ti");
+		srcObject = srcObject == null ? mDoc.getFieldValue("release_tdt") : srcObject;
 		if (referObject == null || srcObject == null) {
 			return true;
 		}
 		Date referDate = (Date) referObject;
-		Date srcDate = (Date) srcObject;
+		Date srcDate = null;
+		if (srcObject instanceof Integer) {
+			srcDate = DateUtils.setYears(new Date(), NumberUtils.toInt(srcObject.toString()));
+		} else {
+			srcDate = (Date) srcObject;
+		}
 		Date fromDate = DateUtils.addMonths(referDate, -12);
 		Date toDate = DateUtils.addMonths(referDate, 12);
 		boolean hasSame = srcDate.after(fromDate) && srcDate.before(toDate);
@@ -369,7 +379,7 @@ public class FillTorrent2MovieTimer implements Runnable {
 		return solrQuery;
 	}
 
-	private SolrDocumentList getEmptyTorrentMovieByIdWithLimit(SolrServer movieServer, Long fromId, int limit)
+	private SolrDocumentList getEmptyTorrentMovieByIdWithLimit(SolrServer movieServer, String fromId, int limit)
 			throws Exception {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setStart(0);
@@ -377,19 +387,19 @@ public class FillTorrent2MovieTimer implements Runnable {
 		solrQuery.set("q", "id:[" + fromId + " TO *]");
 		solrQuery.addSort("id", ORDER.asc);
 		solrQuery.addFilterQuery("torrents_size:0");
-		// solrQuery.set("q", "id:1132221301");
+		solrQuery.set("q", "id:37834614");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();
 	}
 
-	private SolrDocumentList getMovieByIdWithLimit(SolrServer movieServer, Long fromId, int limit)
+	private SolrDocumentList getMovieByIdWithLimit(SolrServer movieServer, String fromId, int limit)
 			throws Exception {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setStart(0);
 		solrQuery.setRows(limit);
 		solrQuery.set("q", "id:[" + fromId + " TO *]");
 		solrQuery.addSort("id", ORDER.asc);
-		// solrQuery.set("q", "id:1132221301");
+		// solrQuery.set("q", "id:275911616");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();
 	}

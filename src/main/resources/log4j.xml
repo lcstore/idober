@@ -7,7 +7,7 @@
 		<!-- 设置File参数：日志输出文件名 -->
 		<param name="File" value="logs/idober.log" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<param name="MaxBackupIndex" value="7" />
+		<param name="MaxBackupIndex" value="2" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{yyyy-MM-dd HH:mm:ss\} %-5p [%c:%L,%t] %m%n" />
@@ -27,7 +27,7 @@
 	</appender>
 	<root>
 		<priority value="info" />
-		<appender-ref ref="console" />
+		<!-- <appender-ref ref="console" /> -->
 		<appender-ref ref="rollAppender" />
 	</root>
 </log4j:configuration> 

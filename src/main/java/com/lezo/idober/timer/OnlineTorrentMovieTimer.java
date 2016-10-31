@@ -67,7 +67,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 			int offset = 0;
 			int limit = 100;
 			int foundCount = 1;
-			Long fromId = 0L;
+			String fromId = "0";
 			while (total < foundCount) {
 				SolrDocumentList foundDocList =
 						getSourceMovieWithTorrents(sourceServer, offset, limit);
@@ -84,8 +84,8 @@ public class OnlineTorrentMovieTimer implements Runnable {
 					break;
 				} else {
 					for (SolrDocument doc : foundDocList) {
-						Long curId = Long.valueOf(doc.getFieldValue("id").toString());
-						if (fromId < curId) {
+						String curId = doc.getFieldValue("id").toString();
+						if (fromId.compareTo(curId) < 0) {
 							fromId = curId;
 						}
 					}
@@ -442,7 +442,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 				SolrDocument srcDoc = docList.get(0);
 				Collection<Object> hasTors = srcDoc.getFieldValues(torrentField);
 				if (CollectionUtils.isNotEmpty(hasTors)) {
-					srcTorrents.addAll(hasTors);
+					// srcTorrents.addAll(hasTors);
 				}
 				hasTors = srcDoc.getFieldValues(shareField);
 				if (CollectionUtils.isNotEmpty(hasTors)) {
@@ -556,7 +556,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
 		return resp.getResults();
 	}
 
-	private SolrDocumentList getMovieByIdWithLimit(SolrServer movieServer, Long fromId, int limit)
+	private SolrDocumentList getMovieByIdWithLimit(SolrServer movieServer, String fromId, int limit)
 			throws Exception {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setStart(0);

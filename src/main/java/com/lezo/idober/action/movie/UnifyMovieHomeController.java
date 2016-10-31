@@ -1,7 +1,9 @@
 package com.lezo.idober.action.movie;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -119,12 +121,19 @@ public class UnifyMovieHomeController {
 			dataObject.put("dataList", docList);
 			model.addAttribute("upcomingObj", dataObject);
 
-			group = "classic";
+			List<String> groupList = Lists.newArrayList();
+			groupList.add("hotly");// 热门
+			groupList.add("latestly");// 最新
+			groupList.add("classic");// 经典
+			Calendar c = Calendar.getInstance();
+			int hour = c.get(Calendar.HOUR_OF_DAY);
+			int groupIndex = hour % groupList.size();
+			group = groupList.get(groupIndex);
 			limit = 24;
 			fields = "id,name,release,image";
 			docList = queryMovieIdByGroup(fields, group, offset, limit);
 			dataObject = new JSONObject();
-			dataObject.put("name", "经典电影");
+			dataObject.put("name", "推荐电影");
 			dataObject.put("dataList", docList);
 			model.addAttribute("classicObj", dataObject);
 

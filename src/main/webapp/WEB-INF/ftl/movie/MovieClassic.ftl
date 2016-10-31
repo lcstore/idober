@@ -8,7 +8,7 @@
 <div class="container box-mtop"  id="movieClassic">
 		<div class="row movie-box">
 					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9 left-box">	
-					    <div class="title"><h4>经典电影</h4></div>
+					    <div class="title"><h4>${classicObj.name!'经典电影'}</h4></div>
 					    <#assign colCount="6"?number >
 					    <#list classicObj.dataList as oMovie>
 					       <#if ((oMovie_index%colCount)==0) >
