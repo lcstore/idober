@@ -442,7 +442,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
                 SolrDocument srcDoc = docList.get(0);
                 Collection<Object> hasTors = srcDoc.getFieldValues(torrentField);
                 if (CollectionUtils.isNotEmpty(hasTors)) {
-                    // srcTorrents.addAll(hasTors);
+                    srcTorrents.addAll(hasTors);
                 }
                 hasTors = srcDoc.getFieldValues(shareField);
                 if (CollectionUtils.isNotEmpty(hasTors)) {
@@ -465,21 +465,7 @@ public class OnlineTorrentMovieTimer implements Runnable {
                 }
             }
             if (StringUtils.isBlank(type) && "bttiantang-torrent".equals(source)) {
-                tObject.remove("source");
-                tObject.put("type", source);
-                JSONObject pObject = tObject.getJSONObject("param");
-                StringBuilder sb = new StringBuilder();
-                for (String key : pObject.keySet()) {
-                    if (sb.length() > 0) {
-                        sb.append("&");
-                    }
-                    sb.append(key);
-                    sb.append("=");
-                    sb.append(pObject.getString(key));
-                }
-                String sParam = sb.toString();
-                tObject.put("param", sParam);
-                torrentMap.put(sUrl + sParam, tObject.toJSONString());
+                continue;
             } else if (type != null && type.endsWith("-share")) {
                 sUrl = sUrl == null ? tObject.getString("name") : sUrl;
                 sUrl = sUrl == null ? "" : sUrl;
@@ -487,7 +473,11 @@ public class OnlineTorrentMovieTimer implements Runnable {
                     shareMap.put(sUrl, tObject.toJSONString());
                 }
             } else if (type != null) {
-                torrentMap.put(sUrl, tObject.toJSONString());
+                if (sUrl.contains("rarbt.com") && sUrl.contains("bbs")) {
+                    continue;
+                } else {
+                    torrentMap.put(sUrl, tObject.toJSONString());
+                }
             }
         }
         if (CollectionUtils.isNotEmpty(shares)) {

@@ -251,7 +251,15 @@ public class FillTorrent2MovieTimer implements Runnable {
         if (CollectionUtils.isEmpty(actorList)) {
             return bSame;
         }
-        bSame = false;
+        bSame = isContains(actors, actorList);
+        if (!bSame && !isSameLang(actors, JSON.toJSONString(actorList))) {
+            bSame = null;
+        }
+        return bSame;
+    }
+
+    private boolean isContains(String actors, Collection<Object> actorList) {
+        boolean bSame = false;
         int sameCount = 0;
         actors = actors.toLowerCase();
         for (Object aObj : actorList) {
@@ -264,18 +272,15 @@ public class FillTorrent2MovieTimer implements Runnable {
                 }
             }
             float hitPer = hitCharCount * 1F / sActor.length();
-            if (hitPer > 0.6F) {
+            if (hitPer > 0.65F) {
                 sameCount++;
             }
         }
         int aCount = actors.split(";").length;
         int minCount = (aCount > 1 && actorList.size() > 0) ? Math.min(aCount, actorList.size()) : actorList.size();
         Float countPer = sameCount * 1F / minCount;
-        if (countPer >= 0.5F) {
+        if (countPer >= 0.7F) {
             bSame = true;
-        }
-        if (!bSame && !isSameLang(actors, JSON.toJSONString(actorList))) {
-            bSame = null;
         }
         return bSame;
     }
@@ -338,14 +343,8 @@ public class FillTorrent2MovieTimer implements Runnable {
             return null;
         }
         srcDirector = srcDirector.toLowerCase();
-        Boolean hasSame = false;
-        List<String> directors = (List<String>) referObject;
-        for (String director : directors) {
-            if (srcDirector.contains(director.toLowerCase())) {
-                hasSame = true;
-                break;
-            }
-        }
+        Collection<Object> directors = (Collection<Object>) referObject;
+        Boolean hasSame = isContains(srcDirector, directors);
         if (!hasSame && !isSameLang(srcDirector, JSON.toJSONString(directors))) {
             hasSame = null;
         }
@@ -445,7 +444,7 @@ public class FillTorrent2MovieTimer implements Runnable {
         solrQuery.setRows(limit);
         solrQuery.set("q", "id:[" + fromId + " TO *]");
         solrQuery.addSort("id", ORDER.asc);
-        // solrQuery.set("q", "id:331021339");
+        // solrQuery.set("q", "id:0638604176");
         QueryResponse resp = movieServer.query(solrQuery);
         return resp.getResults();
     }
