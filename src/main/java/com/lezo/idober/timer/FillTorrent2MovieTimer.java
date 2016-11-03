@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +35,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.lezo.idober.utils.SolrUtils;
 
 @Log4j
@@ -286,9 +288,15 @@ public class FillTorrent2MovieTimer implements Runnable {
     }
 
     private Boolean isSameImdb(SolrDocument doc, SolrDocument mDoc) {
-        String srcContent = doc.getFieldValue("content").toString();
-        JSONObject srcObject = JSONObject.parseObject(srcContent);
-        String sImdb = srcObject.getString("imdb");
+        Object imdbSrcObj = doc.getFieldValue("imdb_s");
+        String sImdb = null;
+        if (imdbSrcObj == null) {
+            String srcContent = doc.getFieldValue("content").toString();
+            JSONObject srcObject = JSONObject.parseObject(srcContent);
+            sImdb = srcObject.getString("imdb");
+        } else {
+            sImdb = imdbSrcObj.toString();
+        }
         if (StringUtils.isBlank(sImdb)) {
             return null;
         }
@@ -297,12 +305,10 @@ public class FillTorrent2MovieTimer implements Runnable {
             return null;
         }
         Boolean bSame = null;
-        if (imdbObj != null && StringUtils.isNotBlank(sImdb)) {
-            String sImdbTxt = imdbObj.toString();
-            if (StringUtils.isNotBlank(sImdbTxt) &&
-                    !sImdbTxt.equals("imdb")) {
-                bSame = sImdb.contains(sImdbTxt);
-            }
+        String sImdbTxt = imdbObj.toString();
+        sImdbTxt = sImdbTxt.replaceAll("[^0-9]+", "").trim();
+        if (StringUtils.isNotBlank(sImdbTxt)) {
+            bSame = sImdb.contains(sImdbTxt);
         }
         return bSame;
     }
@@ -380,26 +386,42 @@ public class FillTorrent2MovieTimer implements Runnable {
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setStart(offset);
         solrQuery.setRows(limit);
-        StringBuilder sb = new StringBuilder();
-        String sName = doc.getFieldValue("name").toString();
-        sName = SYMBOL_REG.matcher(sName).replaceAll(" ");
-        sName = IGNORE_REG.matcher(sName).replaceAll(" ");
-        Matcher matcher = CN_NAME_REG.matcher(sName);
-        if (matcher.find()) {
-            sName = matcher.group(1).trim();
+        Collection<Object> nameList = doc.getFieldValues("names");
+        Set<Object> nameSet = Sets.newHashSet();
+        nameSet.add(doc.getFieldValue("name"));
+        if (nameList != null) {
+            nameSet.addAll(nameList);
         }
-        sName = sName.trim();
-        sb.append(sName);
-        if (useDirector) {
-            List<String> directors = (List<String>) doc.getFieldValue("directors");
-            if (CollectionUtils.isNotEmpty(directors)) {
-                sb.append(" ");
-                sb.append(directors.get(0));
-            } else {
-                missFields.add("directors");
+        String sHead = "(";
+        StringBuilder sb = new StringBuilder(sHead);
+        for (Object nameObj : nameSet) {
+            if (nameObj == null) {
+                continue;
             }
+            String sName = nameObj.toString();
+            sName = SYMBOL_REG.matcher(sName).replaceAll(" ");
+            sName = IGNORE_REG.matcher(sName).replaceAll(" ");
+            Matcher matcher = CN_NAME_REG.matcher(sName);
+            if (matcher.find()) {
+                String sPart = matcher.group(1).trim();
+                if (StringUtils.isNotBlank(sPart)) {
+                    sName = sPart;
+                }
+            }
+            sName = sName.trim();
+            if (StringUtils.isBlank(sName)) {
+                continue;
+            }
+            // sName = sName.replaceAll("[\\s]+", "").trim();
+            if (sb.length() > sHead.length()) {
+                sb.append(" OR ");
+            }
+            sName = ClientUtils.escapeQueryChars(sName);
+            sb.append(sName);
         }
-        String sQuery = ClientUtils.escapeQueryChars(sb.toString());
+        sb.append(")");
+        // String sQuery = ClientUtils.escapeQueryChars(sb.toString());
+        String sQuery = sb.toString();
         solrQuery.set("q", sQuery);
         solrQuery.addFilterQuery(torrentFilterQuery);
         Object yearObj = doc.getFieldValue("year");
@@ -444,7 +466,7 @@ public class FillTorrent2MovieTimer implements Runnable {
         solrQuery.setRows(limit);
         solrQuery.set("q", "id:[" + fromId + " TO *]");
         solrQuery.addSort("id", ORDER.asc);
-        // solrQuery.set("q", "id:0638604176");
+        // solrQuery.set("q", "id:0636784043");
         QueryResponse resp = movieServer.query(solrQuery);
         return resp.getResults();
     }
