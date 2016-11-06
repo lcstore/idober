@@ -29,4 +29,6 @@ public class AppConfig {
 	private String wbAppSecret;
 	@Value("${wb_redirect_url}")
 	private String wbRedirectUrl;
+	@Value("${idober_torrent_dir}")
+	private String torrentDir;
 }

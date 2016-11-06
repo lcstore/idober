@@ -143,6 +143,8 @@
 					    </#if> 
 					    <input class="btn btn-default" type="hidden" name="p" value="${EncodeURL(oTor.param)}">
 					    <input class="btn btn-default" type="hidden" name="n" value="${oTor.name}">
+					    <input class="btn btn-default" type="hidden" name="id" value="${oDoc.id}">
+					    <input class="btn btn-default" type="hidden" name="tid" value="${oTor.id}">
 					    <button type="submit" class="btn btn-success btn-xs downbtn" >
 					       种子下载
 					    </button>
