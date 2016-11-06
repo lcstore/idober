@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.stereotype.Controller;
@@ -75,7 +76,7 @@ public class SitemapController {
 
 	private void addSitemap(Element urlSetEle, Document doc) throws Exception {
 		Integer offset = 0;
-		Integer limit = 100;
+		Integer limit = 500;
 		int total = 2000;
 		SolrServer server = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE);
 		while (offset < total) {
@@ -85,6 +86,7 @@ public class SitemapController {
 			solrQuery.set("q", "(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
 			solrQuery.addField("id");
 			solrQuery.addFilterQuery("type:movie");
+			solrQuery.addSort("release", ORDER.desc);
 			QueryResponse resp = server.query(solrQuery);
 			List<MovieSolr> mSolrs = resp.getBeans(MovieSolr.class);
 			log.info("sitemap,offset:" + offset + ",size:" + mSolrs.size());
