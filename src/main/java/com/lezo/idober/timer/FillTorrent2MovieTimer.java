@@ -86,11 +86,10 @@ public class FillTorrent2MovieTimer implements Runnable {
 			while (true) {
 				SolrDocumentList selectDocs = null;
 				try {
-					// selectDocs =
-					// getEmptyTorrentMovieByIdWithLimit(movieServer, fromId,
-					// limit);
-					selectDocs = getMovieByIdWithLimit(movieServer, fromId,
+					selectDocs = getEmptyTorrentMovieByIdWithLimit(movieServer, fromId,
 							limit);
+					// selectDocs = getMovieByIdWithLimit(movieServer, fromId,
+					// limit);
 				} catch (Exception e) {
 					log.warn("", e);
 				}
@@ -463,7 +462,7 @@ public class FillTorrent2MovieTimer implements Runnable {
 		solrQuery.setRows(limit);
 		solrQuery.set("q", "id:[" + fromId + " TO *]");
 		solrQuery.addSort("id", ORDER.asc);
-		// solrQuery.addFilterQuery("torrents_size:0");
+		solrQuery.addFilterQuery("torrents_size:0");
 		// solrQuery.set("q", "id:0637825677");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();
