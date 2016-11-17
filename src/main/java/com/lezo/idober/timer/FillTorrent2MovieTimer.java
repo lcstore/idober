@@ -50,7 +50,7 @@ public class FillTorrent2MovieTimer implements Runnable {
     static {
         ArrayList<String> typeList = Lists.newArrayList();
         // typeList.add("bttiantang-movie-torrent");
-        typeList.add("xiamp4-movie-torrent");
+        // typeList.add("xiamp4-movie-torrent");
         typeList.add("dy2018-movie-torrent");
         typeList.add("rarbt-movie-torrent");
         typeList.add("bluraydisc-movie-torrent");
