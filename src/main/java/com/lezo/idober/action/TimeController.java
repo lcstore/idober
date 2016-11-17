@@ -68,7 +68,8 @@ public class TimeController extends BaseController {
 				}
 				boolean bError = false;
 				for (Object tor : torrents) {
-					if (tor.toString().contains("bttiantang")) {
+					String sTor = tor.toString();
+					if (sTor.matches("bttiantang.com|xiamp4.com")) {
 						bError = true;
 						break;
 					}
