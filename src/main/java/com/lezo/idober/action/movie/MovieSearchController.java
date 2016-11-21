@@ -52,6 +52,7 @@ public class MovieSearchController extends BaseController {
         solrQuery.setRows(limit);
         solrQuery.set("q", keyWord);
         solrQuery.set("spellcheck", "true");
+		solrQuery.set("spellcheck.count", "10");
         solrQuery.addFilterQuery("type:movie");
         // solrQuery.addFilterQuery("(torrents_size:[1 TO *] OR shares_size:[1 TO *])");
         // 发布时间在2个月之后，且无下载地址的电影不显示

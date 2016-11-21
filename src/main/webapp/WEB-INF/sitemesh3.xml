@@ -70,6 +70,12 @@
 		<decorator>/decorator/header.ftl</decorator>
 	</mapping>
 	<mapping>
+		<path>/m/search/movie</path>
+		<decorator>/mobile//decorator/footer.ftl</decorator>
+		<decorator>/mobile//decorator/navbar.ftl</decorator>
+		<decorator>/mobile//decorator/header.ftl</decorator>
+	</mapping>
+	<mapping>
 		<path>/movie/detail/*</path>
 		<decorator>/decorator/footer.ftl</decorator>
 		<decorator>/decorator/blankbar.ftl</decorator>
