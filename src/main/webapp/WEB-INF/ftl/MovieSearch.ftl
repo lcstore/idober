@@ -6,12 +6,22 @@
 <meta name="title" content="${model.qWord}-搜索结果,为你所用，才是资讯 - 狸猫资讯(LezoMao.com)" />
 <title>${model.qWord}-搜索结果,为你所用，才是资讯 - 狸猫资讯(LezoMao.com)</title>
 </head>
+<#assign dataList = (model.qResponse.dataList![])>
+<#assign suggestion = (model.qResponse.suggestion)>
 <body>
 	<div class="main data-box">
 		<div class="act">
 			<div class="container">
 				<div class="container-fluid">
-				<#list model.qResponse as oDoc>
+				<#if (suggestion)>
+					<div class="alert alert-warning" role="alert">
+					  您是不是要找： <span class="suggest-text">${suggestion}</span>
+					  ，找到相关结果：<span class="suggest-text">${dataList?size}</span>&nbsp;条
+					</div>
+				<#else>
+					<div class="alert alert-info" role="alert">找到相关结果：<span class="suggest-text">${dataList?size}</span>&nbsp;条</div>
+				</#if>
+				<#list dataList as oDoc>
 				    <#assign oDirectors = (oDoc.directors![])>
 					<#assign oActors = (oDoc.actors![])>
 					<#assign oRegions = (oDoc.regions![])>

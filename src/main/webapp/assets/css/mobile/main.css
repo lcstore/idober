@@ -365,3 +365,9 @@ div.list-tag-box {
 		float: left;
 	}
 }
+
+/*MovieSearch**/
+.suggest-text {
+	color: red;
+	font-weight: bold;
+}

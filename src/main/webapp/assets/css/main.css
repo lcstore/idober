@@ -902,3 +902,8 @@ span.cer-bd:before {
 	margin-right: 4px;
 	font-size: 6px;
 }
+
+.suggest-text {
+	color: red;
+	font-weight: bold;
+}
