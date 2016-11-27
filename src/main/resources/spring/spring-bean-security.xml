@@ -22,13 +22,14 @@
 	</http>
 	<http pattern="/img/**" security="none">
 	</http>
-
+	<http pattern="/login**" security="none">
+	</http>
 	<!-- <http use-expressions="true" auto-config="false" entry-point-ref="http403EntryPoint"> 
 		<intercept-url pattern="/comment/**" access="hasRole('ROLE_USER')" /> <http-basic 
 		/> </http> -->
 	<http use-expressions="false" auto-config="false" entry-point-ref="http403EntryPoint">
 		<csrf token-repository-ref="CookieCsrfTokenRepository" />
-		<intercept-url pattern="/comment/**" access="ROLE_USER" />
+		<intercept-url pattern="/movie/edxxit/**" access="ROLE_ADMIN" />
 		<http-basic />
 	</http>
 

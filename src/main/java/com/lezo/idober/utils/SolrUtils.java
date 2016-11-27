@@ -112,6 +112,7 @@ public class SolrUtils {
 		return fieldSet;
 	}
 
+	@Deprecated
 	public static SolrDocument overwriteWithEditVal(SolrDocument doc) {
 		Set<String> delSet = Sets.newHashSet();
 		Set<String> fieldSet = Sets.newHashSet(doc.getFieldNames());

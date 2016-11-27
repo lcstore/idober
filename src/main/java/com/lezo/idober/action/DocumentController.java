@@ -43,6 +43,7 @@ import com.google.common.collect.Sets;
 import com.lezo.idober.solr.pojo.DataSolr;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.SolrUtils;
+import com.lezo.idober.utils.TaskUtils;
 import com.lezo.idober.view.ReturnView;
 import com.lezo.idober.vo.ActionReturnVo;
 import com.lezo.idober.vo.SolrDocListVo;
@@ -238,15 +239,7 @@ public class DocumentController {
 	}
 
 	private void createTasks(JSONArray taskArray) throws Exception {
-		if (taskArray == null || taskArray.size() < 1) {
-			return;
-		}
-		String url = "http://www.lezomao.com:8090/taskmgr/createtasks";
-		String referrer = "http://www.lezomao.com/idober";
-		Response resp =
-				Jsoup.connect(url).referrer(referrer).method(Method.POST).data("tasks", taskArray.toJSONString())
-						.ignoreContentType(true).execute();
-		log.info("resp:" + resp.body());
+		TaskUtils.createTasks(taskArray);
 	}
 
 	private JSONObject createClassicContent(Integer destCount, Integer offset, Integer limit) throws Exception {

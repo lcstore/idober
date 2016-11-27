@@ -1,5 +1,7 @@
 package com.lezo.idober.action.movie;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,47 +9,55 @@ import java.util.regex.Pattern;
 import lombok.extern.log4j.Log4j;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
+import org.apache.solr.client.solrj.request.ContentStreamUpdateRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.util.ContentStream;
+import org.apache.solr.common.util.NamedList;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.lezo.idober.action.BaseController;
 import com.lezo.idober.error.NotFoundException;
-import com.lezo.idober.utils.AESCodecUtils;
+import com.lezo.idober.timer.OnlineTorrentMovieTimer;
 import com.lezo.idober.utils.SolrUtils;
+import com.lezo.idober.utils.TaskUtils;
+import com.lezo.idober.vo.ActionReturnVo;
 
-@RequestMapping("movie/edit")
 @Controller
 @Log4j
+@RequestMapping("movie/edit")
 public class MovieEditDetailController extends BaseController {
 	private static final Pattern NUM_REG = Pattern.compile("^[0-9]+$");
 	private static final String CORE_MOVIE = SolrUtils.CORE_SOURCE_MOVIE;
+	@Autowired
+	private OnlineTorrentMovieTimer onlineTorrentMovieTimer;
 
 	@RequestMapping(value = "{itemCode}", method = RequestMethod.GET)
 	public ModelAndView loadDetail(@PathVariable("itemCode") String itemCode, ModelMap model) throws Exception {
 		itemCode = Jsoup.clean(itemCode, Whitelist.basic());
 		Matcher matcher = NUM_REG.matcher(itemCode);
 		SolrDocument doc = null;
-		if (!matcher.find()) {
-			doc = getDocumentByDecrypt(itemCode);
-		} else {
+		if (matcher.find()) {
 			SolrQuery solrQuery = new SolrQuery();
 			solrQuery.setStart(0);
 			solrQuery.setRows(1);
@@ -62,25 +72,200 @@ public class MovieEditDetailController extends BaseController {
 		if (doc == null) {
 			throw new NotFoundException();
 		}
-		String oldCode = ObjectUtils.toString(doc.getFieldValue("old_id_s"), null);
-		String idString = ObjectUtils.toString(doc.getFieldValue("id"), StringUtils.EMPTY);
-		if (itemCode.equals(oldCode)) {
-			RedirectView red = new RedirectView("/movie/detail/" + idString + ".html", true);
-			red.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-			return new ModelAndView(red);
-		}
 		JSONObject dObject = convert2JSON(doc);
 		model.addAttribute("oDoc", dObject);
 		return new ModelAndView("MovieEditDetail");
 	}
 
+	@ResponseBody
+	@RequestMapping(value = { "detail" }, method = RequestMethod.POST)
+	public ActionReturnVo updateDetail(@RequestBody JSONObject paramObject) throws Exception {
+		ActionReturnVo returnVo = new ActionReturnVo();
+		JSONArray idArray = paramObject.getJSONArray("ids");
+		if (CollectionUtils.isEmpty(idArray)) {
+			returnVo.setMsg("empty id array");
+			returnVo.setCode(ActionReturnVo.CODE_PARAM);
+			return returnVo;
+		}
+		JSONArray taskArray = new JSONArray();
+		List<String> typeList = Lists.newArrayList("douban-movie-detail");
+		for (int index = 0, size = idArray.size(); index < size; index++) {
+			String idString = idArray.getString(index);
+			if (StringUtils.isBlank(idString)) {
+				continue;
+			}
+			for (String type : typeList) {
+				JSONObject taskObject = new JSONObject();
+				taskObject.put("type", type);
+				taskObject.put("url", "https://movie.douban.com/subject/" + idString + "/");
+				taskObject.put("level", 1000);
+				taskObject = TaskUtils.withParam(taskObject, "retry", "0");
+				taskObject = TaskUtils.withParam(taskObject, "id", idString);
+				taskArray.add(taskObject);
+			}
+		}
+		TaskUtils.createTasks(taskArray);
+		return returnVo;
+	}
+	@ResponseBody
+	@RequestMapping(value = { "deploy" }, method = RequestMethod.POST)
+	public ActionReturnVo deployMovie(@RequestBody JSONObject paramObject) throws Exception {
+		ActionReturnVo returnVo = new ActionReturnVo();
+		JSONArray idArray = paramObject.getJSONArray("ids");
+		if (CollectionUtils.isEmpty(idArray)) {
+			returnVo.setMsg("empty id array");
+			returnVo.setCode(ActionReturnVo.CODE_PARAM);
+			return returnVo;
+		}
+		JSONArray docArray = new JSONArray();
+		for (int index = 0, size = idArray.size(); index < size; index++) {
+			String idString = idArray.getString(index);
+			if (StringUtils.isBlank(idString)) {
+				continue;
+			}
+			JSONObject docObj = new JSONObject();
+			docObj.put("id", idString);
+			docObj.put("had_move_s", 0);
+			Map<String, Object> setValMap = new JSONObject();
+			setValMap.put("set", 1);
+			docObj.put("editor", setValMap);
+			docArray.add(docObj);
+		}
+		String sContent = docArray.toJSONString();
+		String contentType = "application/json";
+		Collection<ContentStream> strems = ClientUtils.toContentStreams(sContent, contentType);
+		ContentStreamUpdateRequest request =
+				new ContentStreamUpdateRequest("/update/json");
+		for (ContentStream cs : strems) {
+			request.addContentStream(cs);
+		}
+		request.setAction(AbstractUpdateRequest.ACTION.COMMIT, true, true);
+		NamedList<Object> resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).request(request);
+		log.info("resp:" + resp.size() + ",update:" + docArray.size());
+		onlineTorrentMovieTimer.run();
+		return returnVo;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = { "torrent" }, method = RequestMethod.POST)
+	public ActionReturnVo addTorrent(@RequestBody JSONObject paramObject) throws Exception {
+		ActionReturnVo returnVo = new ActionReturnVo();
+		String itemCode = paramObject.getString("id");
+		String code = paramObject.getString("code");
+		Boolean bCover = paramObject.getBoolean("cover");
+		SolrDocument shareDoc = queryShareByCode(code);
+		if (shareDoc == null) {
+			return returnVo;
+		}
+		String level = paramObject.getString("level");
+		String name = paramObject.getString("name");
+		Map<String, String> shareMap = Maps.newHashMap();
+		JSONObject sObject = new JSONObject();
+		String sUrl = shareDoc.getFieldValue("url_rs").toString();
+		Object secretObject = shareDoc.getFieldValue("secret_rs");
+		String secret = secretObject == null ? null : secretObject.toString();
+		name = StringUtils.isEmpty(name) ? "百度云分享" : name;
+		sObject.put("url", sUrl);
+		sObject.put("secret", secret);
+		sObject.put("type", "baidu-share");
+		sObject.put("name", name);
+		sObject.put("level", level);
+		shareMap.put(sUrl, sObject.toJSONString());
+		if (bCover == null || !bCover) {
+			SolrDocument movieDoc = queryMovieShareById(itemCode);
+			if (movieDoc == null) {
+				return returnVo;
+			}
+			Collection<Object> shares = movieDoc.getFieldValues("shares");
+			if (CollectionUtils.isNotEmpty(shares)) {
+				for (Object oContent : shares) {
+					String sContent = oContent.toString();
+					JSONObject srcObject = JSONObject.parseObject(sContent);
+					String sLink = srcObject.getString("url");
+					if (shareMap.containsKey(sLink)) {
+						continue;
+					}
+					shareMap.put(sLink, sContent);
+				}
+			}
+		}
+		JSONArray docArray = new JSONArray();
+		JSONObject docObj = new JSONObject();
+		docObj.put("id", itemCode);
+		Map<String, Object> setValMap = new JSONObject();
+		setValMap.put("set", shareMap.values());
+		docObj.put("shares", setValMap);
+		docArray.add(docObj);
+		String sContent = docArray.toJSONString();
+		String contentType = "application/json";
+		Collection<ContentStream> strems = ClientUtils.toContentStreams(sContent, contentType);
+		ContentStreamUpdateRequest request =
+				new ContentStreamUpdateRequest("/update/json");
+		for (ContentStream cs : strems) {
+			request.addContentStream(cs);
+		}
+		request.setAction(AbstractUpdateRequest.ACTION.COMMIT, true, true);
+		NamedList<Object> resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).request(request);
+		log.info("resp:" + resp.size() + ",update:" + docArray.size());
+		return returnVo;
+	}
+
+	private SolrDocument queryMovieShareById(String itemCode) throws Exception {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(1);
+		solrQuery.set("q", "(id:" + itemCode + ")");
+		solrQuery.addField("shares");
+		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
+		SolrDocumentList docList = resp.getResults();
+		if (CollectionUtils.isNotEmpty(docList)) {
+			return docList.get(0);
+		}
+		return null;
+	}
+
+	private SolrDocument queryShareByCode(String code) throws Exception {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(1);
+		solrQuery.set("q", "(code_s:" + code + ")");
+		solrQuery.addFilterQuery("source_group_s:torrent");
+		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META).query(solrQuery);
+		SolrDocumentList docList = resp.getResults();
+		if (CollectionUtils.isNotEmpty(docList)) {
+			return docList.get(0);
+		}
+		return null;
+	}
+
 	private JSONObject convert2JSON(SolrDocument doc) {
-		doc = SolrUtils.overwriteWithEditVal(doc);
 		JSONObject srcObject = new JSONObject(doc);
 		JSONArray crumbArr = createCrumbs(srcObject);
 		srcObject.put("crumbs", crumbArr);
 		// assortTorrents(srcObject);
+		fillFeeds(srcObject);
 		return srcObject;
+	}
+
+	private void fillFeeds(JSONObject srcObject) {
+		String name = srcObject.getString("name");
+		if (StringUtils.isEmpty(name)) {
+			return;
+		}
+		name = ClientUtils.escapeQueryChars(name);
+		SolrServer server = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.set("q", name);
+		solrQuery.setRows(10);
+		solrQuery.addFilterQuery("source_group_s:torrent");
+		try {
+			QueryResponse resp = server.query(solrQuery);
+			SolrDocumentList docList = resp.getResults();
+			srcObject.put("src_count", docList.getNumFound());
+			srcObject.put("feeds", docList);
+		} catch (Exception e) {
+			log.warn("fillFeedInfo,name:" + name + ",cause:", e);
+		}
 	}
 
 	private JSONArray createCrumbs(JSONObject srcObject) {
@@ -244,38 +429,4 @@ public class MovieEditDetailController extends BaseController {
 		return kvMap;
 	}
 
-	public SolrDocument getDocumentByDecrypt(String itemCode) {
-		SolrDocument document = null;
-		try {
-			String idString = AESCodecUtils.decrypt(itemCode);
-			String[] unitArr = idString.split(";");
-			if (unitArr.length >= 3) {
-				int index = -1;
-				String sYear = unitArr[++index];
-				StringBuilder sb = new StringBuilder();
-				for (int i = 1; i < unitArr.length - 1; i++) {
-					if (sb.length() > 0) {
-						sb.append(";");
-					}
-					sb.append(unitArr[i]);
-				}
-				String sDirector = sb.toString();
-				String sName = unitArr[unitArr.length - 1];
-				sDirector = ClientUtils.escapeQueryChars(sDirector);
-				sName = ClientUtils.escapeQueryChars(sName);
-				SolrQuery solrQuery = new SolrQuery();
-				solrQuery.setStart(0);
-				solrQuery.setRows(1);
-				solrQuery.set("q", "(year:" + sYear + " AND directors:" + sDirector + " AND names:" + sName + ")");
-				QueryResponse resp = SolrUtils.getMovieServer().query(solrQuery);
-				SolrDocumentList docList = resp.getResults();
-				if (CollectionUtils.isNotEmpty(docList)) {
-					return docList.get(0);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return document;
-	}
 }

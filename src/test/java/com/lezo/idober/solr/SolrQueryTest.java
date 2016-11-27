@@ -46,7 +46,7 @@ public class SolrQueryTest {
 
     @Before
     public void setup() throws Exception {
-        server = new HttpSolrServer("http://www.lezomao.com/cmovie");
+        server = new HttpSolrServer("http://www.lezomao.com/cmeta");
         // server = new HttpSolrServer("http://localhost:8081/cmovie");
         System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
         // CoreContainer.Initializer initializer = new
@@ -142,7 +142,7 @@ public class SolrQueryTest {
 
     @Test
     public void testSolrDelete() throws Exception {
-        server.deleteByQuery("timestamp:[2016-11-19T00:00:19.545Z TO *]");
+        server.deleteByQuery("type:wx-mp-torrent");
         server.commit();
         server.optimize();
     }

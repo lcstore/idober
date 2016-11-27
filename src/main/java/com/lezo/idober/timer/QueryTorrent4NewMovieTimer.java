@@ -17,6 +17,7 @@ import org.jsoup.Jsoup;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lezo.idober.utils.SolrUtils;
+import com.lezo.idober.utils.TaskUtils;
 
 @Log4j
 public class QueryTorrent4NewMovieTimer implements Runnable {
@@ -81,15 +82,7 @@ public class QueryTorrent4NewMovieTimer implements Runnable {
 	}
 
 	private void createTasks(JSONArray taskArray) throws Exception {
-		if (taskArray == null || taskArray.size() < 1) {
-			return;
-		}
-		String url = "http://www.lezomao.com:8090/taskmgr/createtasks";
-		String referrer = "http://www.lezomao.com/idober";
-		Response resp =
-				Jsoup.connect(url).referrer(referrer).method(Method.POST).data("tasks", taskArray.toJSONString())
-						.ignoreContentType(true).execute();
-		log.info("task:" + taskArray.size() + ",resp:" + resp.body());
+		TaskUtils.createTasks(taskArray);
 	}
 
 	/**

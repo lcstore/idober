@@ -5,7 +5,7 @@
 <meta name="description" content="狸猫资讯精挑细选，${cnRegion}高分经典电影下载地址列表，为你臻选！"/>
 <meta name="keywords" content="狸猫资讯、lezomao,高分电影,经典电影,种子下载,迅雷下载,高清下载" />
 <meta name="title" content="${cnRegion}地区高分经典电影下载地址列表 - 狸猫资讯(LezoMao.com)" />
-<title>${cnRegion}地区高分经典电影下载地址列表 - 狸猫资讯(LezoMao.com)</title>
+<title>电影管理列表 - 狸猫资讯(LezoMao.com)</title>
 </head>
 <#assign oDocList = (oDocList![])>
 <#assign oCrumbList = (oCrumbList![])>
@@ -38,18 +38,32 @@
 					<#if (oDoc_index%4==0) >
 					<div class="row row-wp">
 					</#if>
-					    <div class="col-md-3 col-wp">
+					    <div class="col-md-3 col-wp edit-col-wp">
 					    <a class="item-wp" target="_blank" href="/movie/edit/${oDoc.id}.html">
 					      <div class="cover-wp" >
 					      <div class="img-thumbnail">
 					        <img alt="${oDoc.name}" src="${oDoc.image}" width="162" height="225" >
 					      </div>
-					      <p>${oDoc.name}
-					        <strong class="rate">${oDoc.rate?string("0.0")}</strong>
-					      </p>
 					      </div>
-					 
 					    </a>
+						    <div class="attr-wp">
+						      <p>${oDoc.name}
+						        <strong class="rate">${oDoc.rate?string("0.0")}</strong>
+						      </p>
+						      <p>
+						      <#assign oRegions = (oDoc.regions![])>
+						      <#list oRegions as region>
+						          <#if (region_index==0) >
+						            ${region}(${oDoc.release?string("yyyy-MM-dd")})
+						         <#else>
+						            &nbsp${region}
+			 					  </#if>	
+						        </#list>
+						      </p>
+						     <button class="btn btn-info btn-xs" type="button" action="edit-search" name="${oDoc.name}" >
+							   寻找种子 <span class="badge">${oDoc.src_count?string("0")}</span>
+							 </button>
+						      </div>
 						</div>
 					<#if ((oDoc_index+1)%4==0) || (!oDoc_has_next)>
 				    </div>
@@ -93,5 +107,30 @@
 		    </div>
 		</div>
 	</div>
+	<script>
+	$(function () {
+	    $('button[action="edit-search"]').one('click', function(e) {
+			var self = $(this);
+			self.attr('disabled',"disabled");
+			var sName = self.attr('name');
+			var nameArr = [];
+			nameArr.push('赌神归来');
+			nameArr.push(sName);
+			var oParam = {
+				names : nameArr
+			};
+			$.ajax({
+				type : 'POST',
+				url : '/movie/edit/search',
+				dataType : 'json',
+				contentType : 'application/json',
+				data : JSON.stringify(oParam)
+			}).done(function(oBack) {
+				console.log('data:' + JSON.stringify(oBack));
+			}).fail(function(data) {
+			})
+		});
+	});
+	</script>
 </body>
 </html>

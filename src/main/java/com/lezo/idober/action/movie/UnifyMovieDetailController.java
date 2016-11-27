@@ -75,7 +75,6 @@ public class UnifyMovieDetailController extends BaseController {
 	}
 
 	private JSONObject convert2JSON(SolrDocument doc) {
-		doc = SolrUtils.overwriteWithEditVal(doc);
 		JSONObject srcObject = new JSONObject(doc);
 		JSONArray crumbArr = createCrumbs(srcObject);
 		srcObject.put("crumbs", crumbArr);

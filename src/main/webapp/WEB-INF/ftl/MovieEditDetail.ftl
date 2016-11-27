@@ -11,6 +11,7 @@
 <#assign oTorrents = (oDoc.torrents![])>
 <#assign oShares = (oDoc.shares![])>
 <#assign oCrumbs = (oDoc.crumbs![])>
+<#assign oFeeds = (oDoc.feeds![])>
 <meta name="description" content="狸猫资讯(LezoMao.com)，${oDoc.name}(${oDoc.year})，导演：${oDirectors?join('、')}，主演：${oActors?join('、')}"/>
 <meta name="keywords" content="狸猫资讯、lezomao,导演：${oDirectors?join('、')}，主演：${oActors?join('、')},${oDoc.name}(${oDoc.year}),${oDoc.enname},种子下载,迅雷下载,高清下载" />
 <meta name="title" content="${oDoc.name}${oDoc.enname}(${oDoc.year}),种子下载,迅雷下载,高清下载 - 狸猫资讯(LezoMao.com)" />
@@ -96,12 +97,32 @@
 								          </#list>
 								        </li>
 									</#if> 
-								   
+								   <li class="list-group-item tag-info">
+								     <strong>IMDb：</strong>
+								     <a class="imdb" rel="nofollow" target="_blank" href="http://www.imdb.com/title/tt${oDoc.imdb_s}">tt${oDoc.imdb_s}</a>
+								     <strong>豆瓣：</strong>
+								     <a class="douban" rel="nofollow" target="_blank" href="https://movie.douban.com/subject/25726614/">${oDoc.code_s}</a>
+								   </li>
 								  </ul>
 					       </div>
 				      </div>
 				</div>
 			</div>
+		</div>
+		<div class="container cmd-box">
+		  <ul class="list-group">
+		    <li class="list-group-item cmd-item">
+		     <button class="btn btn-info btn-xs edit-search-btn" type="button" action="edit-search" name="${oDoc.name}" >
+			   寻找种子 <span class="badge">${oDoc.src_count?string("0")}</span>
+			 </button>
+			 <button class="btn btn-warning btn-xs edit-search-btn" type="button" action="update-detail" name="${oDoc.code_s}">
+			   更新信息
+			  </button>
+			 <button class="btn btn-danger btn-xs edit-search-btn" type="button" action="deploy"">
+			   发布上线
+			  </button>
+		    </li>
+		  </ul>
 		</div>
 		<div class="container top-margin">
 		   <div class="story">
@@ -159,11 +180,159 @@
 	        </#list>
 	    </li>
 		</div>
+		
+		<div class="container feed-box">
+		  <ul class="list-group feed-list">
+		  <#list oFeeds as oFeed>
+		    <li class="list-group-item feed-item">
+		      <div class="tor-box">
+		        <h3>
+				<span>(${oFeed.code_s})</span>
+				  <a target="_blank" href="${oFeed.url_rs}">${oFeed.url_rs}</a>
+				  <#if oFeed.secret_rs??>
+				  <span>密码：${oFeed.secret_rs}</span>
+				  </#if>
+				</h3>
+		        <span>类型:${oFeed.type}</span>
+		        <span>来源：${oFeed.source_name_txt}</span>
+		        <span>大小：${oFeed.size_tl!'未知'}</span>
+		        <span>更新：${oFeed.date_tdt?string("yyyy-MM-dd HH:mm")}</span>
+			  </div>
+		      <div class="cmd-box">
+		      <div class="row">
+			      <div class="col-lg-6">
+			       <div class="input-group">
+					  <input type="text" class="form-control" name="name" code="${oFeed.code_s}" value="${oFeed.title}">
+					  <span class="input-group-addon">
+				        <input type="checkbox" name="cover" code="${oFeed.code_s}">
+				      </span>
+					  <span class="input-group-addon">
+					　　  <select class="select-level" code="${oFeed.code_s}">
+					　　         <option value="uhd">超清</option>
+					　　         <option value="hd" selected ="selected">高清</option>
+					　　         <option value="sd">标清</option>
+					　　         <option value="bd">枪版</option>
+					　　         <option value="">未知</option>
+					　　    </select>
+					  </span>
+					  <span class="input-group-addon">
+					    <a href="javascript:void(0)" class="add-tor" code="${oFeed.code_s}" >添加</a>
+					  </span>
+					</div>
+				  </div>
+			  </div>
+			  </div>
+		      <div class="txt-box">
+		        <h4>
+				 <a target="_blank" href="${oFeed.source_url_rs}">${oFeed.title}</a>
+				</h4>
+				<p class="txt-info">${oFeed.content}</p>
+			  </div>
+		    </li>
+		  </#list>
+		  </ul>
+		</div>
 	</div>
-	
+	<input type="hidden" name="id" value="${oDoc.id}">
 	<script src="${static_host}/assets/js/custom/urlcodesc.js?v=${version}"></script>
 	<script src="${static_host}/assets/js/custom/detail.js?v=${version}"></script>
-
+    	<script>
+		$(function () {
+		    $('button[action="edit-search"]').one('click', function(e) {
+				var self = $(this);
+				self.attr('disabled',"disabled");
+				var sName = self.attr('name');
+				var nameArr = [];
+				nameArr.push(sName);
+				var oParam = {
+					names : nameArr
+				};
+				$.ajax({
+					type : 'POST',
+					url : '/movie/edit/search',
+					dataType : 'json',
+					contentType : 'application/json',
+					data : JSON.stringify(oParam)
+				}).done(function(oBack) {
+					console.log('data:' + JSON.stringify(oBack));
+				}).fail(function(data) {
+				})
+			});
+		    $('button[action="update-detail"]').one('click', function(e) {
+				var self = $(this);
+				self.attr('disabled',"disabled");
+				var sCode = self.attr('name');
+				var codeArr = [];
+				codeArr.push(sCode);
+				var oParam = {
+					ids : codeArr
+				};
+				$.ajax({
+					type : 'POST',
+					url : '/movie/edit/detail',
+					dataType : 'json',
+					contentType : 'application/json',
+					data : JSON.stringify(oParam)
+				}).done(function(oBack) {
+					console.log('data:' + JSON.stringify(oBack));
+				}).fail(function(data) {
+				})
+			});
+		    $('button[action="deploy"]').one('click', function(e) {
+				var self = $(this);
+				self.attr('disabled',"disabled");
+				var sCode = $('input[name="id"]').val();;
+				var codeArr = [];
+				codeArr.push(sCode);
+				var oParam = {
+					ids : codeArr
+				};
+				$.ajax({
+					type : 'POST',
+					url : '/movie/edit/deploy',
+					dataType : 'json',
+					contentType : 'application/json',
+					data : JSON.stringify(oParam)
+				}).done(function(oBack) {
+					console.log('data:' + JSON.stringify(oBack));
+				}).fail(function(data) {
+				})
+			});
+		    $('input[name="cover"][type="checkbox"]').on('click', function(e) {
+				var self = $(this);
+				var checked = self.prop('checked');
+				var code = self.attr('code');
+				var btnELe = $('a.add-tor[code="'+code+'"]');
+				if(checked){
+				  btnELe.text('覆写');
+				}else {
+				  btnELe.text('添加');
+				}
+			});
+		    $('a.add-tor[href][code]').on('click', function(e) {
+				var self = $(this);
+				var code = self.attr('code');
+				var checked = $('input[name="cover"][code="'+code+'"]').prop('checked');
+				var name = $('input[name="name"][code="'+code+'"]').val();
+				var oParam = {};
+				oParam.id = $('input[name="id"]').val();
+				oParam.code = code;
+				oParam.cover = checked;
+				oParam.name = name;
+				oParam.level = $('select.select-level[code="'+code+'"] option:selected').val();;
+				$.ajax({
+					type : 'POST',
+					url : '/movie/edit/torrent',
+					dataType : 'json',
+					contentType : 'application/json',
+					data : JSON.stringify(oParam)
+				}).done(function(oBack) {
+					console.log('data:' + JSON.stringify(oBack));
+				}).fail(function(data) {
+				})
+			});
+		});
+		</script>
 
 </body>
 </html>
