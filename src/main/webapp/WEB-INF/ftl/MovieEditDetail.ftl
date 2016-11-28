@@ -101,7 +101,7 @@
 								     <strong>IMDb：</strong>
 								     <a class="imdb" rel="nofollow" target="_blank" href="http://www.imdb.com/title/tt${oDoc.imdb_s}">tt${oDoc.imdb_s}</a>
 								     <strong>豆瓣：</strong>
-								     <a class="douban" rel="nofollow" target="_blank" href="https://movie.douban.com/subject/25726614/">${oDoc.code_s}</a>
+								     <a class="douban" rel="nofollow" target="_blank" href="https://movie.douban.com/subject/${oDoc.code_s}/">${oDoc.code_s}</a>
 								   </li>
 								  </ul>
 					       </div>
