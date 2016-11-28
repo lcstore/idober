@@ -198,25 +198,44 @@
 		        <span>大小：${oFeed.size_tl!'未知'}</span>
 		        <span>更新：${oFeed.date_tdt?string("yyyy-MM-dd HH:mm")}</span>
 			  </div>
-		      <div class="cmd-box">
+		      <div class="cmd-box" code="${oFeed.code_s}">
 		      <div class="row">
-			      <div class="col-lg-6">
+			      <div class="col-lg-3">
 			       <div class="input-group">
-					  <input type="text" class="form-control" name="name" code="${oFeed.code_s}" value="${oFeed.title}">
+					  <span class="input-group-addon">链接</span>
+					  <input type="text" class="form-control" name="url"  value="${oFeed.url_rs}">
+				   </div>
+				  </div>
+			      <div class="col-lg-2">
+			       <div class="input-group">
+					  <span class="input-group-addon">密码</span>
+					  <input type="text" class="form-control" name="secret"  value="${oFeed.secret_rs}">
+				   </div>
+				  </div>
+			      <div class="col-lg-2">
+			       <div class="input-group">
+					  <span class="input-group-addon">大小</span>
+					  <input type="text" class="form-control" name="size"  value="${oFeed.size_tl}">
+				    </div>
+				  </div>
+			      <div class="col-lg-5">
+			       <div class="input-group">
+			          <#assign oNameArr = (oFeed.title?split('@>'))>
+					  <input type="text" class="form-control" name="name"  value="百度云:${oNameArr[0]}">
 					  <span class="input-group-addon">
-				        <input type="checkbox" name="cover" code="${oFeed.code_s}">
+				        <input type="checkbox" name="cover" >
 				      </span>
 					  <span class="input-group-addon">
-					　　  <select class="select-level" code="${oFeed.code_s}">
+					　　  <select class="select-level" >
 					　　         <option value="uhd">超清</option>
 					　　         <option value="hd" selected ="selected">高清</option>
 					　　         <option value="sd">标清</option>
 					　　         <option value="bd">枪版</option>
 					　　         <option value="">未知</option>
-					　　    </select>
+					　　   </select>
 					  </span>
 					  <span class="input-group-addon">
-					    <a href="javascript:void(0)" class="add-tor" code="${oFeed.code_s}" >添加</a>
+					    <a href="javascript:void(0)" class="add-tor" >添加</a>
 					  </span>
 					</div>
 				  </div>
@@ -300,26 +319,50 @@
 			});
 		    $('input[name="cover"][type="checkbox"]').on('click', function(e) {
 				var self = $(this);
+				var cmdEle= self.parents('div.cmd-box[code]');
 				var checked = self.prop('checked');
-				var code = self.attr('code');
-				var btnELe = $('a.add-tor[code="'+code+'"]');
+				var btnELe = cmdEle.find('a.add-tor');
 				if(checked){
 				  btnELe.text('覆写');
 				}else {
 				  btnELe.text('添加');
 				}
 			});
-		    $('a.add-tor[href][code]').on('click', function(e) {
+		    $('a.add-tor[href]').on('click', function(e) {
 				var self = $(this);
-				var code = self.attr('code');
-				var checked = $('input[name="cover"][code="'+code+'"]').prop('checked');
-				var name = $('input[name="name"][code="'+code+'"]').val();
+				var cmdEle= self.parents('div.cmd-box[code]');
+				var code = cmdEle.attr('code');
+				var checked = cmdEle.find('input[name="cover"]').prop('checked');
+				var name = cmdEle.find('input[name="name"]').val();
+				var url = cmdEle.find('input[name="url"]').val();
+				var secret = cmdEle.find('input[name="secret"]').val();
+				var size = cmdEle.find('input[name="size"]').val();
+				var level = cmdEle.find('select.select-level option:selected').val();
+				secret = secret?secret:null;
+				size = size?size:'-1';
+				size = size.trim();
+				if(/([0-9\.]+)G$/im.test(size)){
+				   size=RegExp.$1;
+				   size*=1<<30;
+				} else if(/([0-9\.]+)M$/im.test(size)){
+				   size=RegExp.$1;
+				   size*=1<<20;
+				} else if(/([0-9\.]+)K$/im.test(size)){
+				   size=RegExp.$1;
+				   size*=1<<10;
+				}else {
+				   size -=0;
+				}
 				var oParam = {};
 				oParam.id = $('input[name="id"]').val();
 				oParam.code = code;
 				oParam.cover = checked;
 				oParam.name = name;
-				oParam.level = $('select.select-level[code="'+code+'"] option:selected').val();;
+				oParam.url = url;
+				oParam.secret = secret;
+				oParam.size = size;
+				oParam.level = level;
+				console.log('oParam:'+JSON.stringify(oParam));
 				$.ajax({
 					type : 'POST',
 					url : '/movie/edit/torrent',

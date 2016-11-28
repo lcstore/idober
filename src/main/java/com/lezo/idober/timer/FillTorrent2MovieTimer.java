@@ -199,6 +199,9 @@ public class FillTorrent2MovieTimer implements Runnable {
                         String url = torObj.getString("url");
                         type = type == null ? "" : type;
                         url = url == null ? "" : url;
+                        if (url.contains("bbs.rarbt.com")) {
+                            continue;
+                        }
                         if (!type.contains("share") || url.contains(".baidu.com")) {
                             tArray.add(torObj.toJSONString());
                         }
@@ -465,7 +468,7 @@ public class FillTorrent2MovieTimer implements Runnable {
         solrQuery.set("q", "id:[" + fromId + " TO *]");
         solrQuery.addSort("id", ORDER.asc);
         solrQuery.addFilterQuery("torrents_size:0");
-        // solrQuery.set("q", "id:1883423774");
+        // solrQuery.set("q", "id:194531117");
         QueryResponse resp = movieServer.query(solrQuery);
         return resp.getResults();
     }
