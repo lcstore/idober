@@ -96,7 +96,8 @@ public class MovieEditListController extends BaseController {
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setStart(start);
         solrQuery.setRows(ParamUtils.PAGE_SIZE);
-        solrQuery.set("q", "(release:[NOW-" + beforeDay + "DAY/DAY TO NOW/DAY+7DAY])");
+        // solrQuery.set("q", "(release:[NOW-" + beforeDay + "DAY/DAY TO NOW/DAY+7DAY])");
+        solrQuery.set("q", "(release:[* TO NOW/DAY+7DAY])");
         solrQuery.addFilterQuery("type:movie");
         solrQuery.addFilterQuery("(torrents_size:0 AND shares_size:0)");
         solrQuery.addSort("release", ORDER.desc);

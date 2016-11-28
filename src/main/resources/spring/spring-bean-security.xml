@@ -6,7 +6,7 @@
 	<authentication-manager>
 		<authentication-provider>
 			<user-service>
-				<user name="lezosolr" password="lezo@solr" authorities="ROLE_USER,ROLE_ADMIN" />
+				<user name="lezosolr" password="lezo@solr" authorities="ROLE_ADMIN" />
 				<user name="lezo" password="lezo@idober" authorities="ROLE_USER" />
 			</user-service>
 		</authentication-provider>
@@ -27,11 +27,18 @@
 	<!-- <http use-expressions="true" auto-config="false" entry-point-ref="http403EntryPoint"> 
 		<intercept-url pattern="/comment/**" access="hasRole('ROLE_USER')" /> <http-basic 
 		/> </http> -->
-	<http use-expressions="false" auto-config="false" entry-point-ref="http403EntryPoint">
+	<http use-expressions="false" auto-config="true" >
 		<csrf token-repository-ref="CookieCsrfTokenRepository" />
-		<intercept-url pattern="/movie/edxxit/**" access="ROLE_ADMIN" />
-		<http-basic />
+		<intercept-url pattern="/movie/edit/**" access="ROLE_ADMIN" />
+		<form-login login-page='/login' default-target-url='/'
+			always-use-default-target='false' />
+		<form-login 
+		    login-page="/login" 
+		    default-target-url="/" 
+			authentication-failure-url="/login?error" 
+			username-parameter="username"
+			password-parameter="password" />
+		<logout logout-success-url="/login?logout" />
 	</http>
-
 
 </beans:beans>

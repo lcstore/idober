@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -251,4 +252,23 @@ public class LoginController {
         QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_USER).query(solrQuery);
         return resp.getResults();
     }
+    
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView login(
+		@RequestParam(value = "error", required = false) String error,
+		@RequestParam(value = "logout", required = false) String logout) {
+
+		ModelAndView model = new ModelAndView();
+		if (error != null) {
+			model.addObject("error", "Invalid username and password!");
+		}
+
+		if (logout != null) {
+			model.addObject("msg", "You've been logged out successfully.");
+		}
+		model.setViewName("login");
+//		http://www.mkyong.com/spring-security/spring-security-form-login-example/
+		return model;
+
+	}
 }
