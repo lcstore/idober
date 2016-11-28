@@ -190,13 +190,19 @@
 				<span>(${oFeed.code_s})</span>
 				  <a target="_blank" href="${oFeed.url_rs}">${oFeed.url_rs}</a>
 				  <#if oFeed.secret_rs??>
-				  <span>密码：${oFeed.secret_rs}</span>
+				  <span>密码:${oFeed.secret_rs}</span>
 				  </#if>
 				</h3>
 		        <span>类型:${oFeed.type}</span>
-		        <span>来源：${oFeed.source_name_txt}</span>
-		        <span>大小：${oFeed.size_tl!'未知'}</span>
-		        <span>更新：${oFeed.date_tdt?string("yyyy-MM-dd HH:mm")}</span>
+		        <span>来源:${oFeed.source_name_txt}</span>
+		        <span>大小:
+		         <#if (oFeed.size_tl??)>
+		          ${(oFeed.size_tl/1024/1024)}M
+		         <#else>
+		           未知
+		         </#if>
+		        </span>
+		        <span>更新:${oFeed.date_tdt?string("yyyy-MM-dd HH:mm")}</span>
 			  </div>
 		      <div class="cmd-box" code="${oFeed.code_s}">
 		      <div class="row">

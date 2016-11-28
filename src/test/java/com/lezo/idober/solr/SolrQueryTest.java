@@ -142,7 +142,7 @@ public class SolrQueryTest {
 
     @Test
     public void testSolrDelete() throws Exception {
-        server.deleteByQuery("type:wx-mp-torrent");
+        server.deleteByQuery("code_s:723237719");
         server.commit();
         server.optimize();
     }

@@ -252,7 +252,7 @@ public class MovieEditDetailController extends BaseController {
         name = ClientUtils.escapeQueryChars(name);
         SolrServer server = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
         SolrQuery solrQuery = new SolrQuery();
-        solrQuery.set("q", name);
+        solrQuery.set("q", "title:" + name);
         solrQuery.setRows(10);
         solrQuery.addFilterQuery("source_group_s:torrent");
         try {
