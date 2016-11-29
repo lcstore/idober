@@ -19,6 +19,7 @@ import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -252,23 +254,18 @@ public class LoginController {
         QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_USER).query(solrQuery);
         return resp.getResults();
     }
-    
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(
-		@RequestParam(value = "error", required = false) String error,
-		@RequestParam(value = "logout", required = false) String logout) {
 
-		ModelAndView model = new ModelAndView();
-		if (error != null) {
-			model.addObject("error", "Invalid username and password!");
-		}
+    @RequestMapping(value = "/sso", method = RequestMethod.POST)
+    public ModelAndView login(
+            @RequestParam(value = "username", required = false) String username,
+            @RequestParam(value = "password", required = false) String password,
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) {
 
-		if (logout != null) {
-			model.addObject("msg", "You've been logged out successfully.");
-		}
-		model.setViewName("login");
-//		http://www.mkyong.com/spring-security/spring-security-form-login-example/
-		return model;
+        RedirectView red = new RedirectView("/", true);
+        red.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        return new ModelAndView(red);
+        // http://www.mkyong.com/spring-security/spring-security-form-login-example/
 
-	}
+    }
 }

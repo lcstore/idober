@@ -6,8 +6,7 @@
 	<authentication-manager>
 		<authentication-provider>
 			<user-service>
-				<user name="lezosolr" password="lezo@solr" authorities="ROLE_ADMIN" />
-				<user name="lezo" password="lezo@idober" authorities="ROLE_USER" />
+				<user name="${idober_admin_name}" password="${idober_admin_pwd}" authorities="ROLE_ADMIN" />
 			</user-service>
 		</authentication-provider>
 	</authentication-manager>
@@ -27,18 +26,25 @@
 	<!-- <http use-expressions="true" auto-config="false" entry-point-ref="http403EntryPoint"> 
 		<intercept-url pattern="/comment/**" access="hasRole('ROLE_USER')" /> <http-basic 
 		/> </http> -->
-	<http use-expressions="false" auto-config="true" >
+	<beans:bean id="CustomAuthenticationSuccessHandler"
+		class="com.lezo.idober.security.CustomAuthenticationSuccessHandler">
+		<beans:property name="targetUrlParameter" value="retTo" />
+	</beans:bean>
+
+	<http use-expressions="false" auto-config="true">
 		<csrf token-repository-ref="CookieCsrfTokenRepository" />
 		<intercept-url pattern="/movie/edit/**" access="ROLE_ADMIN" />
-		<form-login login-page='/login' default-target-url='/'
-			always-use-default-target='false' />
 		<form-login 
 		    login-page="/login" 
-		    default-target-url="/" 
+			login-processing-url="/login/sso"
 			authentication-failure-url="/login?error" 
+		    default-target-url="/"
 			username-parameter="username"
-			password-parameter="password" />
+			password-parameter="password" 
+			authentication-success-handler-ref="CustomAuthenticationSuccessHandler" />
 		<logout logout-success-url="/login?logout" />
 	</http>
+
+
 
 </beans:beans>

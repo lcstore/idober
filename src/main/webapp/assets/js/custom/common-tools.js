@@ -6,14 +6,15 @@ var _hmt = _hmt || [];
 	s.parentNode.insertBefore(hm, s);
 })();
 $(function() {
+	var csrfCookie = 'XSRF-TOKEN';
+	var csrfToken = $.cookie(csrfCookie);
 	$(document).ajaxSend(function(e, xhr, options) {
 		if (options.type && options.type == 'POST') {
-			var csrfCookie = 'XSRF-TOKEN';
-			var csrfToken = $.cookie(csrfCookie);
 			var csrfHead = 'X-' + csrfCookie;
 			xhr.setRequestHeader(csrfHead, csrfToken);
 		}
 	});
+	$('input[name="_csrf"]').val(csrfToken);
 });
 
 $(document).ready(function() {

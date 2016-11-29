@@ -188,7 +188,7 @@ function logout() {
             </li>
           </ul>
           <div class="single-panel-section">
-            <form class="form-horizontal wt-form" name="login_form">
+            <form class="form-horizontal wt-form" action="/login/sso"  method="post">
               <div class="form-group">
                 <div class="input-group-">
                   <input type="text" tabindex="1" name="username" placeholder="邮箱/手机" class="form-control"></div>
@@ -198,7 +198,10 @@ function logout() {
                   <input type="password" tabindex="2" name="password" placeholder="密码" class="form-control"></div>
               </div>
               <div class="form-group">
-                <button data-loading-text="登录中…" tabindex="4" type="button" class="btn btn-success btn-lg btn-block">登 录</button></div>
+                <button tabindex="3" type="submit" class="btn btn-success btn-lg btn-block">登 录</button>
+                </div>
+               	<input type="hidden" name="_csrf" />
+               	<input type="hidden" name="retTo" />
             </form>
           </div>
           <div class="login_weixin_qr_code text-center panel-hide" id="weixin_qr_code">
