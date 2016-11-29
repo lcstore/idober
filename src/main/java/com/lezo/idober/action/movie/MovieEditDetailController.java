@@ -259,6 +259,10 @@ public class MovieEditDetailController extends BaseController {
             QueryResponse resp = server.query(solrQuery);
             SolrDocumentList docList = resp.getResults();
             srcObject.put("src_count", docList.getNumFound());
+            if (docList.isEmpty()) {
+                // 显示一条空数据
+                docList.add(new SolrDocument());
+            }
             srcObject.put("feeds", docList);
         } catch (Exception e) {
             log.warn("fillFeedInfo,name:" + name + ",cause:", e);
