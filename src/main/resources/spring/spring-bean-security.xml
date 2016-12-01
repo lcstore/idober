@@ -34,6 +34,7 @@
 	<http use-expressions="false" auto-config="true">
 		<csrf token-repository-ref="CookieCsrfTokenRepository" />
 		<intercept-url pattern="/movie/edit/**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/time/**" access="ROLE_ADMIN" />
 		<form-login 
 		    login-page="/login" 
 			login-processing-url="/login/sso"

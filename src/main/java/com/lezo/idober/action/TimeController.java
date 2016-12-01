@@ -1,36 +1,36 @@
 package com.lezo.idober.action;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Collection;
+import java.util.List;
 
 import lombok.extern.log4j.Log4j;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.lezo.idober.action.movie.MovieEditListController;
 import com.lezo.idober.timer.AssembleIdMovieTimer;
 import com.lezo.idober.timer.FillTorrent2MovieTimer;
 import com.lezo.idober.timer.OnlineTorrentMovieTimer;
 import com.lezo.idober.timer.QueryTorrent4NewMovieTimer;
 import com.lezo.idober.timer.UnifyRegionTimer;
+import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.utils.TaskUtils;
 
@@ -48,43 +48,61 @@ public class TimeController extends BaseController {
 	private QueryTorrent4NewMovieTimer queryTorrent4NewMovieTimer;
 	@Autowired
 	private AssembleIdMovieTimer assembleIdMovieTimer;
+	@Autowired
+	private MovieEditListController movieEditListController;
 
 	@ResponseBody
-	@RequestMapping(value = { "mdetail" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "search" }, method = RequestMethod.GET)
 	public String modifyDetail() throws Exception {
-		SolrServer movieServer = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE);
+		SolrServer movieServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE);
 		int limit = 100;
-		InputStream in = TimeController.class.getClassLoader().getResourceAsStream("seed.txt");
-		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		while (br.ready()) {
-			String line = br.readLine();
-			if (StringUtils.isBlank(line)) {
+		String fromId = "0";
+		while (true) {
+			SolrDocumentList selectDocs = null;
+			try {
+				SolrQuery solrQuery = new SolrQuery();
+				solrQuery.setStart(0);
+				solrQuery.setRows(limit);
+				solrQuery.set("q", "id:[" + fromId + " TO *]");
+				solrQuery.addFilterQuery("(release:[* TO NOW/DAY+7DAY])");
+				solrQuery.addFilterQuery("type:movie");
+				solrQuery.addFilterQuery("(torrents_size:0 AND shares_size:0)");
+				solrQuery.addSort("id", ORDER.asc);
+				QueryResponse resp = movieServer.query(solrQuery);
+				selectDocs = resp.getResults();
+			} catch (Exception e) {
+				log.warn("", e);
+			}
+			if (selectDocs == null) {
 				break;
 			}
-			JSONObject argsObject = JSONObject.parseObject(line);
-			String id = argsObject.getString("mid");
-			SolrQuery solrQuery = new SolrQuery();
-			solrQuery.setStart(0);
-			solrQuery.setRows(limit);
-			solrQuery.set("q", "id:" + id);
-			QueryResponse resp = movieServer.query(solrQuery);
-			SolrDocumentList selectDocs = resp.getResults();
-			if (selectDocs == null) {
-				continue;
+			if (selectDocs.size() < limit) {
+				break;
 			}
-			SolrDocumentList newDocumentList = new SolrDocumentList();
-			for (SolrDocument inDoc : selectDocs) {
-				newDocumentList.add(inDoc);
+			JSONArray tArray = new JSONArray();
+			for (SolrDocument doc : selectDocs) {
+				String curId = doc.getFieldValue("id").toString();
+				if (fromId.compareTo(curId) < 0) {
+					fromId = curId;
+				}
+				Object nameObj = doc.getFieldValue("name");
+				if (nameObj != null) {
+					tArray.add(nameObj);
+				}
 			}
-			newDetailTasks(newDocumentList);
+			if (!tArray.isEmpty()) {
+				JSONObject paramObject = new JSONObject();
+				paramObject.put("names", tArray);
+				movieEditListController.searchTorrents(paramObject);
+			}
 		}
 		return "OK";
 	}
 
 	@ResponseBody
 	@RequestMapping(value = { "fixtorrent" }, method = RequestMethod.GET)
-	public String fixBt() throws Exception {
-		SolrServer movieServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE);
+	public String fixBt(@RequestParam(value = "core", defaultValue = "cmovie") String core) throws Exception {
+		SolrServer movieServer = SolrUtils.getSolrServer(core);
 		int limit = 100;
 		String fromId = "0";
 		while (true) {
@@ -101,19 +119,35 @@ public class TimeController extends BaseController {
 			for (SolrDocument inDoc : selectDocs) {
 				Collection<Object> torrents = inDoc.getFieldValues("torrents");
 				if (CollectionUtils.isEmpty(torrents)) {
-					newDocumentList.add(inDoc);
+					// newDocumentList.add(inDoc);
 					continue;
 				}
+				List<Object> keepList = Lists.newArrayList();
 				boolean bError = false;
 				for (Object tor : torrents) {
 					String sTor = tor.toString();
-					if (sTor.matches("bttiantang.com|xiamp4.com")) {
+					if (sTor.contains("bttiantang") || sTor.contains("xiamp4.com")) {
 						bError = true;
-						break;
+					} else {
+						keepList.add(tor);
 					}
 				}
 				if (bError) {
+					inDoc.setField("torrents", keepList);
 					newDocumentList.add(inDoc);
+				}
+			}
+			if (!newDocumentList.isEmpty()) {
+				for (SolrDocument uDoc : newDocumentList) {
+					SolrInputDocument inDoc = ClientUtils.toSolrInputDocument(uDoc);
+					// Map<String, Object> setMap = Maps.newHashMap();
+					// setMap.put("set", uDoc.getFieldValue("code_s"));
+					// inDoc.setField("code_s", setMap);
+					// setMap = Maps.newHashMap();
+					// setMap.put("set", uDoc.getFieldValue("torrents"));
+					// inDoc.setField("torrents", setMap);
+					movieServer.add(inDoc);
+					movieServer.commit();
 				}
 			}
 			newQueryTasks(newDocumentList);
@@ -166,11 +200,17 @@ public class TimeController extends BaseController {
 				log.warn("empty name,id:" + sId);
 				continue;
 			}
+			Object codeObj = doc.getFieldValue("code_s");
+			if (codeObj == null) {
+				continue;
+			}
+			String sUrl = "https://movie.douban.com/subject/" + codeObj.toString() + "/";
 			String sName = doc.getFieldValue("name").toString();
 			JSONObject taskObj = new JSONObject();
 			// taskObj.put("type", "query-movie");
-			taskObj.put("type", "sogou-article-search");
-			taskObj.put("url", "");
+			// taskObj.put("type", "sogou-article-search");
+			taskObj.put("type", "douban-movie-detail");
+			taskObj.put("url", sUrl);
 			taskObj.put("level", 1000);
 			JSONObject argsObj = new JSONObject();
 			argsObj.put("title", sName);
@@ -194,7 +234,8 @@ public class TimeController extends BaseController {
 		solrQuery.set("q", "id:[" + fromId + " TO *]");
 		solrQuery.addSort("id", ORDER.asc);
 		// solrQuery.addFilterQuery("timestamp:[* TO 2016-11-01T00:00:19.545Z]");
-		solrQuery.addFilterQuery("torrents_size:0");
+		solrQuery.addFilterQuery("torrents_size:[1 TO *]");
+		// solrQuery.addField("id,torrents,code_s,name");
 		QueryResponse resp = movieServer.query(solrQuery);
 		return resp.getResults();
 	}
