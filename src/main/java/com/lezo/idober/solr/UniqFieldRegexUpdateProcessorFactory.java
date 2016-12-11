@@ -1,80 +1,38 @@
 package com.lezo.idober.solr;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.util.NamedList;
-import org.apache.solr.request.SolrQueryRequest;
-import org.apache.solr.response.SolrQueryResponse;
-import org.apache.solr.update.AddUpdateCommand;
-import org.apache.solr.update.MergeIndexesCommand;
-import org.apache.solr.update.processor.UniqFieldsUpdateProcessorFactory;
-import org.apache.solr.update.processor.UpdateRequestProcessor;
+import org.apache.solr.update.processor.FieldValueSubsetUpdateProcessorFactory;
 
 import com.google.common.collect.Sets;
 
-public class UniqFieldRegexUpdateProcessorFactory extends UniqFieldsUpdateProcessorFactory {
-    private String fieldRegex;
+public class UniqFieldRegexUpdateProcessorFactory extends FieldValueSubsetUpdateProcessorFactory {
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void init(NamedList args) {
-        this.fieldRegex = args.get("fieldRegex").toString();
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	protected Collection<Object> pickSubset(Collection<Object> values) {
+		Collection<Object> setCollection = Sets.newLinkedHashSet();
+		for (Object col : values) {
+			if (col instanceof Map) {
+				Map<Object, Object> colMap = (Map<Object, Object>) col;
+				for (Entry<Object, Object> entry : colMap.entrySet()) {
+					if (entry.getValue() instanceof Collection) {
+						Collection<Object> colCollection = (Collection<Object>) entry.getValue();
+						setCollection.addAll(colCollection);
+					}
+					break;
+				}
+			} else if (col instanceof Collection) {
+				Collection<?> colCollection = (Collection<?>) col;
+				setCollection.addAll(colCollection);
+			} else {
+				setCollection.add(col);
+			}
+		}
+		return setCollection;
+	}
 
-    @Override
-    public UpdateRequestProcessor getInstance(SolrQueryRequest req, SolrQueryResponse rsp, UpdateRequestProcessor next) {
-        return new UniqFieldsRegexUpdateProcessor(next, this.fieldRegex);
-    }
 
-    public class UniqFieldsRegexUpdateProcessor extends UpdateRequestProcessor {
-        private final Pattern fieldRegex;
-
-        public UniqFieldsRegexUpdateProcessor(UpdateRequestProcessor next, String fieldRegex) {
-            super(next);
-            this.fieldRegex = Pattern.compile(fieldRegex);
-        }
-
-        @Override
-        public void processAdd(AddUpdateCommand cmd) throws IOException {
-            if (fieldRegex != null) {
-                SolrInputDocument solrInputDocument = cmd.getSolrInputDocument();
-                Iterator<String> it = solrInputDocument.getFieldNames().iterator();
-                Set<String> fieldSet = Sets.newHashSet();
-                while (it.hasNext()) {
-                    String field = it.next();
-                    Matcher matcher = fieldRegex.matcher(field);
-                    if (!matcher.find()) {
-                        continue;
-                    }
-                    fieldSet.add(field);
-
-                }
-                for (String field : fieldSet) {
-                    Collection<Object> colList = solrInputDocument.getFieldValues(field);
-                    Set<Object> colSet = Sets.newHashSet();
-                    solrInputDocument.remove(field);
-                    for (Object col : colList) {
-                        if (colSet.contains(col)) {
-                            continue;
-                        }
-                        solrInputDocument.addField(field, col);
-                        colSet.add(col);
-                    }
-                }
-            }
-            super.processAdd(cmd);
-        }
-
-        @Override
-        public void processMergeIndexes(MergeIndexesCommand cmd) throws IOException {
-            super.processMergeIndexes(cmd);
-        }
-
-    }
 }

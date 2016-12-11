@@ -921,6 +921,10 @@ span.cer-bd:before {
 	padding-bottom: 10px;
 }
 /**MovieEditDetail**/
+.alert.share-copyright {
+	padding: 10px 10px;
+}
+
 .feed-item {
 	margin-bottom: 10px;
 }

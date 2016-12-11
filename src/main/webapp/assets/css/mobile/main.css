@@ -92,6 +92,9 @@ a.login-btn {
 }
 
 /* MovieDetail */
+.alert.share-copyright {
+	padding: 10px 10px;
+}
 .movie-title-margin {
 	margin-top: 0px;
 	margin-bottom: 0px;

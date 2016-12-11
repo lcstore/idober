@@ -4,6 +4,7 @@
 <#if (oDoc.id)?exists>
 <link rel="canonical" href="http://www.lezomao.com/movie/detail/${oDoc.id}.html"/>
 </#if> 
+<#assign copyright_info ="非常抱歉，由于版权问题，该资源已下架/(ㄒoㄒ)/~~，请耐心等待授权或搜寻其他可用资源。">
 <#assign oDirectors = (oDoc.directors![])>
 <#assign oActors = (oDoc.actors![])>
 <#assign oRegions = (oDoc.regions![])>
@@ -76,6 +77,9 @@
 								    </li>
 								    <#if (oShares?size>0) > 
 								        <li class="list-group-item"><strong>云盘：</strong>
+								          <#if (oDoc.copyright_s?? && oDoc.copyright_s=0)>
+								             <#assign oShares = ([])>
+								          </#if>
 								          <#list oShares as sShare>
 								                <#assign oShare = ((sShare)!"{}")?eval>
 									        	  <#if (oShare.level="uhd" || oShare.level="hd" || oShare.level="sd" || oShare.level="bd") > 
@@ -129,6 +133,10 @@
 			   </button>
 			   <span id='searchmsg' class="alert alert-info  btn-xs hidden"></span>
 		    </#if>
+		    <#if (oDoc.copyright_s?? && oDoc.copyright_s=0)>
+             <div class="alert alert-info share-copyright">${copyright_info}</div>
+             <#assign oTorrents = ([])>
+            </#if>
 	        <#list oTorrents as sTor>
 	            <#assign oTor = ((sTor)!"{}")?eval>
 	            <div id="tor${sTor_index}" class="torblock" >

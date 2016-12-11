@@ -121,6 +121,13 @@
 			 <button class="btn btn-danger btn-xs edit-search-btn" type="button" action="deploy"">
 			   发布上线
 			  </button>
+			 <button class="btn btn-danger btn-xs edit-search-btn" type="button" action="copyright" copyright="${oDoc.copyright_s!"1"}">
+			    <#if (oDoc.copyright_s?? && oDoc.copyright_s=0)>
+	                授权上架
+	            <#else>
+	                版权下架
+	            </#if>
+			  </button>
 		    </li>
 		  </ul>
 		</div>
@@ -315,6 +322,34 @@
 				$.ajax({
 					type : 'POST',
 					url : '/movie/edit/deploy',
+					dataType : 'json',
+					contentType : 'application/json',
+					data : JSON.stringify(oParam)
+				}).done(function(oBack) {
+					console.log('data:' + JSON.stringify(oBack));
+				}).fail(function(data) {
+				})
+			});
+		    $('button[action="copyright"]').one('click', function(e) {
+				var self = $(this);
+				self.attr('disabled',"disabled");
+				var sCode = $('input[name="id"]').val();;
+				var copyright = self.attr('copyright');
+				if(typeof(copyright) == 'undefined'){
+				  copyright=1;
+				}else if(copyright==null || copyright==''){
+				  copyright=1;
+				}
+				copyright = 1^copyright;
+				var codeArr = [];
+				codeArr.push(sCode);
+				var oParam = {
+					ids : codeArr,
+					copyright : copyright
+				};
+				$.ajax({
+					type : 'POST',
+					url : '/movie/edit/copyright',
 					dataType : 'json',
 					contentType : 'application/json',
 					data : JSON.stringify(oParam)

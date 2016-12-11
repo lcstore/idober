@@ -4,6 +4,7 @@
 <#if (oDoc.id)?exists>
 <link rel="canonical" href="http://www.lezomao.com/movie/detail/${oDoc.id}.html"/>
 </#if> 
+<#assign copyright_info ="非常抱歉，由于版权问题，该资源已下架/(ㄒoㄒ)/~~">
 <#assign oDirectors = (oDoc.directors![])>
 <#assign oActors = (oDoc.actors![])>
 <#assign oRegions = (oDoc.regions![])>
@@ -101,6 +102,9 @@
 			  <li class="list-group-item">
 			    <h4 class="list-group-item-heading">云盘资源</h4>
 			  </li>
+			  <#if (oDoc.copyright_s?? && oDoc.copyright_s=0)>
+	             <#assign oShares = ([])>
+	          </#if>
 			  <#list oShares as sShare>
 	                <#assign oShare = ((sShare)!"{}")?eval>
 	                 <li class="list-group-item">
@@ -125,8 +129,12 @@
 		<div class="list-group">
 		    <span class="list-group-item"> <h4 class="list-group-item-heading">下载资源</h4> </span>
 		    <#if oTorrents?size gt 0 >
+		          <#if (oDoc.copyright_s?? && oDoc.copyright_s=0)>
+		             <div class="alert alert-info share-copyright">${copyright_info}</div>
+		             <#assign oTorrents = ([])>
+		          </#if>
 		      	 <#list oTorrents as sTor>
-	            <#assign oTor = ((sTor)!"{}")?eval>
+	              <#assign oTor = ((sTor)!"{}")?eval>
 	              <#if (oTor.type == 'bttiantang-torrent') >
 	              <a href="javascript:void(0)" rel="nofollow" class="list-group-item" >
 				     <span class="badge">种子</span>

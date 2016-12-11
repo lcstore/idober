@@ -25,6 +25,7 @@ import org.apache.solr.common.SolrInputDocument;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.lezo.idober.utils.QueryUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 /**
@@ -312,8 +313,8 @@ public class AssembleIdMovieTimer implements Runnable {
 	}
 
 	private SolrQuery withCommonQuery(SolrQuery solrQuery) {
-		solrQuery.addFilterQuery("type:movie");
-		return solrQuery;
+		solrQuery.addFilterQuery("!copyright_s:0");
+		return QueryUtils.withCommonMovieFilter(solrQuery);
 	}
 
 }
