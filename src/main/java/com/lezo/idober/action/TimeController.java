@@ -53,7 +53,7 @@ public class TimeController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = { "search" }, method = RequestMethod.GET)
-	public String modifyDetail() throws Exception {
+	public String modifyDetail(@RequestParam(name = "day", defaultValue = "60") Integer beforeDay) throws Exception {
 		SolrServer movieServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE);
 		int limit = 100;
 		String fromId = "0";
@@ -64,7 +64,7 @@ public class TimeController extends BaseController {
 				solrQuery.setStart(0);
 				solrQuery.setRows(limit);
 				solrQuery.set("q", "id:[" + fromId + " TO *]");
-				solrQuery.addFilterQuery("(release:[* TO NOW/DAY+7DAY])");
+				solrQuery.addFilterQuery("(release:[NOW-" + beforeDay + "DAY/DAY TO NOW/DAY+7DAY])");
 				solrQuery.addFilterQuery("type:movie");
 				solrQuery.addFilterQuery("(torrents_size:0 AND shares_size:0)");
 				solrQuery.addSort("id", ORDER.asc);

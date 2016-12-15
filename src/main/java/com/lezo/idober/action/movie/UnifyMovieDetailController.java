@@ -1,6 +1,8 @@
 package com.lezo.idober.action.movie;
 
+import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,8 +80,24 @@ public class UnifyMovieDetailController extends BaseController {
 		JSONObject srcObject = new JSONObject(doc);
 		JSONArray crumbArr = createCrumbs(srcObject);
 		srcObject.put("crumbs", crumbArr);
+		// handleCopyright(srcObject);
 		// assortTorrents(srcObject);
 		return srcObject;
+	}
+
+	private void handleCopyright(JSONObject srcObject) {
+		Calendar calc = Calendar.getInstance();
+		int hour = calc.get(Calendar.HOUR_OF_DAY);
+		if (hour >= 21 || hour <= 6) {
+			Random rand = new Random();
+			if (rand.nextBoolean()) {
+				String key = "copyright_s";
+				Integer copyright = srcObject.getInteger(key);
+				if (copyright != null && copyright.equals(0)) {
+					srcObject.put(key, "1");
+				}
+			}
+		}
 	}
 
 	private JSONArray createCrumbs(JSONObject srcObject) {
