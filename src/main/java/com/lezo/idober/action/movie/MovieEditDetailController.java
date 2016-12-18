@@ -73,6 +73,7 @@ public class MovieEditDetailController extends BaseController {
 			throw new NotFoundException();
 		}
 		JSONObject dObject = convert2JSON(doc);
+		model.addAttribute("qAction", "/search/movie/edit");
 		model.addAttribute("oDoc", dObject);
 		return new ModelAndView("MovieEditDetail");
 	}
@@ -190,7 +191,7 @@ public class MovieEditDetailController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = { "torrent" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "addtorrent" }, method = RequestMethod.POST)
 	public ActionReturnVo addTorrent(@RequestBody JSONObject paramObject) throws Exception {
 		ActionReturnVo returnVo = new ActionReturnVo();
 		String itemCode = paramObject.getString("id");
@@ -248,6 +249,43 @@ public class MovieEditDetailController extends BaseController {
 		log.info("resp:" + resp.size() + ",update:" + docArray.size());
 		return returnVo;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = { "deltorrent" }, method = RequestMethod.POST)
+	public ActionReturnVo deleteTorrent(@RequestBody JSONObject paramObject) throws Exception {
+		ActionReturnVo returnVo = new ActionReturnVo();
+		JSONArray idArray = paramObject.getJSONArray("ids");
+		if (CollectionUtils.isEmpty(idArray)) {
+			returnVo.setMsg("empty id array");
+			returnVo.setCode(ActionReturnVo.CODE_PARAM);
+			return returnVo;
+		}
+		JSONArray docArray = new JSONArray();
+		for (int index = 0, size = idArray.size(); index < size; index++) {
+			String idString = idArray.getString(index);
+			if (StringUtils.isBlank(idString)) {
+				continue;
+			}
+			JSONObject docObj = new JSONObject();
+			docObj.put("id", idString);
+			Map<String, Object> setValMap = new JSONObject();
+			setValMap.put("set", 1);
+			docObj.put("delete_ti", setValMap);
+			docArray.add(docObj);
+		}
+		String sContent = docArray.toJSONString();
+		String contentType = "application/json";
+		Collection<ContentStream> strems = ClientUtils.toContentStreams(sContent, contentType);
+		ContentStreamUpdateRequest request =
+				new ContentStreamUpdateRequest("/update/json");
+		for (ContentStream cs : strems) {
+			request.addContentStream(cs);
+		}
+		request.setAction(AbstractUpdateRequest.ACTION.COMMIT, true, true);
+		NamedList<Object> resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META).request(request);
+		log.info("resp:" + resp.size() + ",update:" + docArray.size());
+		return returnVo;
+	}
 
 	private SolrDocument queryMovieShareById(String itemCode) throws Exception {
 		SolrQuery solrQuery = new SolrQuery();
@@ -256,20 +294,6 @@ public class MovieEditDetailController extends BaseController {
 		solrQuery.set("q", "(id:" + itemCode + ")");
 		solrQuery.addField("shares");
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
-		SolrDocumentList docList = resp.getResults();
-		if (CollectionUtils.isNotEmpty(docList)) {
-			return docList.get(0);
-		}
-		return null;
-	}
-
-	private SolrDocument queryShareByCode(String code) throws Exception {
-		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setStart(0);
-		solrQuery.setRows(1);
-		solrQuery.set("q", "(code_s:" + code + ")");
-		solrQuery.addFilterQuery("source_group_s:torrent");
-		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META).query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
 		if (CollectionUtils.isNotEmpty(docList)) {
 			return docList.get(0);
@@ -297,6 +321,7 @@ public class MovieEditDetailController extends BaseController {
 		solrQuery.set("q", "title:" + name);
 		solrQuery.setRows(10);
 		solrQuery.addFilterQuery("source_group_s:torrent");
+		solrQuery.addFilterQuery("!delete_ti:1");
 		try {
 			QueryResponse resp = server.query(solrQuery);
 			SolrDocumentList docList = resp.getResults();

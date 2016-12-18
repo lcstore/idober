@@ -194,11 +194,15 @@
 		    <li class="list-group-item feed-item">
 		      <div class="tor-box">
 		        <h3>
-				<span>(${oFeed.code_s})</span>
+				  <span>(${oFeed.code_s})</span>
 				  <a target="_blank" href="${oFeed.url_rs}">${oFeed.url_rs}</a>
 				  <#if oFeed.secret_rs??>
 				  <span>密码:${oFeed.secret_rs}</span>
 				  </#if>
+                  <button type="button" class="close" action="deltorrent" tid="${oFeed.id}">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                  </button>
 				</h3>
 		        <span>类型:${oFeed.type}</span>
 		        <span>来源:${oFeed.source_name_txt}</span>
@@ -358,6 +362,28 @@
 				}).fail(function(data) {
 				})
 			});
+		    $('button[action="deltorrent"]').one('click', function(e) {
+				var self = $(this);
+				var tid = self.attr('tid');
+				var codeArr = [];
+				codeArr.push(tid);
+				var oParam = {
+					ids : codeArr
+				};
+				$.ajax({
+					type : 'POST',
+					url : '/movie/edit/deltorrent',
+					dataType : 'json',
+					contentType : 'application/json',
+					data : JSON.stringify(oParam)
+				}).done(function(oBack) {
+				    if(oBack && oBack.code==200){
+				       var liEls = self.parents('li.feed-item');
+				       liEls.remove();
+				    }
+				}).fail(function(data) {
+				})
+			});
 		    $('input[name="cover"][type="checkbox"]').on('click', function(e) {
 				var self = $(this);
 				var cmdEle= self.parents('div.cmd-box[code]');
@@ -406,7 +432,7 @@
 				console.log('oParam:'+JSON.stringify(oParam));
 				$.ajax({
 					type : 'POST',
-					url : '/movie/edit/torrent',
+					url : '/movie/edit/addtorrent',
 					dataType : 'json',
 					contentType : 'application/json',
 					data : JSON.stringify(oParam)

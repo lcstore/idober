@@ -2,6 +2,7 @@ package com.lezo.idober.action;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import lombok.extern.log4j.Log4j;
 
@@ -24,13 +25,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.lezo.idober.action.movie.MovieEditListController;
 import com.lezo.idober.timer.AssembleIdMovieTimer;
 import com.lezo.idober.timer.FillTorrent2MovieTimer;
 import com.lezo.idober.timer.OnlineTorrentMovieTimer;
 import com.lezo.idober.timer.QueryTorrent4NewMovieTimer;
 import com.lezo.idober.timer.UnifyRegionTimer;
-import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.utils.TaskUtils;
 
@@ -50,6 +51,89 @@ public class TimeController extends BaseController {
 	private AssembleIdMovieTimer assembleIdMovieTimer;
 	@Autowired
 	private MovieEditListController movieEditListController;
+
+	@ResponseBody
+	@RequestMapping(value = { "source" }, method = RequestMethod.GET)
+	public JSONObject fillSources(@RequestParam(name = "limit", defaultValue = "1000") Integer maxCount)
+			throws Exception {
+		SolrServer srcServer = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE);
+		SolrServer referServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE);
+		int srcCount = 0;
+		int taskCount = 0;
+		int limit = 100;
+		String fromId = "0";
+		while (true) {
+			SolrDocumentList selectDocs = null;
+			try {
+				SolrQuery solrQuery = new SolrQuery();
+				solrQuery.setStart(0);
+				solrQuery.setRows(limit);
+				solrQuery.set("q", "id:[" + fromId + " TO *]");
+				solrQuery.addSort("id", ORDER.asc);
+				solrQuery.addField("id,code_s");
+				QueryResponse resp = srcServer.query(solrQuery);
+				selectDocs = resp.getResults();
+			} catch (Exception e) {
+				log.warn("", e);
+			}
+			srcCount += selectDocs.size();
+			if (selectDocs.size() < limit) {
+				break;
+			}
+			Map<String, SolrDocument> idMap = Maps.newHashMap();
+			StringBuffer sb = new StringBuffer();
+			for (SolrDocument doc : selectDocs) {
+				String curId = doc.getFieldValue("id").toString();
+				if (fromId.compareTo(curId) < 0) {
+					fromId = curId;
+				}
+				if (sb.length() > 0) {
+					sb.append(" OR ");
+				}
+				idMap.put(curId, doc);
+				sb.append(curId);
+			}
+			SolrQuery solrQuery = new SolrQuery();
+			solrQuery.setStart(0);
+			solrQuery.setRows(selectDocs.size());
+			solrQuery.set("q", "id:(" + sb.toString() + ")");
+			solrQuery.addField("id");
+			QueryResponse resp = referServer.query(solrQuery);
+			SolrDocumentList hasDocs = resp.getResults();
+			JSONArray taskList = new JSONArray();
+			for (SolrDocument hasDoc : hasDocs) {
+				String sHasId = hasDoc.getFieldValue("id").toString();
+				idMap.remove(sHasId);
+			}
+			for (SolrDocument hasDoc : idMap.values()) {
+				Object codeObj = hasDoc.getFieldValue("code_s");
+				if (codeObj == null) {
+					continue;
+				}
+				taskCount++;
+				String sHasId = hasDoc.getFieldValue("id").toString();
+				String sUrl = "https://movie.douban.com/subject/" + codeObj.toString() + "/";
+				JSONObject taskObj = new JSONObject();
+				taskObj.put("type", "douban-movie-detail");
+				taskObj.put("url", sUrl);
+				taskObj.put("level", 1000);
+				JSONObject argsObj = new JSONObject();
+				argsObj.put("mid", sHasId);
+				argsObj.put("retry", "0");
+				taskObj.put("args", argsObj);
+				taskList.add(taskObj);
+			}
+			TaskUtils.createTasks(taskList);
+			if (taskCount >= maxCount) {
+				break;
+			}
+
+		}
+		JSONObject retObject = new JSONObject();
+		retObject.put("srcCount", srcCount);
+		retObject.put("taskCount", taskCount);
+		return retObject;
+	}
 
 	@ResponseBody
 	@RequestMapping(value = { "search" }, method = RequestMethod.GET)

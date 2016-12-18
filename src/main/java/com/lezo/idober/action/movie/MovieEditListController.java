@@ -137,6 +137,7 @@ public class MovieEditListController extends BaseController {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setRows(0);
 		solrQuery.addFilterQuery("source_group_s:torrent");
+		solrQuery.addFilterQuery("!delete_ti:1");
 		for (SolrDocument doc : docList) {
 			String name = doc.getFieldValue("name").toString();
 			if (StringUtils.isBlank(name)) {
