@@ -1,8 +1,10 @@
 package com.lezo.idober.action.movie;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +20,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.ContentStream;
 import org.apache.solr.common.util.NamedList;
 import org.jsoup.Jsoup;
@@ -36,12 +39,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.lezo.idober.action.BaseController;
 import com.lezo.idober.error.NotFoundException;
 import com.lezo.idober.timer.OnlineTorrentMovieTimer;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.utils.TaskUtils;
 import com.lezo.idober.vo.ActionReturnVo;
+import com.mysql.fabric.Server;
 
 @Controller
 @Log4j
@@ -161,33 +166,108 @@ public class MovieEditDetailController extends BaseController {
 			returnVo.setCode(ActionReturnVo.CODE_PARAM);
 			return returnVo;
 		}
-		JSONArray docArray = new JSONArray();
+		StringBuilder sb = new StringBuilder();
 		for (int index = 0, size = idArray.size(); index < size; index++) {
 			String idString = idArray.getString(index);
 			if (StringUtils.isBlank(idString)) {
 				continue;
 			}
-			JSONObject docObj = new JSONObject();
-			docObj.put("id", idString);
-			docObj.put("had_move_s", 0);
-			Map<String, Object> setValMap = new JSONObject();
-			setValMap.put("set", 1);
-			docObj.put("editor", setValMap);
-			docArray.add(docObj);
+			if (sb.length() > 1) {
+				sb.append(" OR ");
+			}
+			sb.append(idString);
 		}
-		String sContent = docArray.toJSONString();
-		String contentType = "application/json";
-		Collection<ContentStream> strems = ClientUtils.toContentStreams(sContent, contentType);
-		ContentStreamUpdateRequest request =
-				new ContentStreamUpdateRequest("/update/json");
-		for (ContentStream cs : strems) {
-			request.addContentStream(cs);
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(idArray.size());
+		solrQuery.set("q", "id:(" + sb.toString() + ")");
+		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
+		SolrDocumentList srcList = resp.getResults();
+		SolrServer solrServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE);
+
+		Map<String, Object> moveModifier = Maps.newHashMap();
+		moveModifier.put("set", "1");
+		Map<String, Object> addModifier = Maps.newHashMap();
+		addModifier.put("add", new Date());
+		List<String> rmList = Lists.newArrayList();
+		rmList.add("_version_");
+		rmList.add("creation");
+		rmList.add("timestamp");
+		rmList.add("tcount");
+		rmList.add("torrents_size");
+		rmList.add("shares_size");
+		rmList.add("scount");
+		rmList.add("editor");
+		for (SolrDocument srcDoc : srcList) {
+			SolrInputDocument newDoc = ClientUtils.toSolrInputDocument(srcDoc);
+			for (String rmFld : rmList) {
+				newDoc.remove(rmFld);
+			}
+			createIfHasShares(srcDoc, newDoc);
+			// unifyRegion(doc, inDoc);
+			newDoc.setField("creation", addModifier);
+
+			SolrInputDocument srcInDoc = new SolrInputDocument();
+			srcInDoc.setField("id", srcDoc.getFieldValue("id"));
+			srcInDoc.setField("had_move_s", moveModifier);
+			solrServer.add(srcInDoc);
 		}
-		request.setAction(AbstractUpdateRequest.ACTION.COMMIT, true, true);
-		NamedList<Object> resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).request(request);
-		log.info("resp:" + resp.size() + ",update:" + docArray.size());
-		onlineTorrentMovieTimer.run();
+		solrServer.commit();
 		return returnVo;
+	}
+
+	private void createIfHasShares(SolrDocument doc, SolrInputDocument inDoc) throws Exception {
+		String torrentField = "torrents";
+		String shareField = "shares";
+		Collection<Object> torrents = doc.getFieldValues(torrentField);
+		Collection<Object> shares = doc.getFieldValues(shareField);
+		List<Object> srcTorrents = Lists.newArrayList();
+		if (CollectionUtils.isNotEmpty(torrents)) {
+			srcTorrents.addAll(torrents);
+		}
+		Map<String, String> shareMap = Maps.newHashMap();
+		Map<String, String> torrentMap = Maps.newHashMap();
+		for (Object torrent : srcTorrents) {
+			JSONObject tObject = JSONObject.parseObject(torrent.toString());
+			tObject.remove("data");
+			String type = tObject.getString("type");
+			String source = tObject.getString("source");
+			String sUrl = tObject.getString("url");
+			sUrl = sUrl == null ? type : sUrl;
+			if (StringUtils.isBlank(source)) {
+				if (sUrl != null && sUrl.contains(".bttiantang.com")) {
+					source = "bttiantang-torrent";
+				}
+			}
+			if (StringUtils.isBlank(type) && "bttiantang-torrent".equals(source)) {
+				continue;
+			} else if (type != null && type.endsWith("-share")) {
+				sUrl = sUrl == null ? tObject.getString("name") : sUrl;
+				sUrl = sUrl == null ? "" : sUrl;
+				if (sUrl.contains(".baidu.com")) {
+					shareMap.put(sUrl, tObject.toJSONString());
+				}
+			} else if (type != null) {
+				if (sUrl.contains("rarbt.com") && sUrl.contains("bbs")) {
+					continue;
+				} else {
+					torrentMap.put(sUrl, tObject.toJSONString());
+				}
+			}
+		}
+		if (CollectionUtils.isNotEmpty(shares)) {
+			for (Object share : shares) {
+				JSONObject tObject = JSONObject.parseObject(share.toString());
+				String sUrl = tObject.getString("url");
+				sUrl = sUrl == null ? tObject.getString("name") : sUrl;
+				sUrl = sUrl == null ? "" : sUrl;
+				if (sUrl.contains(".baidu.com")) {
+					shareMap.put(sUrl, tObject.toJSONString());
+				}
+			}
+		}
+		inDoc.setField(torrentField, torrentMap.values());
+		inDoc.setField(shareField, shareMap.values());
 	}
 
 	@ResponseBody
@@ -249,7 +329,7 @@ public class MovieEditDetailController extends BaseController {
 		log.info("resp:" + resp.size() + ",update:" + docArray.size());
 		return returnVo;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = { "deltorrent" }, method = RequestMethod.POST)
 	public ActionReturnVo deleteTorrent(@RequestBody JSONObject paramObject) throws Exception {

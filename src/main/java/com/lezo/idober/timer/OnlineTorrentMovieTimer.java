@@ -29,6 +29,7 @@ import com.github.stuxuhai.jpinyin.ChineseHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.lezo.idober.utils.RegionUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 @Log4j
@@ -326,42 +327,24 @@ public class OnlineTorrentMovieTimer implements Runnable {
             return;
         }
         Collection<String> regionList = (Collection<String>) rObject;
-        Set<String> regionSet = convertRegions(regionList);
+        Set<String> regionSet = RegionUtils.unifyRegions(regionList);
         SolrServer metaServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
         SolrDocumentList synonymDocs = querySynonymDocs(regionSet, metaServer);
         Set<String> uRegions = Sets.newLinkedHashSet();
         if (synonymDocs != null) {
             for (SolrDocument sDoc : synonymDocs) {
-                String sRegion = sDoc.getFieldValue("title").toString();
-                String sGroup = queryRegionGroup(sRegion, metaServer);
-                if (StringUtils.isNotBlank(sGroup)) {
-                    uRegions.add(sGroup.trim());
+                String sCountry = sDoc.getFieldValue("title").toString();
+                String sRegion = RegionUtils.country2Region(sCountry);
+                if (StringUtils.isNotBlank(sRegion)) {
+                    uRegions.add(sRegion.trim());
                 }
-                uRegions.add(sRegion);
+                uRegions.add(sCountry);
             }
         }
         inDoc.setField(fieldName, uRegions);
 
     }
 
-    private String queryRegionGroup(String sRegion, SolrServer metaServer) {
-        sRegion = ClientUtils.escapeQueryChars(sRegion);
-        SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setStart(0);
-        solrQuery.setRows(1);
-        solrQuery.addField("title");
-        solrQuery.set("q", "(type:idober-group-region AND group_ss:" + sRegion + ")");
-        try {
-            QueryResponse resp = metaServer.query(solrQuery);
-            SolrDocumentList docList = resp.getResults();
-            if (CollectionUtils.isNotEmpty(docList)) {
-                return docList.get(0).getFieldValue("title").toString();
-            }
-        } catch (SolrServerException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     private SolrDocumentList querySynonymDocs(Set<String> regionSet, SolrServer metaServer) throws Exception {
         if (CollectionUtils.isEmpty(regionSet)) {
@@ -387,41 +370,6 @@ public class OnlineTorrentMovieTimer implements Runnable {
         return resp.getResults();
     }
 
-    private Set<String> convertRegions(Collection<String> regions) {
-        Pattern cnReg = Pattern.compile("([\u4E00-\u9FA5]+)");
-        Set<String> regionSet = Sets.newHashSet();
-        for (String region : regions) {
-            region = region.replaceAll("\\.", "");
-            region = region.replaceAll("[()（）]", "");
-            Matcher matcher = cnReg.matcher(region);
-            int index = 0;
-            if (matcher.find()) {
-                String cnName = matcher.group(1);
-                index = matcher.end(1);
-                cnName = cnName.trim();
-                if (cnName.contains("西德")) {
-                    cnName = "德国";
-                }
-                cnName = ChineseHelper.convertToSimplifiedChinese(cnName);
-                regionSet.add(cnName);
-
-            }
-            if (index < region.length()) {
-                region = region.substring(index).toLowerCase();
-                String[] txtArr = region.split("[/|]");
-                for (String txt : txtArr) {
-                    if (StringUtils.isBlank(txt)) {
-                        continue;
-                    }
-                    txt = txt.trim();
-                    txt = ChineseHelper.convertToSimplifiedChinese(txt);
-                    regionSet.add(txt);
-                }
-            }
-        }
-        return regionSet;
-
-    }
 
     private void createIfHasShares(SolrDocument doc, SolrInputDocument inDoc) throws Exception {
         String torrentField = "torrents";
