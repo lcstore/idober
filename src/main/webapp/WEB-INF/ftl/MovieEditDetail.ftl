@@ -118,6 +118,9 @@
 			 <button class="btn btn-warning btn-xs edit-search-btn" type="button" action="update-detail" name="${oDoc.code_s}">
 			   更新信息
 			  </button>
+			 <button class="btn btn-danger btn-xs edit-search-btn" type="button" action="fillTorrents">
+			   匹配种子
+			  </button>
 			 <button class="btn btn-danger btn-xs edit-search-btn" type="button" action="deploy"">
 			   发布上线
 			  </button>
@@ -314,10 +317,29 @@
 				}).fail(function(data) {
 				})
 			});
+		    $('button[action="fillTorrents"]').one('click', function(e) {
+				var self = $(this);
+				self.attr('disabled',"disabled");
+				var sCode = $('input[name="id"]').val();
+				var oParam = {
+					id : sCode
+				};
+				$.ajax({
+					type : 'POST',
+					url : '/movie/edit/fillTorrents',
+					dataType : 'json',
+					contentType : 'application/json',
+					data : JSON.stringify(oParam)
+				}).done(function(oBack) {
+					console.log('data:' + JSON.stringify(oBack));
+					window.location.href = window.location.href
+				}).fail(function(data) {
+				})
+			});
 		    $('button[action="deploy"]').one('click', function(e) {
 				var self = $(this);
 				self.attr('disabled',"disabled");
-				var sCode = $('input[name="id"]').val();;
+				var sCode = $('input[name="id"]').val();
 				var codeArr = [];
 				codeArr.push(sCode);
 				var oParam = {
