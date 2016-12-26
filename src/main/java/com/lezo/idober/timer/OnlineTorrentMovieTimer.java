@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -25,10 +24,10 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.stuxuhai.jpinyin.ChineseHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.lezo.idober.utils.CountryUtils;
 import com.lezo.idober.utils.RegionUtils;
 import com.lezo.idober.utils.SolrUtils;
 
@@ -320,56 +319,26 @@ public class OnlineTorrentMovieTimer implements Runnable {
     }
 
     @SuppressWarnings("unchecked")
-    private void unifyRegion(SolrDocument doc, SolrInputDocument inDoc) throws Exception {
+    private void unifyRegion(SolrDocument srcDoc, SolrInputDocument newDoc) throws Exception {
         String fieldName = "regions";
-        Object rObject = doc.getFieldValue(fieldName);
+        Object rObject = srcDoc.getFieldValue(fieldName);
         if (rObject == null) {
             return;
         }
         Collection<String> regionList = (Collection<String>) rObject;
-        Set<String> regionSet = RegionUtils.unifyRegions(regionList);
-        SolrServer metaServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
-        SolrDocumentList synonymDocs = querySynonymDocs(regionSet, metaServer);
+        Set<String> regionSet = RegionUtils.formatRegions(regionList);
+        String sUnifyCountry = CountryUtils.unifyCountry(regionSet);
+        String sUnifyRegion = RegionUtils.country2Region(regionSet);
         Set<String> uRegions = Sets.newLinkedHashSet();
-        if (synonymDocs != null) {
-            for (SolrDocument sDoc : synonymDocs) {
-                String sCountry = sDoc.getFieldValue("title").toString();
-                String sRegion = RegionUtils.country2Region(sCountry);
-                if (StringUtils.isNotBlank(sRegion)) {
-                    uRegions.add(sRegion.trim());
-                }
-                uRegions.add(sCountry);
-            }
+        if (StringUtils.isNotBlank(sUnifyCountry)) {
+            uRegions.add(sUnifyCountry);
         }
-        inDoc.setField(fieldName, uRegions);
+        if (StringUtils.isNotBlank(sUnifyRegion)) {
+            uRegions.add(sUnifyRegion);
+        }
+        newDoc.setField(fieldName, uRegions);
 
     }
-
-
-    private SolrDocumentList querySynonymDocs(Set<String> regionSet, SolrServer metaServer) throws Exception {
-        if (CollectionUtils.isEmpty(regionSet)) {
-            return null;
-        }
-        String sQuery = "(type:idober-synonym-country AND (";
-        StringBuilder sb = new StringBuilder();
-        sb.append(sQuery);
-        for (String region : regionSet) {
-            if (sb.length() > sQuery.length()) {
-                sb.append(" OR ");
-            }
-            sb.append("synonym_ss:");
-            sb.append(region);
-        }
-        sb.append("))");
-        SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setStart(0);
-        solrQuery.setRows(100);
-        solrQuery.addField("title");
-        solrQuery.set("q", sb.toString());
-        QueryResponse resp = metaServer.query(solrQuery);
-        return resp.getResults();
-    }
-
 
     private void createIfHasShares(SolrDocument doc, SolrInputDocument inDoc) throws Exception {
         String torrentField = "torrents";
