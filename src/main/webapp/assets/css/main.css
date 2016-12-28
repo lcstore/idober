@@ -972,3 +972,7 @@ span.cer-bd:before {
 	margin-left: 15px;
 	margin-right: 15px;
 }
+
+body.home>div.main {
+	min-height: 300px;
+}
