@@ -21,6 +21,12 @@ public class ParamUtils {
 		return curPage;
 	}
 
+	public static long batchNum(long total, int batchSize) {
+		long totalPage = total / batchSize;
+		totalPage = total % batchSize > 0 ? totalPage + 1 : totalPage;
+		return totalPage;
+	}
+
 	public static String xssClean(String source) {
 		if (source != null) {
 			source = Jsoup.clean(source, Whitelist.basic());

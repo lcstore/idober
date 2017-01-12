@@ -12,6 +12,7 @@ public class TypeUtils {
 		typeList.add("dy2018-movie-torrent");
 		typeList.add("rarbt-movie-torrent");
 		typeList.add("bluraydisc-movie-torrent");
+		typeList.add("xybl8-movie-torrent");
 	}
 	
 	public static List<String> getTypeList() {

@@ -1,12 +1,17 @@
 package com.lezo.idober.action;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.extern.log4j.Log4j;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -26,12 +31,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.lezo.idober.action.movie.MovieEditListController;
 import com.lezo.idober.timer.AssembleIdMovieTimer;
 import com.lezo.idober.timer.FillTorrent2MovieTimer;
 import com.lezo.idober.timer.OnlineTorrentMovieTimer;
 import com.lezo.idober.timer.QueryTorrent4NewMovieTimer;
 import com.lezo.idober.timer.UnifyRegionTimer;
+import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.utils.TaskUtils;
 
@@ -51,6 +58,82 @@ public class TimeController extends BaseController {
 	private AssembleIdMovieTimer assembleIdMovieTimer;
 	@Autowired
 	private MovieEditListController movieEditListController;
+
+	@ResponseBody
+	@RequestMapping(value = { "collect" }, method = RequestMethod.GET)
+	public String collectTorrent4Edit()
+			throws Exception {
+		Integer curPage = 1;
+		Integer beforeDay = 300;
+		int start = 0;
+		int limit = 500;
+		Set<String> idSet = Sets.newHashSet();
+		while (true) {
+			start = (curPage - 1) * limit;
+			SolrQuery solrQuery = new SolrQuery();
+			solrQuery.setStart(start);
+			solrQuery.setRows(limit);
+			solrQuery.set("q", "(release:[NOW-" + beforeDay +
+					"DAY/DAY TO NOW/DAY+7DAY])");
+//			solrQuery.set("q", "(release:[* TO NOW/DAY+7DAY])");
+			solrQuery.addFilterQuery("type:movie");
+			solrQuery.addFilterQuery("(torrents_size:0 AND shares_size:0)");
+			solrQuery.addSort("release", ORDER.desc);
+			solrQuery.addField("id,name");
+
+			QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
+			SolrDocumentList docList = resp.getResults();
+			List<String> idList = hasFeedMovieIds(docList);
+			idSet.addAll(idList);
+			if (docList.size() < limit) {
+				break;
+			}
+			curPage++;
+		}
+		String sContent = ArrayUtils.toString(idSet);
+		SolrInputDocument inDoc = new SolrInputDocument();
+		String type = "idober-movie-ids";
+		String sGroup = "wait4edit";
+		inDoc.setField("type", type);
+		inDoc.setField("group_s", sGroup);
+		inDoc.setField("id", type + ";" + sGroup);
+		inDoc.setField("content", sContent);
+		SolrServer mServer = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
+		mServer.add(inDoc);
+		mServer.commit();
+		return sContent;
+	}
+
+	private List<String> hasFeedMovieIds(SolrDocumentList docList) {
+		if (CollectionUtils.isEmpty(docList)) {
+			return Collections.emptyList();
+		}
+		SolrServer server = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setRows(0);
+		solrQuery.addFilterQuery("source_group_s:torrent");
+		solrQuery.addFilterQuery("!delete_ti:1");
+		List<String> movieIdList = Lists.newArrayList();
+		for (SolrDocument doc : docList) {
+			String name = doc.getFieldValue("name").toString();
+			if (StringUtils.isBlank(name)) {
+				continue;
+			}
+			name = ClientUtils.escapeQueryChars(name);
+			solrQuery.set("q", "title:" + name);
+			try {
+				QueryResponse resp = server.query(solrQuery);
+				long srcCount = resp.getResults().getNumFound();
+				if (srcCount > 0) {
+					String sCode = doc.getFieldValue("id").toString();
+					movieIdList.add(sCode);
+				}
+			} catch (Exception e) {
+				log.warn("fillFeedInfo,name:" + name + ",cause:", e);
+			}
+		}
+		return movieIdList;
+	}
 
 	@ResponseBody
 	@RequestMapping(value = { "source" }, method = RequestMethod.GET)

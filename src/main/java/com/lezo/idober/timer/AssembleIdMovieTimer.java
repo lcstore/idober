@@ -213,9 +213,6 @@ public class AssembleIdMovieTimer implements Runnable {
 		solrQuery.addSort("ticket_rate_tf", ORDER.desc);
 		QueryResponse resp = sourceServer.query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
-		if (docList.isEmpty()) {
-			return;
-		}
 		String sDateGroup = docList.get(0).getFieldValue("date_s").toString();
 		Map<String, Integer> codeMap = Maps.newHashMap();
 		for (SolrDocument doc : docList) {
@@ -234,6 +231,10 @@ public class AssembleIdMovieTimer implements Runnable {
 			return;
 		}
 		JSONArray idArray = toIdJSONArray(movieList);
+		if (idArray.isEmpty() || idArray.size() < 6) {
+			log.warn("ignore build.group:" + group + ",title:" + title + ",doc:" + docList.size() + ",limit:" + limit);
+			return;
+		}
 		inDoc.addField("content", idArray.toJSONString());
 		sourceServer.add(inDoc);
 		sourceServer.commit();

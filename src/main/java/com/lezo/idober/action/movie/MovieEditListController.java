@@ -112,7 +112,7 @@ public class MovieEditListController extends BaseController {
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
 		long total = docList.getNumFound();
-		long totalPage = total / ParamUtils.PAGE_SIZE;
+		long totalPage = ParamUtils.batchNum(total, ParamUtils.PAGE_SIZE);
 		totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);
 
 		String sPath = request.getPathInfo();
@@ -120,11 +120,91 @@ public class MovieEditListController extends BaseController {
 		sPath = sPath.replaceAll("/$", "");
 
 		fillFeedInfo(docList);
+		// 按照src_count倒排
+		Comparator<SolrDocument> c = new Comparator<SolrDocument>() {
+			@Override
+			public int compare(SolrDocument o1, SolrDocument o2) {
+				String key = "src_count";
+				Object scObject1 = o1.getFieldValue(key);
+				Object scObject2 = o2.getFieldValue(key);
+				if (scObject1 == null) {
+					return 1;
+				} else if (scObject2 == null) {
+					return -1;
+				}
+				return Integer.valueOf(scObject2.toString()).compareTo(Integer.valueOf(scObject1.toString()));
+			}
+		};
+		Collections.sort(docList, c);
 		model.addAttribute("oDocList", docList);
 		model.addAttribute("curPage", curPage);
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("curPath", sPath);
 		addNewlyEditDoc(model, beforeDay);
+		model.addAttribute("qAction", "/search/movie/edit");
+		return new ModelAndView("MovieEditList");
+	}
+
+	@RequestMapping(value = { "wait" }, method = RequestMethod.GET)
+	public ModelAndView waitEditPage(ModelMap model,
+			HttpServletRequest request) throws Exception {
+		return waitEditPage(1, model, request);
+	}
+
+	@RequestMapping(value = { "wait/{curPage}.html" }, method = RequestMethod.GET)
+	public ModelAndView waitEditPage(@PathVariable("curPage") Integer curPage, ModelMap model,
+			HttpServletRequest request) throws Exception {
+		curPage = ParamUtils.inRange(curPage);
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setStart(0);
+		solrQuery.setRows(1);
+		solrQuery.set("q", "type:idober-movie-ids");
+		solrQuery.addFilterQuery("group_s:wait4edit");
+
+		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META).query(solrQuery);
+		SolrDocumentList docList = resp.getResults();
+		if (!docList.isEmpty()) {
+			String sContent = docList.get(0).getFieldValue("content").toString();
+			JSONArray idArray = JSONArray.parseArray(sContent);
+
+			int fromIndex = (curPage - 1) * ParamUtils.PAGE_SIZE;
+			int toIndex = fromIndex + ParamUtils.PAGE_SIZE;
+			String sHead = "id:(";
+			StringBuilder sb = new StringBuilder(sHead);
+			for (int index = fromIndex, size = idArray.size(); index < size && index <= toIndex; index++) {
+				if (sb.length() > sHead.length()) {
+					sb.append(" OR ");
+				}
+				sb.append(idArray.get(index));
+			}
+			sb.append(")");
+
+			solrQuery = new SolrQuery();
+			solrQuery.setStart(0);
+			solrQuery.setRows(ParamUtils.PAGE_SIZE);
+			solrQuery.set("q", sb.toString());
+			solrQuery.addFilterQuery("type:movie");
+			solrQuery.addFilterQuery("(torrents_size:0 AND shares_size:0)");
+			solrQuery.addSort("release", ORDER.desc);
+			resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
+			docList = resp.getResults();
+			fillFeedInfo(docList);
+			long total = idArray.size();
+			long totalPage = ParamUtils.batchNum(total, ParamUtils.PAGE_SIZE);
+			totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);
+
+			model.addAttribute("oDocList", docList);
+			model.addAttribute("curPage", curPage);
+			model.addAttribute("totalPage", totalPage);
+		} else {
+			model.addAttribute("curPage", curPage);
+			model.addAttribute("totalPage", 0);
+		}
+		String sPath = request.getPathInfo();
+		sPath = sPath.replaceAll("[0-9/]*\\.html.*$", "");
+		sPath = sPath.replaceAll("/$", "");
+
+		model.addAttribute("curPath", sPath);
 		model.addAttribute("qAction", "/search/movie/edit");
 		return new ModelAndView("MovieEditList");
 	}
@@ -153,22 +233,6 @@ public class MovieEditListController extends BaseController {
 				log.warn("fillFeedInfo,name:" + name + ",cause:", e);
 			}
 		}
-		// 按照src_count倒排
-		Comparator<SolrDocument> c = new Comparator<SolrDocument>() {
-			@Override
-			public int compare(SolrDocument o1, SolrDocument o2) {
-				String key = "src_count";
-				Object scObject1 = o1.getFieldValue(key);
-				Object scObject2 = o2.getFieldValue(key);
-				if (scObject1 == null) {
-					return 1;
-				} else if (scObject2 == null) {
-					return -1;
-				}
-				return Integer.valueOf(scObject2.toString()).compareTo(Integer.valueOf(scObject1.toString()));
-			}
-		};
-		Collections.sort(docList, c);
 	}
 
 	private void addCrumbs(ModelMap model, String sRegion, String sCNRegion) {
