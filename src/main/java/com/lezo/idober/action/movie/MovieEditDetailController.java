@@ -410,6 +410,19 @@ public class MovieEditDetailController extends BaseController {
 		}
 		Map<String, String> shareMap = Maps.newHashMap();
 		Map<String, String> torrentMap = Maps.newHashMap();
+		boolean hasShare = false;
+		if (CollectionUtils.isNotEmpty(shares)) {
+			for (Object share : shares) {
+				JSONObject tObject = JSONObject.parseObject(share.toString());
+				String sUrl = tObject.getString("url");
+				sUrl = sUrl == null ? tObject.getString("name") : sUrl;
+				sUrl = sUrl == null ? "" : sUrl;
+				if (sUrl.contains(".baidu.com")) {
+					shareMap.put(sUrl, tObject.toJSONString());
+					hasShare = true;
+				}
+			}
+		}
 		for (Object torrent : srcTorrents) {
 			JSONObject tObject = JSONObject.parseObject(torrent.toString());
 			tObject.remove("data");
@@ -427,7 +440,7 @@ public class MovieEditDetailController extends BaseController {
 			} else if (type != null && type.endsWith("-share")) {
 				sUrl = sUrl == null ? tObject.getString("name") : sUrl;
 				sUrl = sUrl == null ? "" : sUrl;
-				if (sUrl.contains(".baidu.com")) {
+				if (sUrl.contains(".baidu.com") && hasShare) {
 					shareMap.put(sUrl, tObject.toJSONString());
 				}
 			} else if (type != null) {
@@ -438,17 +451,7 @@ public class MovieEditDetailController extends BaseController {
 				}
 			}
 		}
-		if (CollectionUtils.isNotEmpty(shares)) {
-			for (Object share : shares) {
-				JSONObject tObject = JSONObject.parseObject(share.toString());
-				String sUrl = tObject.getString("url");
-				sUrl = sUrl == null ? tObject.getString("name") : sUrl;
-				sUrl = sUrl == null ? "" : sUrl;
-				if (sUrl.contains(".baidu.com")) {
-					shareMap.put(sUrl, tObject.toJSONString());
-				}
-			}
-		}
+
 		inDoc.setField(torrentField, torrentMap.values());
 		inDoc.setField(shareField, shareMap.values());
 	}

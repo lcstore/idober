@@ -87,7 +87,8 @@
 									        	  <#else>
 									        	  <span class="cer-box cer-normal">
 									        	  </#if>
-									        	    <a href="${oShare.url}" rel="nofollow" target="_blank" class="noline">${oShare.name}
+									        	    <a href="${oShare.url}" rel="nofollow" target="_blank" class="noline">
+									        	       ${oShare.name!'百度云资源'}
 									        	    </a>
 									        	  	<#if oShare.secret?? > 
 									        	    <span>(密码: ${oShare.secret})</span>
