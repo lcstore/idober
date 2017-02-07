@@ -114,7 +114,6 @@
 			self.attr('disabled',"disabled");
 			var sName = self.attr('name');
 			var nameArr = [];
-			nameArr.push('赌神归来');
 			nameArr.push(sName);
 			var oParam = {
 				names : nameArr
