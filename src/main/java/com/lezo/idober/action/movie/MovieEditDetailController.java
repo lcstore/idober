@@ -586,7 +586,7 @@ public class MovieEditDetailController extends BaseController {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.set("q", "title:" + name);
 		solrQuery.setRows(10);
-		solrQuery.addFilterQuery("source_group_s:torrent");
+		solrQuery.addFilterQuery("id:pan.baidu.com;*");
 		solrQuery.addFilterQuery("!delete_ti:1");
 		try {
 			QueryResponse resp = server.query(solrQuery);

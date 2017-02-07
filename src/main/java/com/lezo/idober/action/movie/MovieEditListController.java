@@ -217,9 +217,10 @@ public class MovieEditListController extends BaseController {
             return;
         }
         SolrServer server = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_META);
-        SolrQuery solrQuery = new SolrQuery("id:pan.baidu.com;*");
+        SolrQuery solrQuery = new SolrQuery();
         solrQuery.setRows(0);
         solrQuery.addFilterQuery("!delete_ti:1");
+        solrQuery.addFilterQuery("id:pan.baidu.com;*");
         for (SolrDocument doc : docList) {
             String name = doc.getFieldValue("name").toString();
             if (StringUtils.isBlank(name)) {
