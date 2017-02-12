@@ -22,7 +22,9 @@ import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lezo.idober.utils.TaskUtils;
 
 public class TaskmgrTest {
 
@@ -98,5 +100,40 @@ public class TaskmgrTest {
 			System.err.println("header:" + header);
 		}
 		System.err.println("resp:" + JSON.toJSONString(EntityUtils.toString(resp.getEntity())));
+	}
+
+	@Test
+	public void testCreateTask() throws Exception {
+		JSONArray taskArray = new JSONArray();
+		JSONObject taskObject = new JSONObject();
+		// taskObject.put("type", "douban-movie-detail");
+		taskObject.put("type", "bdp-follow");
+		String sUrl = "";
+		// sUrl = "https://movie.douban.com/subject/21352814/";
+		taskObject.put("url", sUrl);
+		taskObject.put("level", "1000");
+		TaskUtils.withParam(taskObject, "retry", "0");
+		TaskUtils.withParam(taskObject, "uk", "2694161689");
+		taskArray.add(taskObject);
+		TaskUtils.createTasks(taskArray);
+	}
+
+	@Test
+	public void testCreateTasks() throws Exception {
+		JSONArray taskArray = new JSONArray();
+		for (int i = 1; i <= 15015; i++) {
+			String sUrl = "http://www.panduoduo.net/u/bd/" + i;
+			JSONObject taskObject = new JSONObject();
+			taskObject.put("type", "common-bdp-uk");
+			taskObject.put("url", sUrl);
+			taskObject.put("level", "1000");
+			TaskUtils.withParam(taskObject, "retry", "0");
+			taskArray.add(taskObject);
+			if (taskArray.size() == 100) {
+				TaskUtils.createTasks(taskArray);
+				taskArray = new JSONArray();
+			}
+		}
+		TaskUtils.createTasks(taskArray);
 	}
 }

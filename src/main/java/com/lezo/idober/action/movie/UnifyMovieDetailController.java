@@ -81,8 +81,25 @@ public class UnifyMovieDetailController extends BaseController {
 		JSONArray crumbArr = createCrumbs(srcObject);
 		srcObject.put("crumbs", crumbArr);
 		// handleCopyright(srcObject);
-		// assortTorrents(srcObject);
+		assortTorrents(srcObject);
 		return srcObject;
+	}
+
+	private void assortTorrents(JSONObject srcObject) {
+		JSONArray tArray = srcObject.getJSONArray("torrents");
+		if (tArray == null) {
+			return;
+		}
+		String sMark = "http://www.rarbt.commagnet:?xt";
+		for (int i = 0; i < tArray.size(); i++) {
+			String sTorrent = tArray.getString(i);
+			String sNewTorrent = sTorrent.replace(sMark, "magnet:?xt");
+			if (!sTorrent.equals(sNewTorrent)) {
+				sNewTorrent = sNewTorrent.replace("rarbt-torrent", "magnet-link");
+				tArray.set(i, sNewTorrent);
+			}
+		}
+		srcObject.put("torrents", tArray);
 	}
 
 	private void handleCopyright(JSONObject srcObject) {
