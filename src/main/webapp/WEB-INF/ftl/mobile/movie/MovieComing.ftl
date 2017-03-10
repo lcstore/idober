@@ -15,11 +15,11 @@
 								       <#if (oMovie.torrents_size>0 || oMovie.shares_size>0)>
 									     <span class="download-newly"></span>
 								       </#if>
-									   <a href="/movie/detail/${oMovie.id}.html"  target="_blank">
+									   <a href="/movie/detail/${oMovie.id}.html"  >
 										  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded list-img">
 										</a>
 										<div class="name-box">
-										    <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
+										    <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" >
 										          ${unifyOf(oMovie.name,12,".")}
 										     </a>
 										</div>

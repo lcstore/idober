@@ -19,7 +19,7 @@
 						               <span class="badge"> 
 									      ${(oRank_index<9)?string('0'+(oRank_index+1),(oRank_index+1))}
 									    </span>
-									   <a href="/movie/detail/${oRank.id}.html" target="_blank">${unifyOf(oRank.name,14,"")}</a>
+									   <a href="/movie/detail/${oRank.id}.html" >${unifyOf(oRank.name,14,"")}</a>
 									   <span class="time-right">${oRank.timestamp?string["MM-dd"]}</span>
 								    </li>
 							   </#list>
@@ -38,11 +38,11 @@
 							   <#if (oMovie.torrents_size>0 || oMovie.shares_size>0)>
 						         <span class="download-newly"></span>
 					           </#if>
-							   <a href="/movie/detail/${oMovie.id}.html" target="_blank">
+							   <a href="/movie/detail/${oMovie.id}.html" >
 								  <img src="${oMovie.image}" alt="${oMovie.name}" class="img-rounded list-img">
 								</a>
 								<div class="name-box">
-								  <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" target="_blank">
+								  <a href="/movie/detail/${oMovie.id}.html" title="${oMovie.name}" >
 								    ${unifyOf(oMovie.name,14,"")}
 								  </a>
 								</div>

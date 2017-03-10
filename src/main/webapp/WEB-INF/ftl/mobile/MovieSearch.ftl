@@ -28,7 +28,7 @@
 					<#assign oGenres = (oDoc.genres![])>
 					<div class="row top-margin">
 						  <div class="col-md-3 movie-left">
-						      <a  target="_blank" href="/movie/detail/${oDoc.id}.html">
+						      <a   href="/movie/detail/${oDoc.id}.html">
 						       <img src="${oDoc.image}" class="img-thumbnail movie-img" alt="${oDoc.name}"/>
 						      </a>
 					      </div>
@@ -36,7 +36,7 @@
 							      <ul class="list-group">
 								    <li class="list-group-item">
 										    <h1 class="movie-title-margin">
-											      <a  target="_blank" href="/movie/detail/${oDoc.id}.html">
+											      <a   href="/movie/detail/${oDoc.id}.html">
 												  ${oDoc.name}
 											      <#if ((oDoc.name?length+oDoc.enname?length)<=40) > 
 											       <small>${oDoc.enname}</small>

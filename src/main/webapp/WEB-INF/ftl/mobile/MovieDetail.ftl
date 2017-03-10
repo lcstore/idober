@@ -76,7 +76,7 @@
 								        </#list>
 								    </li>
 								    <li class="list-group-item tag-info"><strong>分享：</strong>
-								      <span class="share-box"><a id="shareQQ" rel="nofollow" target="_blank" href="javascript:void(0)" ></a></span>
+								      <span class="share-box"><a id="shareQQ" rel="nofollow"  href="javascript:void(0)" ></a></span>
 								    </li>
 								    
 								   
@@ -113,7 +113,7 @@
 		        	  <#else>
 		        	   <span class=""></span>
 		        	  </#if>
-		        	    <a href="${oShare.url}" rel="nofollow" target="_blank" class="noline">${oShare.name}
+		        	    <a href="${oShare.url}" rel="nofollow"  class="noline">${oShare.name}
 		        	    </a>
 		        	  	<#if oShare.secret?? > 
 		        	     <span>&nbsp;(密码: ${oShare.secret})</span>

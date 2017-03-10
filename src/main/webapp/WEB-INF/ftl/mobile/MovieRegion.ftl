@@ -39,7 +39,7 @@
 					<div class="row row-wp">
 					</#if>
 					    <div class="col-md-3 col-wp">
-					    <a class="item-wp" target="_blank" href="/movie/detail/${oDoc.id}.html">
+					    <a class="item-wp"  href="/movie/detail/${oDoc.id}.html">
 					      <div class="cover-wp" >
 					      <div class="img-thumbnail">
 					        <img alt="${oDoc.name}" src="${oDoc.image}" width="162" height="225" >
@@ -80,7 +80,7 @@
                     <h3 class="text-center"> 高分电影 </h3>
                     <div class="hot-list">
                        <#list oStarList as oStar>
-                       <a target="_blank" href="/movie/detail/${oStar.id}.html">
+                       <a  href="/movie/detail/${oStar.id}.html">
                          <div class="star-wp">
                          <img src="${oStar.cover}" alt="${oStar.name}" class="img-circle star-img" width="60" height="60">
                          <div class="star-txt">${oStar.name}</div>

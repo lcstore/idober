@@ -8,7 +8,7 @@
 <body>
 	<!--  navbar -->
 	<div id="top-navbar" class="navbar-fixed-top" role="navigation">
-      <form target="_blank" action="${qAction!'/search/movie'}" role="search" class="form-search" id="qForm">
+      <form  action="${qAction!'/search/movie'}" role="search" class="form-search" id="qForm">
 	  <div class="form-group">
         <div class="input-group input-group-bk">
 		  <span class="search-logo-box">
