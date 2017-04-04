@@ -8,7 +8,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,8 +16,8 @@ import com.google.common.collect.Sets;
 import com.lezo.idober.solr.pojo.MovieSolr;
 import com.lezo.idober.utils.SolrUtils;
 
-@Controller
-@RequestMapping("doc")
+//@Controller
+//@RequestMapping("doc")
 public class MovieTorrentController {
 
     @RequestMapping("torrent")

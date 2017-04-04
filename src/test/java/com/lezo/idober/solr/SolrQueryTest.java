@@ -21,10 +21,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.servlet.SolrRequestParsers;
 import org.junit.Before;
@@ -39,6 +41,7 @@ import com.github.stuxuhai.jpinyin.PinyinHelper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.lezo.idober.solr.pojo.ItemSolr;
+import com.lezo.idober.utils.TaskUtils;
 
 @Log4j
 public class SolrQueryTest {
@@ -46,7 +49,7 @@ public class SolrQueryTest {
 
 	@Before
 	public void setup() throws Exception {
-		// server = new HttpSolrServer("http://www.lezomao.com/cmeta");
+		server = new HttpSolrServer("http://www.lezomao.com/cmeta");
 		// server = new HttpSolrServer("http://localhost:8081/cmovie");
 		System.setProperty("solr.solr.home", "/apps/src/istore/solr_home");
 		// CoreContainer.Initializer initializer = new
@@ -54,6 +57,43 @@ public class SolrQueryTest {
 		// CoreContainer coreContainer = initializer.initialize();
 		// // server = new EmbeddedSolrServer(coreContainer, "collection1");
 		// server = new EmbeddedSolrServer(coreContainer, "core0");
+	}
+
+	@Test
+	public void testMake() throws Exception {
+		Integer start = 0;
+		Integer rows = 100;
+		int maxCount = 60000;
+		int count = 0;
+		while (true) {
+			SolrQuery solrQuery = new SolrQuery();
+			solrQuery.set("q", "id:bdp-uk;*");
+			solrQuery.addFilterQuery("!share_count_tl:*");
+			solrQuery.addField("id");
+			solrQuery.setStart(start);
+			solrQuery.setRows(rows);
+			QueryResponse response = server.query(solrQuery);
+			SolrDocumentList docList = response.getResults();
+			JSONArray taskArray = new JSONArray();
+			for (SolrDocument doc : docList) {
+				String idString = doc.get("id").toString();
+				String sUK = idString.replace("bdp-uk;", "");
+				JSONObject taskObj = new JSONObject();
+				taskObj.put("type", "bdp-follow");
+				taskObj.put("url", "");
+				taskObj.put("level", 1000);
+				TaskUtils.withParam(taskObj, "retry", "0");
+				TaskUtils.withParam(taskObj, "uk", sUK);
+				taskArray.add(taskObj);
+			}
+			TaskUtils.createTasks(taskArray);
+			count += taskArray.size();
+			System.err.println("start:" + start + ",count:" + count);
+			if (docList.size() < rows || count >= maxCount) {
+				break;
+			}
+			start += docList.size();
+		}
 	}
 
 	@Test
@@ -142,9 +182,9 @@ public class SolrQueryTest {
 
 	@Test
 	public void testSolrDelete() throws Exception {
-		server.deleteByQuery("code_s:723237719");
+		server.deleteByQuery("id:bdp-share;*");
 		server.commit();
-		server.optimize();
+//		server.optimize();
 	}
 
 	@Test

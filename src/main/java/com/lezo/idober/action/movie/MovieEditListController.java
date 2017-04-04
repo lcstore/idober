@@ -32,6 +32,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.lezo.idober.action.BaseController;
+import com.lezo.idober.utils.DocUtils;
 import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 import com.lezo.idober.utils.TaskUtils;
@@ -110,6 +111,7 @@ public class MovieEditListController extends BaseController {
         solrQuery.addSort("release", ORDER.desc);
 
         QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
+        DocUtils.changeImage(resp.getResults());
         SolrDocumentList docList = resp.getResults();
         long total = docList.getNumFound();
         long totalPage = ParamUtils.batchNum(total, ParamUtils.PAGE_SIZE);

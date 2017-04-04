@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lezo.idober.action.BaseController;
+import com.lezo.idober.utils.DocUtils;
 import com.lezo.idober.utils.SolrConstant;
 import com.lezo.idober.utils.SolrUtils;
 
@@ -49,6 +50,7 @@ public class MovieEditSearchController extends BaseController {
 		solrQuery.addFilterQuery("type:movie");
 		solrQuery.addSort("release", ORDER.desc);
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_SOURCE_MOVIE).query(solrQuery);
+		DocUtils.changeImage(resp.getResults());
 		return resp.getResults();
 	}
 }

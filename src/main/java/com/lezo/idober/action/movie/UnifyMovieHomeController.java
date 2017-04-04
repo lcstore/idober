@@ -33,6 +33,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.lezo.idober.solr.pojo.DataSolr;
+import com.lezo.idober.utils.DocUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 //@RequestMapping("movie")
@@ -225,6 +226,8 @@ public class UnifyMovieHomeController {
 			}
 		}
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
-		return resp.getResults();
+		SolrDocumentList docList = resp.getResults();
+		DocUtils.changeImage(docList);
+		return docList;
 	}
 }

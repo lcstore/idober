@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lezo.idober.action.BaseController;
+import com.lezo.idober.utils.DocUtils;
 import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.SolrUtils;
 
@@ -53,6 +54,7 @@ public class MovieListController extends BaseController {
 		solrQuery.addSort("release", ORDER.desc);
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
+		DocUtils.changeImage(resp.getResults());
 		SolrDocumentList docList = resp.getResults();
 		long total = docList.getNumFound();
 		long totalPage = total / ParamUtils.PAGE_SIZE;

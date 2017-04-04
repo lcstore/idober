@@ -37,10 +37,12 @@ public class SolrUtils {
 		return getSolrServer(CORE_DATA);
 	}
 
+	@Deprecated
 	public static SolrServer getSkuServer() {
 		return getSolrServer(CORE_SKU);
 	}
 
+	@Deprecated
 	public static SolrServer getMovieServer() {
 		return getSolrServer(CORE_OLD_MOVIE);
 	}

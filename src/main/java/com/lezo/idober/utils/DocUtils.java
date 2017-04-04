@@ -11,6 +11,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -191,5 +192,27 @@ public class DocUtils {
 		boolean rHasCn = rMatcher.find();
 		// 中文 vs 英文
 		return lHasCn & rHasCn;
+	}
+
+	public static void changeImage(SolrDocumentList docList) {
+		if (docList == null) {
+			return;
+		}
+		for (SolrDocument doc : docList) {
+			changeImage(doc);
+		}
+	}
+
+	public static void changeImage(SolrDocument doc) {
+		if (doc == null) {
+			return;
+		}
+		String key = "image";
+		Object imageObj = doc.getFieldValue(key);
+		if (imageObj != null) {
+			String image = imageObj.toString();
+			image = image.replace(".webp", ".jpg");
+			doc.setField(key, image);
+		}
 	}
 }

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.lezo.idober.action.BaseController;
+import com.lezo.idober.utils.DocUtils;
 import com.lezo.idober.utils.ParamUtils;
 import com.lezo.idober.utils.RegionUtils;
 import com.lezo.idober.utils.SolrUtils;
@@ -55,6 +56,7 @@ public class MovieRegionController extends BaseController {
 
 		QueryResponse resp = SolrUtils.getSolrServer(SolrUtils.CORE_ONLINE_MOVIE).query(solrQuery);
 		SolrDocumentList docList = resp.getResults();
+		DocUtils.changeImage(resp.getResults());
 		long total = docList.getNumFound();
 		long totalPage = total / ParamUtils.PAGE_SIZE;
 		totalPage = Math.min(totalPage, ParamUtils.MAX_PAGE_NUM);

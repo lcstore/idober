@@ -74,6 +74,7 @@ public class MovieEditDetailController extends BaseController {
 			solrQuery.set("q", "(id:" + itemCode + " OR old_id_s:" + itemCode + ")");
 			solrQuery.addFilterQuery("type:movie");
 			QueryResponse resp = SolrUtils.getSolrServer(CORE_MOVIE).query(solrQuery);
+			DocUtils.changeImage(resp.getResults());
 			SolrDocumentList docList = resp.getResults();
 			if (CollectionUtils.isNotEmpty(docList)) {
 				doc = docList.get(0);

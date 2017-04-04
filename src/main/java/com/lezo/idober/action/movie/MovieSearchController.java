@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lezo.idober.action.BaseController;
+import com.lezo.idober.utils.DocUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 @Controller
@@ -83,6 +84,7 @@ public class MovieSearchController extends BaseController {
                 sAlterToken = alters.get(0);
             }
         }
+        DocUtils.changeImage(resp.getResults());
         JSONObject rsObj = new JSONObject();
         rsObj.put("dataList", resp.getResults());
         if (sAlterToken != null) {

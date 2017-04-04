@@ -33,6 +33,7 @@ import com.google.common.collect.Maps;
 import com.lezo.idober.action.BaseController;
 import com.lezo.idober.error.NotFoundException;
 import com.lezo.idober.utils.AESCodecUtils;
+import com.lezo.idober.utils.DocUtils;
 import com.lezo.idober.utils.SolrUtils;
 
 @RequestMapping("movie/detail")
@@ -48,7 +49,7 @@ public class UnifyMovieDetailController extends BaseController {
 		Matcher matcher = NUM_REG.matcher(itemCode);
 		SolrDocument doc = null;
 		if (!matcher.find()) {
-			doc = getDocumentByDecrypt(itemCode);
+			// doc = getDocumentByDecrypt(itemCode);
 		} else {
 			SolrQuery solrQuery = new SolrQuery();
 			solrQuery.setStart(0);
@@ -77,6 +78,7 @@ public class UnifyMovieDetailController extends BaseController {
 	}
 
 	private JSONObject convert2JSON(SolrDocument doc) {
+		DocUtils.changeImage(doc);
 		JSONObject srcObject = new JSONObject(doc);
 		JSONArray crumbArr = createCrumbs(srcObject);
 		srcObject.put("crumbs", crumbArr);
