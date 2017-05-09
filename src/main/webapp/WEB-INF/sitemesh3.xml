@@ -49,6 +49,7 @@
 		<decorator>/movie/MovieClassic.ftl</decorator>
 		<decorator>/movie/MovieComing.ftl</decorator>
 		<decorator>/movie/MovieHot.ftl</decorator>
+		<decorator>/decorator/noticebar.ftl</decorator>
 		<decorator>/decorator/blankbar.ftl</decorator>
 		<decorator>/decorator/navbar.ftl</decorator>
 		<decorator>/decorator/header.ftl</decorator>
