@@ -245,7 +245,7 @@
 		<commons.beanutils.version>1.8.3</commons.beanutils.version>
 		<derby.version>10.10.1.1</derby.version>
 		<javax.servlet.version>3.1.0</javax.servlet.version>
-		<quartz.version>2.2.1</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
 		<maven-war-plugin.version>2.2.1</maven-war-plugin.version>
 		<slf4j.version>1.7.7</slf4j.version>
 		<mina.version>2.0.7</mina.version>
