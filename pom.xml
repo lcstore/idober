@@ -255,7 +255,7 @@
 		<servlet-api.version>2.5</servlet-api.version>
 		<jstl.version>1.2</jstl.version>
 		<spring-session.version>1.2.0.RC1</spring-session.version>
-		<spring-security.version>4.1.0.RELEASE</spring-security.version>
+		<spring-security.version>5.2.10.RELEASE</spring-security.version>
 
 	</properties>
 </project>
